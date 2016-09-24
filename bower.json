@@ -1,28 +1,33 @@
 {
-    "name": "interblock-sistema",
-    "version": "0.0.0",
-    "homepage": "https://github.com/wesleifreitas/px-example",
-    "authors": [
-        "Weslei Freitas <weslei.rfreitas@gmail.com>"
-    ],
-    "description": "Sistema Interblock",
-    "main": "index.html",
-    "moduleType": [
-        "amd",
-        "globals"
-    ],
-    "keywords": [
-        "interblock-sistema"
-    ],
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "px-project": "~1"
-    }
+  "name": "interblock-sistema",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wesleifreitas/px-example",
+  "authors": [
+    "Weslei Freitas <weslei.rfreitas@gmail.com>"
+  ],
+  "description": "Sistema Interblock",
+  "main": "index.html",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "interblock-sistema"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "px-project": "~1",
+    "angular-ui-calendar": "~1.0.2"
+  },
+  "resolutions": {
+    "angular": "~1",
+    "jquery": "~2.1.4"
+  }
 }
