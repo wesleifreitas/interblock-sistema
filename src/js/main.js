@@ -18,7 +18,9 @@ require.config({
         'numeral': '../lib/numeral/min/numeral.min',
         'numeral-languages': '../lib/numeral/min/languages.min',
         'jstree': '../lib/jstree/dist/jstree.min',
-        'px-module': '../lib/px-module/dist/px-full/px-full'
+        'px-module': '../lib/px-module/dist/px-full/px-full',
+        'fullcalendar': '../lib/fullcalendar/dist/fullcalendar',
+        'angular-ui-calendar': '../lib/angular-ui-calendar/src/calendar'
     },
     shim: {
         'angular': {
@@ -62,6 +64,12 @@ require.config({
         },
         'px-module': {
             deps: ['angular', 'jquery']
+        },
+        'fullcalendar': {
+            deps: ['jquery']
+        },
+        'angular-ui-calendar': {
+            deps: ['angular', 'moment', 'fullcalendar']
         }
     }
 });

@@ -2,7 +2,7 @@
 <div>
     <md-toolbar class="home-title">
         <div class="md-toolbar-tools">
-            <a class="logo-toolbar" href="http://www.interblock.com.br" target="_blank"></a>
+            <a class="logo-toolbar" href="http://interblock.com.br" target="_blank"></a>
             <px-nav-bar flex></px-nav-bar>
             <md-button class="md-icon-button" aria-label="More" ng-click="toggleRight()">
                 <md-icon class="material-icons">more_vert</md-icon>

@@ -9,7 +9,7 @@ define(['./app'], function(app) {
         angular.extend(pxConfig, {
             PX_PACKAGE: PX_PACKAGE, // Package Phoenix Project
             LIB: 'lib/', // Componentes externos
-            PROJECT_ID: 1, // Identificação do projeto (table: px.project)
+            PROJECT_ID: 0, // Identificação do projeto (table: px.project)
             PROJECT_NAME: 'Phoenix Project', // Nome do projeto
             PROJECT_SRC: 'px-project/src/', // Source do projeto
             PROJECT_CSS: [
@@ -21,10 +21,11 @@ define(['./app'], function(app) {
                 'https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic',
                 'lib/font-awesome/css/font-awesome.min.css',
                 'lib/px-module/dist/px-full/px-full.min.css',
+                'lib/fullcalendar/dist/fullcalendar.min.css',
                 'styles.css'
             ], // Arquivos .css
 
-            PROJECT_DSN: 'px_project_sql', // Data Source Name (CF)
+            PROJECT_DSN: 'px_interblock_sql', // Data Source Name (CF)
             LOCALE: 'pt-BR', // Locale
             LOGIN_REQUIRED: true, // Login obrigatório?
             GROUP: true, // Agrupar dados?
@@ -61,6 +62,10 @@ define(['./app'], function(app) {
             .state('home.exemplo', {
                 url: '/exemplo',
                 templateUrl: 'custom/exemplo/exemplo.html'
+            })
+            .state('home.agenda', {
+                url: '/agenda',
+                templateUrl: 'custom/agenda/agenda.html'
             });
 
         // https://material.angularjs.org/latest/Theming/01_introduction
@@ -94,6 +99,9 @@ define(['./app'], function(app) {
                 var loggedIn = $rootScope.globals.currentUser;
                 if (restrictedPage && !loggedIn) {
                     $location.path('/login');
+                } else if (restrictedPage && loggedIn && $location.path() === '/home') {
+                    // Ir para primeira tela (Agenda)
+                     $location.path('/home/agenda');
                 }
             });
         } else {
