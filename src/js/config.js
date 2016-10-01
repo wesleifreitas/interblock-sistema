@@ -25,7 +25,7 @@ define(['./app'], function(app) {
                 'styles.css'
             ], // Arquivos .css
 
-            PROJECT_DSN: 'px_interblock_sql', // Data Source Name (CF)
+            PROJECT_DSN: 'px_interblock_sql_local', // Data Source Name (CF)
             LOCALE: 'pt-BR', // Locale
             LOGIN_REQUIRED: true, // Login obrigatório?
             GROUP: true, // Agrupar dados?
@@ -66,6 +66,10 @@ define(['./app'], function(app) {
             .state('home.agenda', {
                 url: '/agenda',
                 templateUrl: 'custom/agenda/agenda.html'
+            })
+            .state('home.pagamento', {
+                url: '/pagamento',
+                templateUrl: 'custom/pagamento/pagamento.html'
             });
 
         // https://material.angularjs.org/latest/Theming/01_introduction
@@ -73,6 +77,8 @@ define(['./app'], function(app) {
         $mdThemingProvider.theme('default')
             .primaryPalette('light-blue')
             .accentPalette('grey');
+
+        moment.locale('pt-BR');
     }]);
 
     app.run(function(pxConfig, $rootScope, $location, $cookieStore, $http, loginService) {
@@ -100,8 +106,8 @@ define(['./app'], function(app) {
                 if (restrictedPage && !loggedIn) {
                     $location.path('/login');
                 } else if (restrictedPage && loggedIn && $location.path() === '/home') {
-                    // Ir para primeira tela (Agenda)
-                     $location.path('/home/agenda');
+                    // Redirecionar para primeira tela (Agenda)
+                    $location.path('/home/agenda');
                 }
             });
         } else {

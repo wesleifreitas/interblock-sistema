@@ -18,8 +18,8 @@ require.config({
         'numeral': '../lib/numeral/min/numeral.min',
         'numeral-languages': '../lib/numeral/min/languages.min',
         'jstree': '../lib/jstree/dist/jstree.min',
-        'px-module': '../lib/px-module/dist/px-full/px-full',
-        'fullcalendar': '../lib/fullcalendar/dist/fullcalendar',
+        'px-module': '../lib/px-module/dist/px-full/px-full.min',
+        'fullcalendar': '../lib/fullcalendar/dist/fullcalendar.min',
         'angular-ui-calendar': '../lib/angular-ui-calendar/src/calendar'
     },
     shim: {

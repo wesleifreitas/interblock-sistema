@@ -1,4 +1,5 @@
 define([
 	'./version',
-	'../exemplo/exemplo.service'
+	'../exemplo/exemplo.service',
+	'../pagamento/pagamento.service'
 ], function() {});
