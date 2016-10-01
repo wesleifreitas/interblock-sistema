@@ -97,7 +97,7 @@ gulp.task('build-interblock-sistema-lib-px-project', function() {
 gulp.task('build-interblock-sistema-lib-px-project-rest', function() {
 	return gulp
 		.src([
-			'./src/lib/px-project/dist/rest/*.cfm'
+			'./src/lib/px-project/dist/rest/**/*'
 		])
 		.pipe(gulp.dest('./release/lib/px-project/dist/rest'));
 });
@@ -150,14 +150,14 @@ gulp.task('build-interblock-sistema-src-html', function() {
 		.src([
 			'./src/custom/**/*.html'
 		])
-		.pipe(gulp.dest('./release'));
+		.pipe(gulp.dest('./release/custom'));
 });
 
 gulp.task('build-interblock-sistema-src-js', function() {
 	return gulp
 		.src(['./src/custom/**/*.js'])
 		//.pipe(uglify())
-		.pipe(gulp.dest('./release'));
+		.pipe(gulp.dest('./release/custom'));
 });
 
 gulp.task('build-interblock-sistema-src-cf', function() {
@@ -166,23 +166,24 @@ gulp.task('build-interblock-sistema-src-cf', function() {
 			'./src/custom/**/*.cfm',
 			'./src/custom/**/*.cfc'
 		])
-		.pipe(gulp.dest('./release'));
+		.pipe(gulp.dest('./release/custom'));
 });
 
 gulp.task('build-interblock-sistema-src-css', function() {
 	return gulp
 		.src(['./src/custom/**/*.css'])
 		.pipe(cssmin())
-		.pipe(gulp.dest('./release'));
+		.pipe(gulp.dest('./release/custom'));
 });
 
 gulp.task('build-interblock-sistema-src-assets', function() {
 	return gulp
 		.src([
 			'./src/custom/assets/**/*.svg',
-			'./src/custom/assets/**/*.png'
+			'./src/custom/assets/**/*.png',
+			'./src/custom/assets/**/*.jpg'
 		])
-		.pipe(gulp.dest('./release/assets'));
+		.pipe(gulp.dest('./release/custom/assets'));
 });
 
 gulp.task('build-interblock-sistema-root', function() {
