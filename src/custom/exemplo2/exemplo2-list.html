@@ -22,14 +22,14 @@
                     </div>
                 </div>
             </div>
-            <div px-fixed px-wrapper=".px-view" px-hfixed="true" layout="row" layout-align="end center">
+            <div px-fixed px-wrapper=".px-view" px-hfixed="true" layout="row" layout-align="end center" layout-padding>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default" ng-click="getDataExemplo2()">
                         <span ng-class="dgExemploControl.working | dataGridRefresh"></span> <span hide-sm>Atualizar</span>
                     </button>
                 </div>
             </div>
-            <px-data-grid id="dgExemplo2" px-debug="true" px-control="dgExemplo2Control" px-init="dgExemplo2Init()" px-config="{{dgExemplo2Config}}" px-data-init="true" px-check="false" px-edit="false" px-item-click="callback(event)">
+            <px-data-grid id="dgExemplo2" px-debug="false" px-control="dgExemplo2Control" px-init="dgExemplo2Init()" px-config="{{dgExemplo2Config}}" px-data-init="true" px-check="false" px-edit="false" px-item-click="callback(event)">
             </px-data-grid>
     </md-dialog-content>
 </md-dialog>
