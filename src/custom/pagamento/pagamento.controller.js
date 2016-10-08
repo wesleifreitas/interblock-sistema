@@ -79,7 +79,7 @@ define(['../controllers/module'], function(controllers) {
                 field: 'pag_id',
                 type: 'int'
             }, {
-                visible: true,
+                visible: false,
                 title: 'pag_data_vencimento_mes',
                 field: 'pag_data_vencimento_mes',
                 type: 'int',
@@ -90,7 +90,7 @@ define(['../controllers/module'], function(controllers) {
                     selectedItem: 'id'
                 }
             }, {
-                visible: true,
+                visible: false,
                 title: 'pag_data_vencimento_ano',
                 field: 'pag_data_vencimento_ano',
                 type: 'int',
