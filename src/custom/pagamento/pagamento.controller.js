@@ -79,6 +79,24 @@ define(['../controllers/module'], function(controllers) {
                 field: 'pag_id',
                 type: 'int'
             }, {
+                visible: true,
+                title: 'pag_data_vencimento_mes',
+                field: 'pag_data_vencimento_mes',
+                type: 'int',
+                filter: 'filtroVencimentoMes',
+                filterOperator: '=',
+                filterOptions: {
+                    field: 'pag_data_vencimento_mes',
+                    selectedItem: 'id'
+                }
+            }, {
+                visible: true,
+                title: 'pag_data_vencimento_ano',
+                field: 'pag_data_vencimento_ano',
+                type: 'int',
+                filter: 'filtroVencimentoAno',
+                filterOperator: '='
+            }, {
                 title: 'Status',
                 field: 'pag_status_label',
                 type: 'bit',
