@@ -1,6 +1,7 @@
 <!--- 
 SQL 2012+
 --->
+<cfabort>
 <cfparam name="URL.tickBegin" default="#GetTickCount()#">
 
 <cfoutput>
@@ -138,7 +139,7 @@ SQL 2012+
 			</cfloop>
 
 			<cfloop query="qParcelaEntrada">		
-				<cfloop from="#qParcela.par_inicio#" to="#qParcela.par_fim#" index="i">
+				<cfloop from="#qParcelaEntrada.par_inicio#" to="#qParcelaEntrada.par_fim#" index="i">
 					<cfscript>
 						if (qProposta.prop_cheque_entrada_primeiro_vencimento EQ "") {
 							continue;
@@ -147,11 +148,11 @@ SQL 2012+
 						data = dateAdd("m", i - 1, qProposta.prop_cheque_entrada_primeiro_vencimento);
 						id = "vencimento_" & LSDateFormat(data, "YYYMMDD");
 						if(structKeyExists(boleto, id)) {
-							boleto[id]["valor"] = boleto[id]["valor"] + qParcela.par_valor;
+							boleto[id]["valor"] = boleto[id]["valor"] + qParcelaEntrada.par_valor;
 						} else {
 							boleto[id] = structNew();
 							boleto[id]["contrato"] = qProposta.prop_id;
-							boleto[id]["valor"] = qParcela.par_valor;
+							boleto[id]["valor"] = qParcelaEntrada.par_valor;
 							boleto[id]["data"] = data;	
 						}
 						boleto[id]["parcela"] = -1;
@@ -175,7 +176,14 @@ SQL 2012+
 
 				<!--- <br /><cfdump var="#boleto[item]#" label="boleto (collection item)"> --->	
 
-				<cfquery datasource="#DSN#">
+				<cfquery datasource="#arguments.DSN#">
+					DELETE FROM
+						dbo.pagamento
+					WHERE
+						con_id = #qProposta.prop_id#
+					AND pag_data_vencimento = <cfqueryparam cfsqltype="cf_sql_date" value="#boleto[item].data#">
+					AND pag_status = 0;
+
 					INSERT INTO 
 						dbo.pagamento
 					(				
@@ -200,8 +208,8 @@ SQL 2012+
 					);
 				</cfquery>
 
-
 			</cfloop>
+			
 		</cfloop>
 	<cfcatch>
 		<cfdump var="#cfcatch#">
