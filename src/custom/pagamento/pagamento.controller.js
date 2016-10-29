@@ -125,7 +125,7 @@ define(['../controllers/module'], function(controllers) {
                 filter: 'filtroCPF',
                 filterOperator: '='
             }, {
-                title: 'Contrato',
+                title: 'Proposta / Contrato',
                 field: 'prop_numero',
                 type: 'string',
                 filter: 'filtroContrato',
@@ -177,17 +177,19 @@ define(['../controllers/module'], function(controllers) {
 
         // Listagem - End     
 
+        $scope.formShow = 'default';
         // Inicializar título do formulário      
         $scope.formTitle = 'Formulário de Adicionar';
         /**
          * Alterar título do formulário
          */
         $scope.setFormTitle = function() {
+
             if ($scope.formShow === 'default') {
                 if ($scope.formAction === 'insert') {
                     $scope.formTitle = 'Formulário de Adicionar';
                 } else {
-                    $scope.formTitle = 'Formulário de Editar';
+                    $scope.formTitle = 'Formulário de Pagamento';
                 }
             } else if ($scope.formShow === 'exemplo2') {
                 $scope.formTitle = 'Selecione uma categoria';
@@ -204,7 +206,7 @@ define(['../controllers/module'], function(controllers) {
                 scope: $scope,
                 preserveScope: true,
                 controller: formCtrl,
-                templateUrl: 'custom/exemplo/exemplo-form.html',
+                templateUrl: 'custom/pagamento/pagamento-form.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose: false
@@ -220,7 +222,7 @@ define(['../controllers/module'], function(controllers) {
                 scope: $scope,
                 preserveScope: true,
                 controller: formCtrl,
-                templateUrl: 'custom/exemplo/exemplo-form.html',
+                templateUrl: 'custom/pagamento/pagamento-form.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose: false
