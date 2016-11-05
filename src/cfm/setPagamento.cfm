@@ -1,7 +1,7 @@
 <!--- 
 SQL 2012+
 --->
-<cfabort>
+
 <cfparam name="URL.tickBegin" default="#GetTickCount()#">
 
 <cfoutput>
@@ -176,7 +176,7 @@ SQL 2012+
 
 				<!--- <br /><cfdump var="#boleto[item]#" label="boleto (collection item)"> --->	
 
-				<cfquery datasource="#arguments.DSN#">
+				<cfquery datasource="#variables.DSN#">
 					DELETE FROM
 						dbo.pagamento
 					WHERE
