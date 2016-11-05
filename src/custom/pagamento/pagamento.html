@@ -57,7 +57,8 @@
                 </button>
             </div>
         </div>
-        <px-data-grid id="dgPagamento" class="table-striped table-bordered" px-debug="true" px-control="dgPagamentoControl" px-init="dgPagamentoInit()" px-config="{{dgPagamentoConfig}}" px-data-init="true" px-check="true" px-edit="true" px-item-edit="edit(event)">
+        <px-data-grid id="dgPagamento" class="table-striped table-bordered" px-debug="true" px-control="dgPagamentoControl" px-init="dgPagamentoInit()" px-config="{{dgPagamentoConfig}}" px-check="false" px-edit="true" px-item-edit="edit(event)"
+            px-label-function="dgPagamentoLabel(event)">
         </px-data-grid>
     </div>
 </div>

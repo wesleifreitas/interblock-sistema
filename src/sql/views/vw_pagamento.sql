@@ -12,12 +12,6 @@ AS
     pagamento.pag_id
     ,pagamento.con_id
     ,pagamento.pag_status
-    ,pag_status_label =
-    CASE
-        WHEN pagamento.pag_status = 0 THEN 'Aberto'
-        WHEN pagamento.pag_status = 1 THEN 'Pago'
-        ELSE '?'
-    END
     ,pagamento.pag_data
     --,MONTH(pagamento.pag_data) AS pag_data_mes
     --,YEAR(pagamento.pag_data) AS pag_data_ano

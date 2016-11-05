@@ -13,49 +13,47 @@
         <md-dialog-content>
             <div class="md-dialog-content">
                 <div layout="row" layout-sm="column" layout-wrap layout-padding flex="100">
-                    <div flex="50" flex-sm="100" layout="row" layout-align="start center">
-                        <label>
-                            <input id="exe_checkbox" ng-model="exe_checkbox" type="checkbox"> Checkbox (Bit)</label>
-                        <label>
-                    </div>
-                    <div flex="50" flex-sm="100" layout="row" layout-align="start center">
-                        <label>
-                            <input id="exe_checkbox_char" ng-model="exe_checkbox_char" type="checkbox"> Checkbox (Char)</label>
-                        <label>
+                    <div class="form-group" flex="50" flex-sm="100">
+                        <label for="Status"> Status: </label>
+                        <select name="pag_status" id="pag_status" ng-model="pag_status" class="form-control">
+                            <option ng-repeat="option in status.availableOptions" value="{{option.id}}">{{option.name}}</option>
+                        </select>
                     </div>
                     <div class="form-group" flex="50" flex-sm="100">
-                        <label for="exe_nome">Nome</label>
-                        <input id="exe_nome" name="exe_nome" ng-model="exe_nome" class="form-control" required>
-                        <px-message px-element="form.exe_nome" />
+                        <label for="pag_data_vencimento">VENCIMENTO</label>
+                        <input id="pag_data_vencimento" name="pag_data_vencimento" ng-model="pag_data_vencimento" class="form-control" required ng-disabled="true">
+                        <px-message px-element="form.pag_data_vencimento" />
                     </div>
                     <div flex="50" flex-sm="100">
-                        <label for="exe_telefone">Telefone</label>
-                        <input id="exe_telefone" name="exe_telefone" ng-model="exe_telefone" class="form-control" px-br-phone-mask>
+                        <label for="pag_valor">Valor do documento</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input id="pag_valor" name="pag_valor" ng-model="pag_valor" class="form-control" px-number-mask ng-disabled="true">
+                        </div>
                     </div>
                     <div flex="50" flex-sm="100">
-                        <label for="exe_cpf">CPF</label>
-                        <input id="exe_cpf" name="exe_cpf" ng-model="exe_cpf" class="form-control" px-cpf-mask required>
-                        <px-message px-element="form.exe_cpf" />
+                        <label for="pag_valor_pago">Valor pago</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input id="pag_valor_pago" name="pag_valor_pago" ng-model="pag_valor_pago" class="form-control" px-number-mask>
+                        </div>
+                    </div>
+                    <div class="form-group" flex="50" flex-sm="100">
+                        <label for="prop_numero">Proposta / Contrato</label>
+                        <input id="prop_numero" name="prop_numero" ng-model="prop_numero" class="form-control" required ng-disabled="true">
+                        <px-message px-element="form.prop_numero" />
                     </div>
                     <div flex="50" flex-sm="100">
-                        <label for="exe_cep">CEP</label>
-                        <input id="exe_cep" name="exe_cep" ng-model="exe_cep" class="form-control" px-br-cep-mask required>
-                        <px-message px-element="form.exe_cep" />
+                        <label for="cli_cpfCnpj">CPF</label>
+                        <input id="cli_cpfCnpj" name="cli_cpfCnpj" ng-model="cli_cpfCnpj" class="form-control" px-cpf-mask required>
+                        <px-message px-element="form.cli_cpfCnpj" />
                     </div>
-                    <div flex="100" flex-sm="100">
-                        <label for="exe2_id">Input Search</label>
-                        <px-input-search id="exe2_id" name="exe2_id" ng-model="exe2_id" px-input-class="form-control" placeholder="Pesquisar categoria" px-control="exe2_id_searchControl" px-complete="true" px-config="{{exe2_id_searchConfig}}" px-dialog="true" px-search-click="exe2_id_searchClick(event)"></px-input-search>
+                    <div class="form-group" flex="100" flex-sm="100">
+                        <label for="cli_nome">Cliente</label>
+                        <input id="cli_nome" name="cli_nome" ng-model="cli_nome" class="form-control" required ng-disabled="true">
+                        <px-message px-element="form.cli_nome" />
                     </div>
-                    <div flex="50" flex-sm="100">
-                        <label for="exe_senha">Senha</label>
-                        <input id="exe_senha" name="exe_senha" ng-model="exe_senha" class="form-control" type="password" required>
-                        <px-message px-element="form.exe_senha" />
-                    </div>
-                    <div flex="50" flex-sm="100">
-                        <label for="exe_senha_confirmar">Confirmar Senha</label>
-                        <input id="exe_senha_confirmar" name="exe_senha_confirmar" ng-model="exe_senha_confirmar" class="form-control" type="password" required>
-                        <px-message px-element="form.exe_senha_confirmar" px-confirm="exe_senha" px-confirm-error="Senha não confere" />
-                    </div>
+
                 </div>
             </div>
         </md-dialog-content>

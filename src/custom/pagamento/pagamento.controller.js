@@ -98,7 +98,9 @@ define(['../controllers/module'], function(controllers) {
                 filterOperator: '='
             }, {
                 title: 'Status',
-                field: 'pag_status_label',
+                field: 'pag_status',
+                label: 'status',
+                align: 'center',
                 type: 'bit',
                 filter: 'filtroStatus',
                 filterOperator: '=',
@@ -154,7 +156,23 @@ define(['../controllers/module'], function(controllers) {
          * @return {Void}
          */
         $scope.dgPagamentoInit = function() {
+            $scope.getData();
+        };
 
+        $scope.dgPagamentoLabel = function(event) {
+            if (event.item.label === 'status') {
+                if (event.data.pag_status === 0 &&
+                    new Date(event.data.value.PAG_DATA_VENCIMENTO).getTime() <= (new Date()).getTime()) {
+                    event.data.pag_status = '<span class="label label-danger">ABERTO</span>';
+                } else if (event.data.value.PAG_STATUS === 0 &&
+                    new Date(event.data.value.PAG_DATA_VENCIMENTO).getTime() > (new Date()).getTime()) {
+                    event.data.pag_status = '<span class="label label-warning">ABERTO</span>';
+                } else {
+                    event.data.pag_status = '<span class="label label-success">PAGO</span>';
+                }
+            }
+
+            return event;
         };
 
         /**
@@ -197,7 +215,7 @@ define(['../controllers/module'], function(controllers) {
         }
 
 
-        formCtrl.$inject = ['$scope', '$mdDialog'];
+        formCtrl.$inject = ['$scope', '$mdDialog', 'pxDateUtil'];
         $scope.add = function(event) {
             $scope.formAction = 'insert';
             $scope.setFormTitle();
@@ -237,7 +255,7 @@ define(['../controllers/module'], function(controllers) {
         };
     }
     // Controller - Formulário
-    function formCtrl($scope, $mdDialog) {
+    function formCtrl($scope, $mdDialog, pxDateUtil) {
         /**
          * Controle do formulário
          * Note que a propriedade 'control' da directive px-form é igual a 'formControl'
@@ -246,12 +264,23 @@ define(['../controllers/module'], function(controllers) {
          */
         $scope.formControl = {};
 
-        // Controle do campo exe2_id
-        $scope.exe2_id_searchControl = {};
-        // Clicar no botão busca
-        $scope.exe2_id_searchClick = function() {
-            $scope.formShow = 'exemplo2';
-            $scope.setFormTitle();
+        $scope.status = {
+            availableOptions: [{
+                id: 0,
+                name: 'ABERTO'
+            }, {
+                id: 1,
+                name: 'PAGO (BANCO)'
+            }, {
+                id: 2,
+                name: 'PAGO (CAIXA INTERNO)'
+            }, {
+                id: 3,
+                name: 'PAGO (DEPÓSITO)'
+            }, {
+                id: 4,
+                name: 'PAGO (TRANSFERÊNCIA)'
+            }]
         };
 
         /**
@@ -268,59 +297,49 @@ define(['../controllers/module'], function(controllers) {
             // Configurar formulário
             $scope.formConfig = {
                 schema: 'dbo',
-                table: 'exemplo',
-                view: 'vw_exemplo',
+                table: 'pagamento',
+                view: 'vw_pagamento',
                 fields: [{
                     pk: true,
-                    field: 'exe_id',
-                    type: 'string',
+                    field: 'pag_id',
+                    type: 'int',
                     identity: true
                 }, {
-                    field: 'exe_checkbox',
+                    field: 'pag_status',
                     type: 'bit',
-                    element: 'exe_checkbox'
+                    element: 'pag_status'
                 }, {
-                    field: 'exe_checkbox_char',
-                    type: 'string',
-                    element: 'exe_checkbox_char',
-                    fieldValueOptions: {
-                        checked: 'A',
-                        unchecked: 'B'
-                    }
+                    field: 'pag_data_vencimento',
+                    type: 'date',
+                    element: 'pag_data_vencimento',
+                    insert: false,
+                    update: false
                 }, {
-                    field: 'exe_nome',
-                    type: 'string',
-                    element: 'exe_nome',
+                    field: 'prop_numero',
+                    type: 'varchar',
+                    element: 'prop_numero',
+                    insert: false,
+                    update: false
                 }, {
-                    field: 'exe_cpf',
-                    type: 'string',
-                    element: 'exe_cpf'
+                    field: 'pag_valor',
+                    type: 'float',
+                    element: 'pag_valor',
+                    insert: false,
+                    update: false
                 }, {
-                    field: 'exe_telefone',
-                    type: 'string',
-                    element: 'exe_telefone'
+                    field: 'pag_valor_pago',
+                    type: 'float',
+                    element: 'pag_valor_pago'
                 }, {
-                    field: 'exe_cep',
-                    type: 'string',
-                    element: 'exe_cep'
+                    field: 'cli_nome',
+                    type: 'varchar',
+                    element: 'cli_nome',
+                    insert: false,
+                    update: false
                 }, {
-                    field: 'exe2_id',
-                    type: 'string',
-                    element: 'exe2_id',
-                    fieldValueOptions: {
-                        selectedItem: 'exe2_id',
-                        labelField: 'exe2_categoria'
-                    },
-                }, {
-                    field: 'exe_senha',
-                    type: 'string',
-                    element: 'exe_senha',
-                    hash: true
-                }, {
-                    field: 'exe_senha_confirmar',
-                    type: 'string',
-                    element: 'exe_senha_confirmar',
-                    select: false,
+                    field: 'cli_cpfCnpj',
+                    type: 'varchar',
+                    element: 'cli_cpfCnpj',
                     insert: false,
                     update: false
                 }]
@@ -344,6 +363,7 @@ define(['../controllers/module'], function(controllers) {
          * @return {[type]} [description]
          */
         $scope.formUpdate = function(form) {
+            $scope.pag_valor_pago = numeral().unformat($scope.pag_valor_pago);
             $scope.formControl.update();
         };
 
@@ -354,7 +374,9 @@ define(['../controllers/module'], function(controllers) {
          */
         $scope.formCallback = function(event) {
             if (event.action === 'select') {
-                $scope.exe_senha_confirmar = event.qQuery[0].EXE_SENHA;
+                $scope.pag_data_vencimento = pxDateUtil.moment(pag_data_vencimento).format('DD/MM/YYYY');
+                $scope.pag_valor = numeral($scope.pag_valor).format('0,0.00');
+                $scope.pag_valor_pago = numeral($scope.pag_valor_pago).format('0,0.00');
             } else if (event.action == 'insert' && !event.error) {
                 // Adicionar registro na listagem
                 $scope.dgPagamentoControl.addDataRow(event.data);
@@ -362,6 +384,7 @@ define(['../controllers/module'], function(controllers) {
             } else if (event.action == 'update' && !event.error) {
                 // Atualizar registro na listagem
                 $scope.dgPagamentoControl.updateDataRow(event.data);
+                $scope.dgPagamentoControl.getData();
                 $mdDialog.hide();
             }
         };
