@@ -122,7 +122,7 @@ define(['../controllers/module'], function(controllers) {
             }, {
                 title: 'CPF',
                 field: 'cli_cpfCnpj',
-                type: 'int',
+                type: 'varchar',
                 stringMask: '###.###.###-##',
                 filter: 'filtroCPF',
                 filterOperator: '='
