@@ -3,20 +3,73 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="product" content="interblock-sistema">
     <meta name="description" content="Sistema Interblock">
     <meta name="author" content="Weslei Freitas, weslei.rfreitas@gmail.com">
     <link href="favicon.ico" rel="shortcut icon">
     <title>Interblock</title>
-    <link rel="stylesheet" href="lib/px-project/dist/system/core/px-loading.css">
+    <link href="app.less" type="text/css" rel="stylesheet/less">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body class="metro">
-    <div id="px-loading" class="loading">Loading&#8230;</div>
-    <div id="px-main" ui-view></div>
+<body ng-app="myApp" layout="column" ng-cloak>
+    <div ui-view layout="column" class="myApp-views"></div>
+    <!-- Livereload script for development only (stripped during dist build) -->
+    <script src="http://localhost:35729/livereload.js"></script>
+    <!-- htmlbuild:js -->
+    <!-- Libraries -->
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular-animate/angular-animate.min.js"></script>
+    <script src="lib/angular-aria/angular-aria.min.js"></script>
+    <script src="lib/angular-messages/angular-messages.min.js"></script>
+    <script src="lib/angular-cookies/angular-cookies.min.js"></script>
+    <script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="lib/angular-i18n/angular-locale_pt-br.js"></script>
+    <script src="lib/angular-resource/angular-resource.min.js"></script>
+    <script src="lib/angular-input-masks/angular-input-masks-standalone.min.js"></script>
+    <script src="lib/angular-ui-mask/dist/mask.min.js"></script>
+    <script src="lib/less/dist/less.min.js"></script>
+    <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/moment/min/moment-with-locales.min.js"></script>
-    <script src="lib/requirejs/require.js" data-main="js/main.js"></script>
+    <script src="lib/numeral/min/numeral.min.js"></script>
+    <script src="lib/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="lib/px-module/dist/px-full/px-full.min.js"></script>
+    <script src="lib/angular-material-data-table/dist/md-data-table.min.js"></script>
+    <script src="lib/jstree/dist/jstree.min.js"></script>
+    <script src="lib/angular-material/angular-material.min.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="lib/material-calendar/dist/angular-material-calendar.min.js"></script>
+    <!-- Your application bootstrap  -->
+    <script src="app.js"></script>
+    <!-- controllers -->
+    <script src="partial/login/login.controller.js"></script>
+    <script src="partial/home/home.controller.js"></script>
+    <script src="partial/404/404.controller.js"></script>
+    <script src="partial/example/example.controller.js"></script>
+    <script src="partial/example/example-form.controller.js"></script>
+    <script src="partial/agenda/agenda.controller.js"></script>
+    <script src="partial/pagamento/pagamento.controller.js"></script>
+    <script src="partial/pagamento/pagamento-form.controller.js"></script>
+    <!-- routes -->
+    <script src="partial/login/login.route.js"></script>
+    <script src="partial/home/home.route.js"></script>
+    <script src="partial/404/404.route.js"></script>
+    <script src="partial/example/example.route.js"></script>
+    <script src="partial/example/example-form.route.js"></script>
+    <script src="partial/agenda/agenda.route.js"></script>
+    <script src="partial/pagamento/pagamento.route.js"></script>
+    <!-- directives -->
+    <script src="directive/compare-to/compare-to.js"></script>
+    <script src="directive/nav-bar/nav-bar.js"></script>
+    <!-- services -->
+    <script src="service/login.service.js"></script>
+    <script src="service/user.service.js"></script>
+    <script src="service/example.service.js"></script>
+    <script src="service/pagamento.service.js"></script>
+    <!-- constants -->
+    <script src="constant/example.constant.js"></script>
+    <!-- endbuild -->
 </body>
 
 </html>

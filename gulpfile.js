@@ -1,273 +1,263 @@
-var gulp = require('gulp');
-//var clean = require('gulp-clean');
-var gutil = require('gulp-util');
-var jshint = require('gulp-jshint');
-var uglify = require('gulp-uglify');
-var cssmin = require('gulp-cssmin');
-var rename = require('gulp-rename');
-var replace = require('gulp-replace');
-var watch = require('gulp-watch');
+var gulp = require('gulp'),
+    plugins = require('gulp-load-plugins')(),
+    htmlbuild = require('gulp-htmlbuild'),
+    es = require('event-stream'),
+    less = require('gulp-less'),
+    path = require('path'),
+    replace = require('gulp-replace'),
+    gulpSequence = require('gulp-sequence'),
+    webserver = require('gulp-webserver'),
+    jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish'),
+    watch = require('gulp-watch'),
+    request = require('request'),
+    clean = require('gulp-clean'),
+    uglify = require('gulp-uglify'),
+    concat = require('gulp-concat'),
+    cssmin = require('gulp-cssmin'),
+    livereload = require('gulp-livereload');
 
-/*gulp.task('build-interblock-sistema-clean', function() {
-	return gulp
-		.src(['./release'])
-		.pipe(clean({
-			read: false,
-			force: true
-		}));
-});*/
-
-/*
-gulp.task('jshint-js', function() {
-	return gulp
-		.src(['./js/*.js'])
-		.pipe(jshint())
-		.pipe(jshint.reporter('default'));
-});
-*/
-
-gulp.task('build-interblock-sistema-js', function() {
-	return gulp
-		.src(['./src/js/*.js'])
-		//.pipe(uglify())
-		.pipe(gulp.dest('./release/js'));
-});
-
-gulp.task('build-interblock-sistema-lib-js', function() {
-	return gulp
-		.src([
-			'./src/lib/**/*.min.js'
-		])
-		.pipe(gulp.dest('./release/lib'));
+// https://www.npmjs.com/package/gulp-webserver
+gulp.task('serve', ['watch'], function() {
+    gulp.src('')
+        .pipe(webserver({
+            livereload: {
+                enable: false,
+                filter: function(fileName) {
+                    // exclude all source maps from livereload
+                    if (fileName.match(/LICENSE|\.json$|\.md|lib|backend|node_modules|build|pdf-viewer/)) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            directoryListing: false,
+            open: false,
+            port: 9000
+        }));
 });
 
-gulp.task('build-interblock-sistema-lib-css', function() {
-	return gulp
-		.src([
-			'./src/lib/**/*.min.css'
-		])
-		.pipe(gulp.dest('./release/lib'));
+gulp.task('livereload', function() {
+    gulp.src('src')
+        .pipe(livereload());
 });
 
-gulp.task('build-interblock-sistema-bootstrap-css', function() {
-	return gulp
-		.src([
-			'./src/lib/bootstrap/**/*.css'
-		])
-		.pipe(cssmin())
-		.pipe(gulp.dest('./release/lib/bootstrap'));
+gulp.task('watch', function() {
+    livereload.listen();
+    gulp.watch([
+        './src/*.html',
+        './src/*.js',
+        './src/*.less',
+        './src/*.css',
+        './src/directive/**/*.*',
+        './src/partial/**/*.*',
+        './src/service/**/*.*',
+        './src/constant/**/*.*'
+    ], ['livereload']);
+    gulp.watch('./src/*.js', ['jshint']);
+    gulp.watch('./src/directive/**/*.js', ['jshint']);
+    gulp.watch('./src/partial/**/*.js', ['jshint']);
+    gulp.watch('./src/service/**/*.js', ['jshint']);
+    gulp.watch('./src/constant/**/*.js', ['jshint']);
+    gulp.watch('./backend/cf/**/*.*', ['backend-cf-init']);
 });
 
-gulp.task('build-interblock-sistema-lib-angular-i18n', function() {
-	return gulp
-		.src([
-			'./src/lib/angular-i18n/angular-locale_pt-br.js'
-		])
-		.pipe(uglify())
-		.pipe(gulp.dest('./release/lib/angular-i18n'));
+gulp.task('backend-cf-init', function() {
+    var url = 'http://localhost:8500/interblock-sistema/backend/cf/restInit.cfm'
+    request(url, function(error, response, body) {
+        var date = new Date();
+        if (!error && response.statusCode == 200) {
+            console.log('[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ']', body);
+        } else {
+            console.log('[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ']', 'error');
+        }
+    })
 });
 
-gulp.task('build-interblock-sistema-lib-angular-ui-calendar', function() {
-	return gulp
-		.src([
-			'./src/lib/angular-ui-calendar/**/*.js'
-		])
-		.pipe(uglify())
-		.pipe(gulp.dest('./release/lib/angular-ui-calendar'));
-});
-
-gulp.task('build-interblock-sistema-lib-ui-calendar', function() {
-	return gulp
-		.src([
-			'./src/lib/ui-calendar/src/**/*.js'
-		])
-		.pipe(uglify())
-		.pipe(gulp.dest('./release/lib/ui-calendar/src'));
-});
-
-gulp.task('build-interblock-sistema-lib-px-project', function() {
-	return gulp
-		.src([
-			'./src/lib/px-project/dist/system/**/*.js'
-		])
-		.pipe(uglify())
-		.pipe(gulp.dest('./release/lib/px-project/dist/system'));
-});
-
-gulp.task('build-interblock-sistema-lib-px-project-rest', function() {
-	return gulp
-		.src([
-			'./src/lib/px-project/dist/rest/**/*'
-		])
-		.pipe(gulp.dest('./release/lib/px-project/dist/rest'));
-});
-
-gulp.task('build-interblock-sistema-lib-px-project-css', function() {
-	return gulp
-		.src([
-			'./src/lib/px-project/dist/system/**/*.css'
-		])
-		.pipe(cssmin())
-		.pipe(gulp.dest('./release/lib/px-project/dist/system'));
-});
-
-gulp.task('build-interblock-sistema-lib-px-project-others', function() {
-	return gulp
-		.src([
-			'./src/lib/px-project/dist/system/**/*.html',
-			'./src/lib/px-project/dist/system/**/*.woff',
-			'./src/lib/px-project/dist/system/**/*.ttf',
-			'./src/lib/px-project/dist/system/**/*.cfm',
-			'./src/lib/px-project/dist/system/**/*.cfc',
-			'./src/lib/px-project/dist/system/**/*.cfc',
-			'./src/lib/px-project/dist/system/**/*.gif',
-			'./src/lib/px-project/dist/system/**/*.png'
-		])
-		.pipe(gulp.dest('./release/lib/px-project/dist/system'));
-});
-
-gulp.task('build-interblock-sistema-lib-font-awesome-others', function() {
-	return gulp
-		.src([
-			'./src/lib/font-awesome/**/*.ttf',
-			'./src/lib/font-awesome/**/*.woff',
-			'./src/lib/font-awesome/**/*.woff2'
-		])
-		.pipe(gulp.dest('./release/lib/font-awesome'));
-});
-
-gulp.task('build-interblock-sistema-lib-requirejs', function() {
-	return gulp
-		.src([
-			'./src/lib/requirejs/**/*.js'
-		])
-		.pipe(uglify())
-		.pipe(gulp.dest('./release/lib/requirejs'));
-});
-
-gulp.task('build-interblock-sistema-src-html', function() {
-	return gulp
-		.src([
-			'./src/custom/**/*.html'
-		])
-		.pipe(gulp.dest('./release/custom'));
-});
-
-gulp.task('build-interblock-sistema-src-js', function() {
-	return gulp
-		.src(['./src/custom/**/*.js'])
-		//.pipe(uglify())
-		.pipe(gulp.dest('./release/custom'));
-});
-
-gulp.task('build-interblock-sistema-src-cf', function() {
-	return gulp
-		.src([
-			'./src/custom/**/*.cfm',
-			'./src/custom/**/*.cfc'
-		])
-		.pipe(gulp.dest('./release/custom'));
-});
-
-gulp.task('build-interblock-sistema-src-css', function() {
-	return gulp
-		.src(['./src/custom/**/*.css'])
-		.pipe(cssmin())
-		.pipe(gulp.dest('./release/custom'));
-});
-
-gulp.task('build-interblock-sistema-src-assets', function() {
-	return gulp
-		.src([
-			'./src/custom/assets/**/*.svg',
-			'./src/custom/assets/**/*.png',
-			'./src/custom/assets/**/*.jpg'
-		])
-		.pipe(gulp.dest('./release/custom/assets'));
-});
-
-gulp.task('build-interblock-sistema-root', function() {
-	return gulp
-		.src([
-			'./src/*.html',
-			'./src/*.cfc',
-			'./src/*.cfm',
-			'./src/*.ico'
-		])
-		.pipe(gulp.dest('./release'));
-});
-
-gulp.task('build-interblock-sistema-root-css', function() {
-	return gulp
-		.src([
-			'./src/*.css',
-		])
-		.pipe(cssmin())
-		.pipe(gulp.dest('./release'));
-});
-
-gulp.task('build-interblock-sistema-server', function() {
-	return gulp
-		.src([
-			'./_server/*'
-		])
-		.pipe(gulp.dest('./release/_server'));
-});
-
-gulp.task('build-interblock-sistema-pdf-viewer', function() {
-	return gulp
-		.src([
-			'./pdf-viewer/**/*'
-		])
-		.pipe(gulp.dest('./release/pdf-viewer'));
-});
-
-gulp.task('build-interblock-sistema-webservice', function() {
-	return gulp
-		.src([
-			'./wsinterblock-sistema/**/*'
-		])
-		.pipe(gulp.dest('./release/wsinterblock-sistema'));
-});
-
-gulp.task('build-interblock-sistema-schedule', function() {
-	return gulp
-		.src([
-			'./schedule/**/*'
-		])
-		.pipe(gulp.dest('./release/schedule'));
+gulp.task('jshint', function() {
+    return gulp
+        .src(['./src/*.js',
+            './src/directive/**/*.js',
+            './src/partial/**/*.js',
+            './src/service/**/*.js',
+            './src/constant/**/*.js',
+        ])
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'));
 });
 
 
-/*gulp.task('watch', function() {});*/
-gulp.task('default', [
-	'build-interblock-sistema'
-]);
+// pipe a glob stream into this and receive a gulp file stream 
+var gulpSrc = function(opts) {
+    var paths = es.through();
+    var files = es.through();
+
+    paths.pipe(es.writeArray(function(err, srcs) {
+
+        for (var i = 0; i <= srcs.length - 1; i++) {
+            srcs[i] = 'src/' + srcs[i];
+        }
+
+        gulp.src(srcs, opts).pipe(files);
+    }));
+
+    return es.duplex(paths, files);
+};
 
 
-gulp.task('build-interblock-sistema', [
-	'build-interblock-sistema-js',
-	'build-interblock-sistema-lib-js',
-	'build-interblock-sistema-lib-css',
-	'build-interblock-sistema-bootstrap-css',
-	'build-interblock-sistema-lib-angular-i18n',
-	'build-interblock-sistema-lib-angular-ui-calendar',
-	'build-interblock-sistema-lib-px-project',
-	'build-interblock-sistema-lib-px-project-rest',
-	'build-interblock-sistema-lib-px-project-css',
-	'build-interblock-sistema-lib-px-project-others',
-	'build-interblock-sistema-lib-font-awesome-others',
-	'build-interblock-sistema-lib-requirejs',
-	'build-interblock-sistema-lib-ui-calendar',
-	'build-interblock-sistema-src-html',
-	'build-interblock-sistema-src-js',
-	'build-interblock-sistema-src-cf',
-	'build-interblock-sistema-src-css',
-	'build-interblock-sistema-src-assets',
-	'build-interblock-sistema-server',
-	'build-interblock-sistema-pdf-viewer',
-	'build-interblock-sistema-webservice',
-	'build-interblock-sistema-schedule',
-	'build-interblock-sistema-root',
-	'build-interblock-sistema-root-css',
-]);
+var jsBuild = es.pipeline(
+    //uglify(),
+    plugins.concat('concat.js'),
+    gulp.dest('./src/build/js')
+);
+
+var cssBuild = es.pipeline(
+    plugins.concat('concat.css'),
+    gulp.dest('./src/build/css')
+);
+
+
+gulp.task('htmlbuild', function() {
+
+    gulp.src(['./src/index.html'])
+        .pipe(htmlbuild({
+            // build js with preprocessor 
+            js: htmlbuild.preprocess.js(function(block) {
+
+                block.pipe(gulpSrc())
+                    .pipe(jsBuild);
+
+                block.end('js/concat.js');
+
+            }),
+
+            // build css with preprocessor 
+            css: htmlbuild.preprocess.css(function(block) {
+
+                block.pipe(gulpSrc())
+                    .pipe(cssBuild);
+
+                block.end('css/concat.css');
+
+            }),
+
+            // remove blocks with this target 
+            remove: function(block) {
+                block.end();
+            },
+
+            // add a template with this target 
+            template: function(block) {
+                es.readArray([
+                    '<!--',
+                    '  processed by htmlbuild (' + block.args[0] + ')',
+                    '-->'
+                ].map(function(str) {
+                    return block.indent + str;
+                })).pipe(block);
+            }
+        }))
+        .pipe(gulp.dest('./src/build'));
+});
+
+gulp.task('less', function() {
+    return gulp.src('./src/app.less')
+        .pipe(less({
+            paths: [path.join(__dirname, 'less', 'includes')]
+        }))
+        //.pipe(cssmin())
+        .pipe(gulp.dest('./src/build'));
+});
+
+gulp.task('material-css', function() {
+    return gulp.src('./src/lib/angular-material/angular-material.min.css')
+        .pipe(gulp.dest('./src/build/lib/angular-material/'));
+});
+
+gulp.task('partial-html', function() {
+    return gulp.src('./src/partial/**/*.html')
+        .pipe(gulp.dest('./src/build/partial/'));
+});
+
+gulp.task('assets', function() {
+    return gulp
+        .src(['./src/assets/**/*.jpg',
+            './src/assets/**/*.png',
+            './src/assets/**/*.gif'
+        ])
+        .pipe(gulp.dest('./src/build/assets/'));
+});
+
+gulp.task('lib-fonts', function() {
+    return gulp
+        .src(['./src/lib/**/*.ttf',
+            './src/lib/**/*.woff',
+            './src/lib/**/*.woff2'
+        ])
+        .pipe(gulp.dest('./src/build/lib/'));
+});
+
+gulp.task('index-replace', function() {
+    gulp.src(['./src/build/index.html'])
+        .pipe(replace('app.less', 'app.css'))
+        .pipe(replace('stylesheet/less', 'stylesheet'))
+        .pipe(gulp.dest('./src/build'));
+})
+
+gulp.task('js-compress', function() {
+    return gulp
+        .src(['!./src/build/js/*.min.js', './src/build/js/*.js'])
+        .pipe(uglify())
+        .pipe(gulp.dest('./src/build/js/'));
+});
+
+gulp.task('js-concat', function() {
+    return gulp
+        .src(['./src/build/js/*.js'])
+        .pipe(concat('concat.js'))
+        .pipe(gulp.dest('./src/build/js/'));
+});
+
+gulp.task('js-clean', function() {
+    return gulp
+        .src(['!./src/build/js/concat.js',
+            './src/build/js/*.js'
+        ])
+        .pipe(clean({ force: true }));
+});
+
+gulp.task('backend-cf', function() {
+    return gulp
+        .src(['./backend/cf/**/*.cfm',
+            './backend/cf/**/*.cfc'
+        ])
+        .pipe(gulp.dest('./src/build/backend'));
+});
+
+gulp.task('clean', function() {
+    return gulp.src('./src/build')
+        .pipe(clean({ force: true }));
+});
+
+gulp.task('default', ['build']);
+
+gulp.task('build', function() {
+    gulpSequence('clean',
+        'htmlbuild',
+        'less',
+        'material-css',
+        'partial-html',
+        'assets',
+        'lib-fonts',
+        //'js-compress',
+        //'js-concat',
+        //'js-clean',
+        'index-replace')();
+});
+
+gulp.task('build-backend-cf', function() {
+    projectBuild = 'main';
+    gulpSequence('clean',
+        'backend-cf')();
+});

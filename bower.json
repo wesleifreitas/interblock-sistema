@@ -1,18 +1,19 @@
 {
-  "name": "interblock-sistema",
+  "name": "px-project-a1",
   "version": "0.0.0",
-  "homepage": "https://github.com/wesleifreitas/px-example",
+  "homepage": "https://github.com/wesleifreitas/px-project-a1",
+  "private": true,
   "authors": [
     "Weslei Freitas <weslei.rfreitas@gmail.com>"
   ],
-  "description": "Sistema Interblock",
-  "main": "index.html",
+  "description": "Phoenix Project AngularJS 1",
+  "main": "src/js/main.js",
   "moduleType": [
     "amd",
     "globals"
   ],
   "keywords": [
-    "interblock-sistema"
+    "px-project"
   ],
   "license": "MIT",
   "ignore": [
@@ -20,14 +21,30 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "docs",
+    "src"
   ],
   "dependencies": {
-    "px-project": "~1",
-    "angular-ui-calendar": "~1.0.2"
+    "angular": "~1",
+    "angular-animate": "~1",
+    "angular-aria": "~1",
+    "angular-cookies": "~1",
+    "angular-i18n": "~1",
+    "angular-material": "~1",
+    "angular-resource": "~1",
+    "angular-ui-router": "~0.3.1",
+    "less": "~2.7.1",
+    "px-module": "~1",
+    "jstree-bootstrap-theme": "~1",
+    "angular-input-masks": "~2.5.0",
+    "numeral": "~1.5.3",
+    "angular-material-data-table": "~0.10.10",
+    "material-calendar": "^0.2.14",
+    "angular-sanitize": "^1.6.1"
   },
   "resolutions": {
-    "angular": "~1",
-    "jquery": "~2.1.4"
+    "bootstrap": "~3",
+    "angular-material": "~1"
   }
 }
