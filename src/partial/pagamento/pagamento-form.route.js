@@ -13,8 +13,8 @@
 
     function getState() {
         return {
-            url: '/example/:id',
-            templateUrl: 'partial/example/pagamento-form.html',
+            url: '/pagamento/:id',
+            templateUrl: 'partial/pagamento/pagamento-form.html',
             controller: 'PagamentoFormCtrl',
             controllerAs: 'vm',
             parent: 'home',
@@ -27,13 +27,13 @@
         };
     }
 
-    getData.$inject = ['$state', '$stateParams', 'exampleService'];
+    getData.$inject = ['$state', '$stateParams', 'pagamentoService'];
 
-    function getData($state, $stateParams, exampleService) {
+    function getData($state, $stateParams, pagamentoService) {
         console.info('$stateParams', $stateParams);
 
         if ($stateParams.id) {
-            return exampleService.getById($stateParams.id).then(success, error);
+            return pagamentoService.getById($stateParams.id).then(success, error);
         } else {
             return {};
         }

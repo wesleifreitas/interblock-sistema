@@ -11,6 +11,7 @@
             'ngMessages',
             'ngSanitize',
             'ui.utils.masks',
+            'idf.br-filters',
             'ui.mask',
             'pxConfig',
             'px-data-grid',

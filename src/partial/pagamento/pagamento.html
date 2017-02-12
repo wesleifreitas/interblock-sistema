@@ -1,26 +1,45 @@
-<div layout="column" ng-cloak class="example" ng-init="vm.init()">
+<div layout="column" ng-cloak class="pagamento" ng-init="vm.init()">
     <form name="formSearch" class="filter">
         <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
+
         <div layout-gt-sm="row">
-            <md-input-container flex-gt-sm="10" flex-gt-sm layout-xs="100">
-                <label>ID</label>
-                <input ng-model="vm.filter.id">
+            <md-input-container flex-gt-sm="15">
+                <label>Ano (Vencimento)</label>
+                <input ng-model="vm.filter.ano" type="number">
             </md-input-container>
 
-            <md-input-container flex-gt-sm="25" layout-xs="100">
-                <label>Nome</label>
-                <input ng-model="vm.filter.nome">
+            <md-input-container flex-gt-sm="20">
+                <label>Mês (Vencimento)</label>
+                <md-select ng-model="vm.filter.mes">
+                    <md-option><em>Todos</em></md-option>
+                    <md-option ng-repeat="option in vm.filter.months" ng-value="$index">
+                        {{vm.filter.months[$index]}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container>
+                <label>CPF</label>
+                <input ng-model="vm.filter.cpf" ui-br-cpf-mask>
+                <div ng-messages="form.cpf.$error" multiple md-auto-hide="false">
+                    <div ng-message="cpf">CPF inválido</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container flex-gt-sm>
+                <label>Cliente</label>
+                <input ng-model="vm.filter.cliente">
             </md-input-container>
         </div>
     </form>
-    <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.example.selected.length">
+    <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.pagamento.selected.length">
         <div class="md-toolbar-tools">
-            <span>Exemplos</span>
+            <span>Pagamentos</span>
             <span flex></span>
-            <md-button class="md-primary" ng-click="vm.create()">
+            <!-- <md-button class="md-primary" ng-click="vm.create()">
                 <md-icon>add</md-icon>
                 Adicionar
-            </md-button>
+            </md-button> -->
             <md-button class="md-primary" ng-click="vm.getData({reset: true})">
                 <md-icon>refresh</md-icon>
                 Atualizar
@@ -28,9 +47,9 @@
         </div>
     </md-toolbar>
 
-    <md-toolbar class="md-accent md-hue-1" ng-show="vm.example.selected.length">
+    <md-toolbar class="md-accent md-hue-1" ng-show="vm.pagamento.selected.length">
         <div class="md-toolbar-tools">
-            <span>{{vm.example.selected.length}} {{vm.example.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
+            <span>{{vm.pagamento.selected.length}} {{vm.pagamento.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="vm.remove()">
                 <md-icon>delete</md-icon>
@@ -39,29 +58,41 @@
     </md-toolbar>
     <md-content class="content" flex>
         <md-table-container>
-            <table md-table md-row-select="true" multiple="true" ng-model="vm.example.selected" md-progress="vm.example.promise">
-                <thead md-head md-order="vm.example.order">
+            <table md-table md-row-select="true" multiple="true" ng-model="vm.pagamento.selected" md-progress="vm.pagamento.promise">
+                <thead md-head md-order="vm.pagamento.order">
                     <tr md-row>
                         <th md-column><span></span></th>
-                        <th md-column md-order-by="NOME"><span>Nome</span></th>
-                        <th md-column md-order-by="CPF"><span>CPF</span></th>
-                        <th md-column>Data</th>
+                        <th md-column><span>Boleto</span></th>
+                        <th md-column><span>Status</span></th>
+                        <th md-column><span>Vencimento</span></th>
+                        <th md-column md-order-by="CLI_NOME">Cliente</th>
+                        <th md-column>CPF</th>
+                        <th md-column>Proposta / Contrato</th>
+                        <th md-column>Arquivo</th>
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row md-select="item" md-select-id="name" md-auto-select ng-repeat="item in vm.example.data | orderBy: vm.example.order">
+                    <tr md-row md-select="item" md-select-id="name" md-auto-select ng-repeat="item in vm.pagamento.data | orderBy: vm.pagamento.order">
                         <td md-cell>
-                            <md-button class="md-icon-button" ng-click="vm.update(item._ID)">
+                            <md-button class="md-icon-button" ng-click="vm.update(item.PAG_ID)">
                                 <md-icon>mode_edit</md-icon>
                             </md-button>
                         </td>
-                        <td md-cell>{{item.NOME}}</td>
-                        <td md-cell>{{item.CPF}}</td>
-                        <td md-cell>{{item.DATA}}</td>
+                        <td md-cell>
+                            <md-button class="md-icon-button">
+                                <md-icon>picture_as_pdf</md-icon>
+                            </md-button>
+                        </td>
+                        <td md-cell>{{item.PAG_STATUS}}</td>
+                        <td md-cell>{{vm.moment(item.PAG_DATA_VENCIMENTO).format('DD/MM/YYYY')}}</td>
+                        <td md-cell>{{item.CLI_NOME}}</td>
+                        <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>
+                        <td md-cell>{{item.PROP_NUMERO}}</td>
+                        <td md-cell>{{item.CLI_ARQUIVO}}</td>
                     </tr>
                 </tbody>
             </table>
         </md-table-container>
     </md-content>
-    <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.example.limit" md-page="vm.example.page" md-total="{{vm.example.total}}" md-page-select md-on-paginate="vm.example.pagination"></md-table-pagination>
+    <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.pagamento.limit" md-page="vm.pagamento.page" md-total="{{vm.pagamento.total}}" md-page-select md-on-paginate="vm.pagamento.pagination"></md-table-pagination>
 </div>

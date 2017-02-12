@@ -3,16 +3,19 @@
 
     angular.module('myApp').controller('PagamentoFormCtrl', PagamentoFormCtrl);
 
-    PagamentoFormCtrl.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', 'exampleService', 'getData', 'EXAMPLE'];
+    PagamentoFormCtrl.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', 'pagamentoService',
+        'getData', 'EXAMPLE'
+    ];
 
-    function PagamentoFormCtrl($scope, $state, $stateParams, $mdDialog, exampleService, getData, EXAMPLE) {
+    function PagamentoFormCtrl($scope, $state, $stateParams, $mdDialog, pagamentoService,
+        getData, EXAMPLE) {
 
         var vm = this;
         vm.init = init;
-        vm.example = {};
+        vm.pagamento = {};
         vm.uf = EXAMPLE.UF;
         vm.getData = getData;
-        vm.removeById = removeById;
+        //vm.removeById = removeById;
         vm.cancel = cancel;
         vm.save = save;
 
@@ -20,17 +23,18 @@
             if ($stateParams.id) {
                 vm.action = 'update';
 
-                vm.example = {
-                    nome: vm.getData.NOME,
-                    cpf: String(vm.getData.CPF),
-                    data: new Date(vm.getData.DATA)
+                vm.pagamento = {
+                    nome: vm.getData.CLI_NOME,
+                    cpf: String(vm.getData.CLI_CPFCNPJ),
+                    contrato: vm.getData.PROP_NUMERO,
+                    arquivo: vm.getData.CLI_ARQUIVO
                 };
             } else {
                 vm.action = 'create';
             }
         }
 
-        function removeById(event) {
+        /*function removeById(event) {
             var confirm = $mdDialog.confirm()
                 .title('ATENÇÃO')
                 .textContent('Deseja realmente remover este registro?')
@@ -39,11 +43,11 @@
                 .cancel('NÃO');
 
             $mdDialog.show(confirm).then(function() {
-                exampleService.removeById($stateParams.id)
+                pagamentoService.removeById($stateParams.id)
                     .then(function success(response) {
                         if (response.success) {
                             console.info('success', response);
-                            $state.go('example');
+                            $state.go('pagamento');
                         } else {
                             console.warn('warn', response);
                         }
@@ -53,21 +57,21 @@
             }, function() {
                 // cancel
             });
-        }
+        }*/
 
         function cancel() {
-            $state.go('example');
+            $state.go('pagamento');
         }
 
         function save() {
 
             if ($stateParams.id) {
                 //update
-                exampleService.update($stateParams.id, vm.example)
+                pagamentoService.update($stateParams.id, vm.pagamento)
                     .then(function success(response) {
                         if (response.success) {
                             console.info('success', response);
-                            $state.go('example');
+                            $state.go('pagamento');
                         } else {
                             console.warn('warn', response);
                         }
@@ -76,11 +80,11 @@
                     });
             } else {
                 // create
-                exampleService.create(vm.example)
+                pagamentoService.create(vm.pagamento)
                     .then(function success(response) {
                         if (response.success) {
                             console.info('success', response);
-                            $state.go('example');
+                            $state.go('pagamento');
                         } else {
                             console.warn('warn', response);
                         }
