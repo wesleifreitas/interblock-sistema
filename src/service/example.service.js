@@ -25,6 +25,7 @@
                     url: config.REST_URL + '/example/',
                     method: 'GET',
                     headers: {
+                        'Authorization': '',
                         'Content-Type': 'application/json'
                     },
                     params: params
@@ -40,6 +41,7 @@
                     url: config.REST_URL + '/example/' + id,
                     method: 'GET',
                     headers: {
+                        'Authorization': '',
                         'Content-Type': 'application/json'
                     }
                 })
@@ -54,6 +56,7 @@
                     url: config.REST_URL + '/example/',
                     method: 'POST',
                     headers: {
+                        'Authorization': '',
                         'Content-Type': 'application/json'
                     },
                     data: data
@@ -69,6 +72,7 @@
                     url: config.REST_URL + '/example/' + id,
                     method: 'PUT',
                     headers: {
+                        'Authorization': '',
                         'Content-Type': 'application/json'
                     },
                     data: data
@@ -83,6 +87,7 @@
                     url: config.REST_URL + '/example/',
                     method: 'DELETE',
                     headers: {
+                        'Authorization': '',
                         'Content-Type': 'application/json'
                     },
                     data: data
@@ -97,6 +102,7 @@
                     url: config.REST_URL + '/example/' + id,
                     method: 'DELETE',
                     headers: {
+                        'Authorization': '',
                         'Content-Type': 'application/json'
                     }
                 })
@@ -108,7 +114,7 @@
         // private functions
 
         function handleSuccess(response) {
-
+            console.info('handleSuccess', response);
             if (response.data.message && response.data.message !== '') {
 
                 $timeout(function() {
@@ -118,20 +124,30 @@
                         .position('bottom right')
                         .hideDelay(3500)
                     );
-                }, 1000);
-
+                }, 500);
             }
 
             return response.data;
         }
 
         function handleError(response) {
-
-            if (!angular.isObject(response.data) || !response.data.message) {
-                return ($q.reject('Ocorreu um erro desconhecido.'));
+            console.info('handleError', response);
+            if (!angular.isObject(response.data) || !response.data.Message) {
+                response.data.Message = 'Ops! Ocorreu um erro desconhecido';
             }
 
-            return ($q.reject(response.data.message));
+            $mdToast.show(
+                $mdToast.simple()
+                .textContent(response.data.Message)
+                .action('Fechar')
+                .highlightAction(true)
+                .highlightClass('md-accent')
+                .position('bottom right')
+                .hideDelay(0)
+                .theme('error-toast')
+            );
+
+            return ($q.reject(response.data.Message));
         }
     }
 

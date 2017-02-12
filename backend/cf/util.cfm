@@ -81,3 +81,20 @@
         "$1-$2-$3 $4"
         ) />
 </cffunction>
+
+<cffunction 
+    name       ="responseError" 
+    access     ="private" 
+    returntype ="void" 
+    output     ="false">
+
+    <cfargument name="errorCode" type="numeric" required="false" default="0" >
+    <cfargument name="message" type="string" required="false" default="" >
+
+    <cfif arguments.message eq "" and arguments.errorCode eq 401>
+        <cfset arguments.message = "Usuário não autenticado ou sessão encerrada">
+    </cfif>
+
+    <cfthrow errorcode="#arguments.errorCode#" message="#arguments.message#">
+
+</cffunction>

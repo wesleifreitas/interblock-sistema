@@ -1,14 +1,18 @@
-<cfcomponent rest="true" restPath="/login">  
+<cfcomponent rest="true" restPath="/">  
 
     <cfprocessingDirective pageencoding="utf-8">
     <cfset setEncoding("form","utf-8")> 
     
 	<cfinclude template="util.cfm">
 
-	<cffunction name="login" access="remote" returnType="String" httpMethod="POST">
+	<cffunction name="login" access="remote" returnType="String" httpMethod="POST" restPath="/login">
 		<cfargument name="body" type="String">
 
 		<cfset body = DeserializeJSON(arguments.body)>
+
+        <cfif not IsDefined("body.setSession")>
+            <cfset body.setSession = true>
+        </cfif>
 
         <cfset response = structNew()>
 		<cfset response["body"] = body>
@@ -40,12 +44,14 @@
         <cfif qLogin.recordCount GT 0>
             <cfset response["success"] = true>
             <cfset response["message"] = "">
-            <cflock timeout="20" throwontimeout="No" type="EXCLUSIVE" scope="session">
-                <cfset session.authenticated = true>					
-                <cfset session.userId = qLogin.user_id>
-                <cfset session.userName = qLogin.user_name>                                
-            </cflock>
-            <cfset response["session"] = session>
+            <cfif body.setSession>
+                <cflock timeout="20" throwontimeout="No" type="EXCLUSIVE" scope="session">
+                    <cfset session.authenticated = true>					
+                    <cfset session.userId = qLogin.user_id>
+                    <cfset session.userName = qLogin.user_name>                                
+                </cflock>
+                <cfset response["session"] = session>
+            </cfif>
         <cfelse>
             <cfset response["success"] = false>
             <cfset response["message"] = "Usuário e/ou senha incorreto(s)">
@@ -57,7 +63,7 @@
 		<cfreturn SerializeJSON(response)>
 	</cffunction>
     
-    <cffunction name = "authenticated" access ="remote" returntype ="String" httpMethod="GET">
+    <cffunction name = "authenticated" access ="remote" returntype ="String" httpMethod="GET" restPath="/login">
 
         <cfset response = structNew()>
 
@@ -66,6 +72,15 @@
         <cfelse>    
             <cfset response["authenticated"] = false>
         </cfif>
+
+        <cfreturn SerializeJSON(response)>
+    </cffunction>
+
+    <cffunction name = "logout" access ="remote" returntype ="String" httpMethod="POST" restPath="/logout">
+        
+        <cfset StructClear(session)>
+        <cfset response = structNew()>
+        <cfset response["sessionClear"] = true>
 
         <cfreturn SerializeJSON(response)>
     </cffunction>

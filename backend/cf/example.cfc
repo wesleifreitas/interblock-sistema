@@ -1,4 +1,5 @@
 <cfcomponent rest="true" restPath="/example">  
+	<cfinclude template="security.cfm">
 	<cfinclude template="util.cfm">
 	
 	<cffunction name="sayHello" access="remote" returntype="String" httpmethod="GET" restPath="/hello"> 
@@ -19,6 +20,8 @@
 	</cffunction>
 
 	<cffunction name="example" access="remote" returntype="String" httpmethod="GET"> 
+
+		<cfset checkAuthentication()>
         
 		<cfset response = structNew()>
 		
@@ -68,7 +71,7 @@
 			<cfset response["query"] = queryToArray(query)>
 
 			<cfcatch>
-				<cfset response["catch"] = cfcatch>
+				<cfset responseError(400, cfcatch.message)>
 			</cfcatch>
 		</cftry>
 		
@@ -78,47 +81,59 @@
 	<cffunction name="getById" access="remote" returntype="String" httpmethod="GET" restpath="/{id}"> 
 
 		<cfargument name="id" restargsource="Path" type="numeric"/>
-        
+		
+		<cfset checkAuthentication()>
+
 		<cfset response = structNew()>
 		<cfset response["arguments"] = arguments>
 		<cfset response["params"] = url>
 
-		<cfset rows = 100>
-		<cfset myQuery = QueryNew("_id, nome, cpf, data, bateria, status", "bigint, varchar, varchar, date, integer, integer")> 
-        <cfset newRow = QueryAddRow(MyQuery, rows)> 
-		
-		<cfloop from="1" to="#rows#" index="i">
+		<cftry>
+
+			<cfset rows = 100>
+			<cfset myQuery = QueryNew("_id, nome, cpf, data, bateria, status", "bigint, varchar, varchar, date, integer, integer")> 
+			<cfset newRow = QueryAddRow(MyQuery, rows)> 
 			
-			<cfset temp = QuerySetCell(myQuery, "_id", i, i)> 
-			<cfset temp = QuerySetCell(myQuery, "nome", "Weslei Freitas", i)> 
-			<cfset temp = QuerySetCell(myQuery, "cpf", '39145592845', i)>
-			<cfset temp = QuerySetCell(myQuery, "data", now(), i)>
-			<cfset temp = QuerySetCell(myQuery, "bateria", 1, i)>
-			<cfset temp = QuerySetCell(myQuery, "status", 1, i)>
+			<cfloop from="1" to="#rows#" index="i">
+				
+				<cfset temp = QuerySetCell(myQuery, "_id", i, i)> 
+				<cfset temp = QuerySetCell(myQuery, "nome", "Weslei Freitas", i)> 
+				<cfset temp = QuerySetCell(myQuery, "cpf", '39145592845', i)>
+				<cfset temp = QuerySetCell(myQuery, "data", now(), i)>
+				<cfset temp = QuerySetCell(myQuery, "bateria", 1, i)>
+				<cfset temp = QuerySetCell(myQuery, "status", 1, i)>
 
-		</cfloop>
+			</cfloop>
 
-		<cfquery dbtype="query" name="query">  
-            SELECT 
-                _id
-                ,nome
-                ,cpf
-				,data
-				,bateria
-				,status 
-            FROM 
-            	myQuery
-			WHERE
-				_id = <cfqueryPARAM value="#arguments.id#" CFSQLType='CF_SQL_INTEGER'>  
-        </cfquery>
-		
-		<cfset response["query"] = queryToArray(query)>
+			<cfquery dbtype="query" name="query">  
+				SELECT 
+					_id
+					,nome
+					,cpf
+					,data
+					,bateria
+					,status 
+				FROM 
+					myQuery
+				WHERE
+					_id = <cfqueryPARAM value="#arguments.id#" CFSQLType='CF_SQL_INTEGER'>  
+			</cfquery>
+			
+			<cfset response["query"] = queryToArray(query)>
 
-		<cfreturn SerializeJSON(response)>
+			<cfreturn SerializeJSON(response)>
+
+			<cfcatch>
+				<cfset responseError(400, cfcatch.message)>
+			</cfcatch>
+		</cftry>
+
     </cffunction>
 
 	<cffunction name="exampleCreate" access="remote" returnType="String" httpMethod="POST">		
 		<cfargument name="body" type="String">
+
+		<cfset checkAuthentication()>
 
 		<cfset body = DeserializeJSON(arguments.body)>
 		
@@ -131,8 +146,7 @@
 			<cfset response["message"] = 'Ação realizada com sucesso!'>
 
 			<cfcatch>
-				<cfset response["success"] = false>
-				<cfset response["catch"] = cfcatch>	
+				<cfset responseError(400, cfcatch.message)>
 			</cfcatch>	
 		</cftry>
 		
@@ -142,6 +156,8 @@
 	<cffunction name="exampleUpdate" access="remote" returnType="String" httpMethod="PUT" restPath="/{id}">
 		<cfargument name="id" restargsource="Path" type="numeric"/>
 		<cfargument name="body" type="String">
+
+		<cfset checkAuthentication()>
 
 		<cfset body = DeserializeJSON(arguments.body)>
 		
@@ -154,8 +170,7 @@
 			<cfset response["message"] = 'Ação realizada com sucesso!'>
 
 			<cfcatch>
-				<cfset response["success"] = false>
-				<cfset response["catch"] = cfcatch>	
+				<cfset responseError(400, cfcatch.message)>	
 			</cfcatch>	
 		</cftry>
 		
@@ -164,6 +179,8 @@
 
 	<cffunction name="exampleRemove" access="remote" returnType="String" httpMethod="DELETE">		
 		<cfargument name="body" type="String">
+
+		<cfset checkAuthentication()>
 
 		<cfset body = DeserializeJSON(arguments.body)>
 		
@@ -175,8 +192,7 @@
 			<cfset response["success"] = true>			
 
 			<cfcatch>
-				<cfset response["success"] = false>
-				<cfset response["catch"] = cfcatch>	
+				<cfset responseError(400, cfcatch.message)>
 			</cfcatch>	
 		</cftry>
 		
@@ -184,7 +200,9 @@
 	</cffunction>
 
 	<cffunction name="exampleRemoveById" access="remote" returnType="String" httpMethod="DELETE" restPath="/{id}">
-		<cfargument name="id" restargsource="Path" type="numeric"/>		
+		<cfargument name="id" restargsource="Path" type="numeric"/>
+
+		<cfset checkAuthentication()>
 
 		<cfset response = structNew()>
 		<cfset response["arguments"] = arguments>
@@ -195,8 +213,7 @@
 			<cfset response["message"] = 'Ação realizada com sucesso!'>
 
 			<cfcatch>
-				<cfset response["success"] = false>
-				<cfset response["catch"] = cfcatch>	
+				<cfset responseError(400, cfcatch.message)>
 			</cfcatch>	
 		</cftry>
 		

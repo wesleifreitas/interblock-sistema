@@ -52,61 +52,10 @@
 
         <cfargument type="String" name="targetPage" required="true"/>
 
-        <!--- fake --->
-        <cfif (IsDefined("SESSION.authenticated") AND SESSION.authenticated) 
-            OR targetPage EQ "/interblock-sistema/backend/cf/restInit.cfm" 
-            OR targetPage EQ "/backend/restInit.cfm">
-            
-            <cfreturn true />
-        <cfelse>
 
-            <cfset var authHeader = GetPageContext().getRequest().getHeader("Authorization") />
-            <cfset var authString = "" />
-            <cfsetting showDebugOutput="false" />
-
-            <cfif IsDefined("authHeader")>
-                <cfset authString = ToString(BinaryDecode(ListLast(authHeader, " "),"Base64")) />
-
-                <cfquery datasource="#application.datasource#" name="query">
-                    SELECT 
-                        TOP 1
-                        usu_id
-                    FROM 
-                        dbo.usuario
-                    WHERE
-                        usu_login = <cfqueryparam cfsqltype="cf_sql_varchar" value="#GetToken(authString, 1, ":")#">                        
-                    AND usu_senha = <cfqueryparam cfsqltype="cf_sql_varchar" value="#hash(GetToken(authString, 2, ":"), "SHA-512")#">
-                    AND usu_ativo = 1
-                </cfquery>
-
-                <!-- fake -->
-                <cfif GetToken(authString, 1, ":") EQ "admin" AND GetToken(authString, 2, ":") EQ "admin">
-                    <cfreturn true />
-                </cfif>
-            </cfif>
-
-            <cfheader statuscode="401"> 
-            <cfheader name="WWW-Authenticate" value="Basic realm=""Test"""> 
-             
-             <!--- UNAUTHORIZED --->            
-            <cfthrow message="UNAUTHORIZED #hash(GetToken(authString, 2, ":"), "SHA-512")#">
-
-            <cfreturn false />
-        </cfif>     
-
-        <!--- Check for initialization. 
-        <cfif StructKeyExists( URL, "reset" )>
-
-            <!--- Reset application and session. --->
-            <cfset THIS.OnApplicationStart() />
-            <cfset THIS.OnSessionStart() />
-
-        </cfif>
-       
         
         <!--- Return out. --->
         <cfreturn true />
-         --->
     </cffunction>
 
     <cffunction
