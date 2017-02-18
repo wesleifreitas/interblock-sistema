@@ -64,7 +64,7 @@
                         <th md-column><span></span></th>
                         <th md-column><span>Boleto</span></th>
                         <th md-column><span>Status</span></th>
-                        <th md-column><span>Vencimento</span></th>
+                        <th md-column><span>Vencimento/Valor</span></th>
                         <th md-column md-order-by="CLI_NOME">Cliente</th>
                         <th md-column>CPF</th>
                         <th md-column>Proposta / Contrato</th>
@@ -84,7 +84,7 @@
                             </md-button>
                         </td>
                         <td md-cell>{{item.PAG_STATUS}}</td>
-                        <td md-cell>{{vm.moment(item.PAG_DATA_VENCIMENTO).format('DD/MM/YYYY')}}</td>
+                        <td md-cell>{{vm.moment(item.PAG_DATA_VENCIMENTO).format('DD/MM/YYYY')}} {{item.PAG_VALOR | currency}}</td>
                         <td md-cell>{{item.CLI_NOME}}</td>
                         <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>
                         <td md-cell>{{item.PROP_NUMERO}}</td>
