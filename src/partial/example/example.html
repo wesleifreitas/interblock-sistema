@@ -49,7 +49,7 @@
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row md-select="item" md-select-id="name" md-auto-select ng-repeat="item in vm.example.data | orderBy: vm.example.order">
+                    <tr md-row md-select="item" md-select-id="_ID" md-auto-select ng-repeat="item in vm.example.data | orderBy: vm.example.order">
                         <td md-cell>
                             <md-button class="md-icon-button" ng-click="vm.update(item._ID)">
                                 <md-icon>mode_edit</md-icon>
