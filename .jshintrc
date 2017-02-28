@@ -57,6 +57,7 @@
         "angular": false,
         "$": false,
         "alert": false,
-        "moment": false
+        "moment": false,
+        "numeral": false
     }
 }

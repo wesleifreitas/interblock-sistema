@@ -16,7 +16,8 @@
             'pxConfig',
             'px-data-grid',
             'md.data.table',
-            'materialCalendar'
+            'materialCalendar',
+            'ng-currency'
         ])
         .config(config)
         .run(run);
@@ -76,12 +77,10 @@
             var m = moment(dateString, 'L', true);
             return m.isValid() ? m.toDate() : new Date(NaN);
         };
+
         $mdDateLocaleProvider.formatDate = function(date) {
-            if (moment(date).format('L') === 'Invalid date') {
-                return '';
-            } else {
-                return moment(date).format('L');
-            }
+            var m = moment(date);
+            return m.isValid() ? m.format('L') : '';
         };
     }
 

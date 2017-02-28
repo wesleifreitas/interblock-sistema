@@ -4,31 +4,33 @@
     angular.module('myApp').controller('PagamentoFormCtrl', PagamentoFormCtrl);
 
     PagamentoFormCtrl.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', 'pagamentoService',
-        'getData', 'EXAMPLE'
+        'getData', 'PAGAMENTO'
     ];
 
     function PagamentoFormCtrl($scope, $state, $stateParams, $mdDialog, pagamentoService,
-        getData, EXAMPLE) {
+        getData, PAGAMENTO) {
 
         var vm = this;
         vm.init = init;
         vm.pagamento = {};
-        vm.uf = EXAMPLE.UF;
+        vm.status = PAGAMENTO.STATUS;
         vm.getData = getData;
         //vm.removeById = removeById;
         vm.cancel = cancel;
         vm.save = save;
+        vm.statusChange = statusChange;
+        vm.dataPagoChange = dataPagoChange;
+        vm.valorPagoChange = valorPagoChange;
 
         function init() {
             if ($stateParams.id) {
                 vm.action = 'update';
 
-                vm.pagamento = {
-                    nome: vm.getData.CLI_NOME,
-                    cpf: String(vm.getData.CLI_CPFCNPJ),
-                    contrato: vm.getData.PROP_NUMERO,
-                    arquivo: vm.getData.CLI_ARQUIVO
-                };
+                vm.getData.CLI_CPFCNPJ = String(vm.getData.CLI_CPFCNPJ);
+                vm.getData.PAG_DATA_VENCIMENTO = new Date(vm.getData.PAG_DATA_VENCIMENTO);
+
+                vm.getData.PAG_DATA_PAGO = (vm.getData.PAG_DATA_PAGO) ? new Date(vm.getData.PAG_DATA_PAGO) : null;
+                vm.pagamento = vm.getData;
             } else {
                 vm.action = 'create';
             }
@@ -91,6 +93,43 @@
                     }, function error(response) {
                         console.error('error', response);
                     });
+            }
+        }
+
+        function statusChange() {
+            if (!vm.getData.PAG_DATA_PAGO) {
+                vm.getData.PAG_DATA_PAGO = new Date();
+                dataPagoChange();
+            }
+        }
+
+        function dataPagoChange() {
+
+            // Data de pagamento válido?
+            if (angular.isDate(vm.pagamento.PAG_DATA_PAGO)) {
+                // Data de pagameto apés da de vencimento?
+                if (moment(vm.pagamento.PAG_DATA_PAGO).isAfter(vm.pagamento.PAG_DATA_VENCIMENTO, 'day')) {
+                    var diasATraso = moment(vm.pagamento.PAG_DATA_PAGO).diff(vm.pagamento.PAG_DATA_VENCIMENTO, 'days');
+
+                    // juros = c*i*t (1% ao mês)
+                    // t= dias de atraso (ex.:10 dias = 10/30 
+                    // j = 9 * 0.01 * 10/30 = 0,66 
+                    var valorJuros = vm.pagamento.PAG_VALOR * 0.01 * diasATraso / 30;
+                    console.info('valorJuros', valorJuros);
+
+                    // 2%
+                    var multa = vm.pagamento.PAG_VALOR * 0.02;
+
+                    vm.pagamento.PAG_VALOR_JUROS = vm.pagamento.PAG_VALOR + valorJuros + multa;
+                } else {
+                    vm.pagamento.PAG_VALOR_JUROS = vm.pagamento.PAG_VALOR;
+                }
+            }
+        }
+
+        function valorPagoChange() {
+            if (angular.isNumber(vm.pagamento.PAG_VALOR_PAGO) && angular.isNumber(vm.pagamento.PAG_VALOR_JUROS)) {
+                vm.pagamento.PAG_VALOR_PENDENTE = vm.pagamento.PAG_VALOR_JUROS - vm.pagamento.PAG_VALOR_PAGO;
             }
         }
     }

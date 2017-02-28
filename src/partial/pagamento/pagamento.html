@@ -72,7 +72,7 @@
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row md-select="item" md-select-id="PAG_ID" md-auto-select ng-repeat="item in vm.pagamento.data | orderBy: vm.pagamento.order">
+                    <tr md-row md-select="item" md-select-id="PAG_ID" ng-repeat="item in vm.pagamento.data | orderBy: vm.pagamento.order">
                         <td md-cell>
                             <md-button class="md-icon-button" ng-click="vm.update(item.PAG_ID)">
                                 <md-icon>mode_edit</md-icon>
@@ -83,7 +83,7 @@
                                 <md-icon>picture_as_pdf</md-icon>
                             </md-button>
                         </td>
-                        <td md-cell>{{item.PAG_STATUS}}</td>
+                        <td md-cell nowrap>{{item.PAG_STATUS | pagamentoStatus}}</td>
                         <td md-cell>{{vm.moment(item.PAG_DATA_VENCIMENTO).format('DD/MM/YYYY')}} {{item.PAG_VALOR | currency}}</td>
                         <td md-cell>{{item.CLI_NOME}}</td>
                         <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>

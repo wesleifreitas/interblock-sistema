@@ -35,7 +35,7 @@
                     AND	cli_cpfCnpj = <cfqueryparam value = "#url.cpf#" CFSQLType = "CF_SQL_VARCHAR">
                 </cfif>
                 <cfif IsDefined("url.cliente") AND url.cliente NEQ "">
-                    AND	cli_nome LIKE <cfqueryparam value = "%#url.cliente#%" CFSQLType = "CF_SQL_VARCHAR">
+                    AND	cli_nome COLLATE Latin1_general_CI_AI LIKE <cfqueryparam value = "%#url.cliente#%" CFSQLType = "CF_SQL_VARCHAR">
                 </cfif>
                 <cfif IsDefined("url.ano") AND IsNumeric(url.ano)>
                     AND	pag_data_vencimento_ano = <cfqueryparam value = "#url.ano#" CFSQLType = "CF_SQL_NUMERIC">
@@ -66,7 +66,7 @@
                     AND	cli_cpfCnpj = <cfqueryparam value = "#url.cpf#" CFSQLType = "CF_SQL_VARCHAR">
                 </cfif>
                 <cfif IsDefined("url.cliente") AND url.cliente NEQ "">
-                    AND	cli_nome LIKE <cfqueryparam value = "%#url.cliente#%" CFSQLType = "CF_SQL_VARCHAR">
+                    AND	cli_nome COLLATE Latin1_general_CI_AI LIKE <cfqueryparam value = "%#url.cliente#%" CFSQLType = "CF_SQL_VARCHAR">
                 </cfif>
                 <cfif IsDefined("url.ano") AND IsNumeric(url.ano)>
                     AND	pag_data_vencimento_ano = <cfqueryparam value = "#url.ano#" CFSQLType = "CF_SQL_NUMERIC">
@@ -121,8 +121,11 @@
                     ,cli_cpfCnpj
                     ,prop_numero
                     ,cli_arquivo
-                    ,pag_valor
-                    ,pag_valor_pago
+					,pag_valor
+					,pag_valor_juros
+					,pag_valor_pago
+					,pag_valor_pendente
+					,pag_data_pago
                 FROM
                     dbo.vw_pagamento
                 WHERE
@@ -176,6 +179,19 @@
 	
 		<cftry>
 			<!--- update --->
+			<cfquery datasource="#application.datasource#">
+				UPDATE 
+					dbo.pagamento  
+				SET 
+					pag_status = <cfqueryparam value = "#arguments.body.pag_status#" CFSQLType = "CF_SQL_NUMERIC">,
+					pag_valor_juros = <cfqueryparam value = "#arguments.body.pag_valor_juros#" CFSQLType = "CF_SQL_FLOAT">,
+					pag_valor_pago = <cfqueryparam value = "#arguments.body.pag_valor_pago#" CFSQLType = "CF_SQL_FLOAT">,
+					pag_valor_pendente = <cfqueryparam value = "#arguments.body.pag_valor_pendente#" CFSQLType = "CF_SQL_FLOAT">,
+					pag_data_pago = <cfqueryparam value = "#ISOToDateTime(arguments.body.pag_data_pago)#" CFSQLType = "CF_SQL_DATE">
+				WHERE 
+					pag_id = <cfqueryparam value = "#arguments.id#" CFSQLType = "CF_SQL_NUMERIC">
+  			</cfquery>
+
 			<cfset response["success"] = true>
 			<cfset response["message"] = 'Ação realizada com sucesso!'>
 

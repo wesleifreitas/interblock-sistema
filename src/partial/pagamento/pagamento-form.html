@@ -13,16 +13,16 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>Nome</label>
-                        <input name="nome" ng-model="vm.pagamento.nome" required disabled>
-                        <div ng-messages="form.nome.$error">
+                        <input name="CLI_NOME" ng-model="vm.pagamento.CLI_NOME" required disabled>
+                        <div ng-messages="form.CLI_NOME.$error">
                             <div ng-message="required">Campo obrigatório</div>
                         </div>
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>CPF</label>
-                        <input name="cpf" ng-model="vm.pagamento.cpf" ui-br-cpf-mask required disabled>
-                        <div ng-messages="form.cpf.$error" multiple md-auto-hide="false">
+                        <input name="CLI_CPFCNPJ" ng-model="vm.pagamento.CLI_CPFCNPJ" ui-br-cpf-mask required disabled>
+                        <div ng-messages="form.CLI_CPFCNPJ.$error" multiple md-auto-hide="false">
                             <div ng-message="required">Campo obrigatório</div>
                             <div ng-message="cpf">CPF inválido</div>
                         </div>
@@ -32,40 +32,104 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>Proposta / Contrato</label>
-                        <input name="contrato" ng-model="vm.pagamento.contrato" required disabled>
-                        <div ng-messages="form.contrato.$error">
+                        <input name="PROP_NUMERO" ng-model="vm.pagamento.PROP_NUMERO" required disabled>
+                        <div ng-messages="form.PROP_NUMERO.$error">
                             <div ng-message="required">Campo obrigatório</div>
                         </div>
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>Arquivo</label>
-                        <input name="cpf" ng-model="vm.pagamento.arquivo" required disabled>
-                        <div ng-messages="form.arquivo.$error">
+                        <input name="CLI_ARQUIVO" ng-model="vm.pagamento.CLI_ARQUIVO" required disabled>
+                        <div ng-messages="form.CLI_ARQUIVO.$error">
+                            <div ng-message="required">Campo obrigatório</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container flex="50">
+                        <label>Vencimento</label>
+                        <md-datepicker name="PAG_DATA_VENCIMENTO" ng-model="vm.pagamento.PAG_DATA_VENCIMENTO" required disabled></md-datepicker>
+                        <div class="hint-datepicker">DD/MM/YYYY</div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Valor até o vencimento</label>
+                        <input type="text" ng-currency name="PAG_VALOR" ng-model="vm.pagamento.PAG_VALOR" required disabled>
+                        <div ng-messages="form.PAG_VALOR.$error">
+                            <div ng-message="required">Campo obrigatório</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Status desta parcela</label>
+                        <md-select ng-model="vm.pagamento.PAG_STATUS" class="md-no-underline" ng-change="vm.statusChange()">
+                            <md-option ng-repeat="status in vm.status" ng-value="status.id">
+                                {{status.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container flex="50">
+                        <label>Pago em</label>
+                        <md-datepicker name="PAG_DATA_PAGO" ng-model="vm.pagamento.PAG_DATA_PAGO" ng-disabled="vm.pagamento.PAG_STATUS === 0" ng-required="vm.pagamento.PAG_STATUS !== '0'" ng-change="vm.dataPagoChange()"></md-datepicker>
+                        <div ng-messages="form.PAG_DATA_PAGO.$error">
+                            <div ng-message="valid">Data inválida (DD/MM/YYYY)</div>
+                            <div ng-message="required">Campo obrigatório</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container flex="50">
+                        <label>Valor final</label>
+                        <input type="text" ng-currency name="PAG_VALOR_JUROS" ng-model="vm.pagamento.PAG_VALOR_JUROS" required disabled>
+                        <div ng-messages="form.PAG_VALOR_JUROS.$error">
+                            <div ng-message="required">Campo obrigatório</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Valor pago</label>
+                        <input type="text" ng-currency name="PAG_VALOR_PAGO" ng-model="vm.pagamento.PAG_VALOR_PAGO" required ng-change="vm.valorPagoChange()">
+                        <div ng-messages="form.PAG_VALOR_PAGO.$error">
+                            <div ng-message="required">Campo obrigatório</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+
+                <div layout-gt-sm="row">
+                    <md-input-container flex="50">
+                        <label>Valor pendente</label>
+                        <input type="text" ng-currency name="PAG_VALOR_PENDENTE" ng-model="vm.pagamento.PAG_VALOR_PENDENTE" disabled>
+                        <div ng-messages="form.PAG_VALOR_PENDENTE.$error">
                             <div ng-message="required">Campo obrigatório</div>
                         </div>
                     </md-input-container>
                 </div>
             </form>
         </div>
+    </md-content>
 
-        <md-divider></md-divider>
+    <md-actions layout="row" layout="center center" layout-xs="column">
 
-        <div class="md-actions" layout="row" layout-xs="column">
-
-            <!-- <md-button class="md-warn" ng-click="vm.removeById()" ng-if="vm.action === 'update'">
+        <!-- <md-button class="md-warn" ng-click="vm.removeById()" ng-if="vm.action === 'update'">
                 <i class="fa fa-times" aria-hidden="true"></i> Remover
             </md-button> -->
 
-            <span flex></span>
+        <span flex></span>
 
-            <md-button ng-click="vm.cancel()">
-                <i class="" aria-hidden="true"></i> Cancelar
-            </md-button>
+        <md-button ng-click="vm.cancel()">
+            <i class="" aria-hidden="true"></i> Cancelar
+        </md-button>
 
-            <md-button class="md-raised md-primary" ng-click="vm.save()" ng-disabled="form.$invalid">
-                <i class="fa fa-check" aria-hidden="true"></i> Salvar
-            </md-button>
-        </div>
-    </md-content>
+        <md-button class="md-raised md-primary" ng-click="vm.save()" ng-disabled="form.$invalid">
+            <i class="fa fa-check" aria-hidden="true"></i> Salvar
+        </md-button>
+    </md-actions>
 </div>
