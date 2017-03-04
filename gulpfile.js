@@ -201,6 +201,12 @@ gulp.task('lib-fonts', function() {
         .pipe(gulp.dest('./src/build/lib/'));
 });
 
+gulp.task('pdf-viewer', function() {
+    return gulp
+        .src('./src/pdf-viewer/**')
+        .pipe(gulp.dest('./src/build/pdf-viewer'));
+});
+
 gulp.task('index-replace', function() {
     gulp.src(['./src/build/index.html'])
         .pipe(replace('app.less', 'app.css'))
@@ -256,8 +262,8 @@ gulp.task('build', function() {
         //'js-compress',
         //'js-concat',
         //'js-clean',
-        'index-replace',
-        'backend-cf')();
+        'pdf-viewer',
+        'index-replace')();
 });
 
 gulp.task('build-backend-cf', function() {
