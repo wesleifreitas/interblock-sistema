@@ -6,7 +6,7 @@
 	<cfprocessingDirective pageencoding="utf-8">
 	<cfset setEncoding("form","utf-8")> 
 
-	<cffunction name="getById" access="remote" returntype="String" httpmethod="GET" restpath="/{id}"> 
+	<cffunction name="boleto" access="remote" returntype="String" httpmethod="GET" restpath="/{id}"> 
 
 		<cfargument name="id" restargsource="Path" type="numeric"/>
 		
@@ -14,25 +14,24 @@
 
 		<cfset response = structNew()>
 		<cfset response["params"] = url>
-
+		
 		<cftry>
             <cfset destination = getDirectoryFromPath(getCurrentTemplatePath()) & "/../_files/temp/boleto">
             <cfif not directoryExists(destination)>
                 <cfdirectory action="create" directory="#destination#" />		
             </cfif>
-            <cfif not directoryExists(log)>
-                <cfdirectory action="create" directory="#log#" />		
-            </cfif>
 
             <cfset guid = CreateUUID()>
 			<cfset filename = destination & "/boleto_" & guid & ".pdf">
 
+			
   			<!--- agencia, conta, nossonumero --->
-			<cfset numeroChave = chave(100, 6001342, 123456)>
+			<cfset numeroChave = chave(100, 6001342, 123456)>	
 			<!--- vencimento, valor, numeroChave --->
 			<cfset codBar = codigoBarra("30/07/2005", 98.00, numeroChave)>
 			<cfset linha = linhaDigitavel(numeroChave, codBar)>
 
+			
             <cfdocument format = "PDF" 
 		 	 			filename = "#filename#" 
 		 	 			overwrite = "yes" 

@@ -98,7 +98,7 @@ WriteOutput("<img src='http://localhost:8500/interblock-sistema/backend/cf/bolet
 <tbody><tr>
 <td width="225" align="center"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><img src=http://localhost:8500/interblock-sistema/backend/cf/boleto_module/logo-bradesco.jpg><font face="Verdana, Arial, Helvetica, sans-serif" size="4">&nbsp;</font></td>
+    <td><img src=http://sistema-beta-init.interblock.com.br/boleto_module/logo-bradesco.jpg><font face="Verdana, Arial, Helvetica, sans-serif" size="4">&nbsp;</font></td>
     <td><font face="Verdana, Arial, Helvetica, sans-serif" size="4"><strong>070-1</strong></font></td>
   </tr>
 </table></td>
@@ -162,7 +162,7 @@ WriteOutput("<img src='http://localhost:8500/interblock-sistema/backend/cf/bolet
 <tbody><tr>
 <td valign="middle" width="225"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><img src=http://localhost:8500/interblock-sistema/backend/cf/boleto_module/logo-bradesco.jpg><font face="Verdana, Arial, Helvetica, sans-serif" size="4">&nbsp;</font></td>
+    <td><img src=http://sistema-beta-init.interblock.com.br/boleto_module/logo-bradesco.jpg><font face="Verdana, Arial, Helvetica, sans-serif" size="4">&nbsp;</font></td>
     <td><font face="Verdana, Arial, Helvetica, sans-serif" size="4"><strong>070-1</strong></font></td>
   </tr>
 </table></td>
