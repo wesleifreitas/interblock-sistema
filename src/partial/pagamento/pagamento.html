@@ -11,7 +11,9 @@
             <md-input-container flex-gt-sm="20">
                 <label>Mês (Vencimento)</label>
                 <md-select ng-model="vm.filter.mes">
-                    <md-option><em>Todos</em></md-option>
+                    <md-option ng-value="-1">
+                        <em>Todos</em>
+                    </md-option>
                     <md-option ng-repeat="option in vm.filter.months" ng-value="$index">
                         {{vm.filter.months[$index]}}
                     </md-option>
@@ -27,8 +29,20 @@
             </md-input-container>
 
             <md-input-container flex-gt-sm>
-                <label>Cliente</label>
+                <label>Nome do cliente</label>
                 <input ng-model="vm.filter.cliente">
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm="">
+                <label>Status desta parcela</label>
+                <md-select ng-model="vm.filter.PAG_STATUS">
+                    <md-option ng-value="todos">
+                        <em>Todos</em>
+                    </md-option>
+                    <md-option ng-repeat="status in vm.status" ng-value="status.id">
+                        {{status.name}}
+                    </md-option>
+                </md-select>
             </md-input-container>
         </div>
     </form>
@@ -40,6 +54,10 @@
                 <md-icon>add</md-icon>
                 Adicionar
             </md-button> -->
+            <md-button class="md-primary" ng-click="vm.quitar()">
+                <md-icon>assignment_turned_in</md-icon>
+                Quitar pagamentos
+            </md-button>
             <md-button class="md-primary" ng-click="vm.getData({reset: true})">
                 <md-icon>refresh</md-icon>
                 Atualizar
@@ -65,7 +83,7 @@
                         <th md-column><span>Boleto</span></th>
                         <th md-column><span>Status</span></th>
                         <th md-column><span>Vencimento/Valor</span></th>
-                        <th md-column md-order-by="CLI_NOME">Cliente</th>
+                        <th md-column md-order-by="">Cliente</th>
                         <th md-column>CPF</th>
                         <th md-column>Proposta / Contrato</th>
                         <th md-column>Arquivo</th>

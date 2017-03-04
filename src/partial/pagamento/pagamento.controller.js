@@ -3,15 +3,19 @@
 
     angular.module('myApp').controller('PagamentoCtrl', PagamentoCtrl);
 
-    PagamentoCtrl.$inject = ['config', 'pagamentoService', '$rootScope', '$scope', '$state', '$mdDialog'];
+    PagamentoCtrl.$inject = ['config', 'pagamentoService', '$rootScope', '$scope', '$state', '$mdDialog',
+        '$timeout', 'PAGAMENTO'
+    ];
 
-    function PagamentoCtrl(config, pagamentoService, $rootScope, $scope, $state, $mdDialog) {
+    function PagamentoCtrl(config, pagamentoService, $rootScope, $scope, $state, $mdDialog,
+        $timeout, PAGAMENTO) {
 
         var vm = this;
         vm.init = init;
         vm.moment = moment;
-        vm.filter = {};
+        vm.filter = JSON.parse(localStorage.getItem('filter')) || {};
         vm.filter.months = moment.months();
+        vm.status = PAGAMENTO.STATUS;
         vm.getData = getData;
         //vm.create = create;
         vm.update = update;
@@ -25,6 +29,7 @@
             pagination: pagination,
             total: 0
         };
+        vm.quitar = quitar;
 
         // $on
         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope
@@ -34,8 +39,8 @@
         });
 
         function init() {
-            vm.filter.ano = moment().year();
-            vm.filter.mes = moment().month();
+            vm.filter.ano = vm.filter.ano || moment().year();
+            vm.filter.mes = vm.filter.mes || moment().month();
             getData({ reset: true });
         }
 
@@ -55,10 +60,17 @@
                 vm.pagamento.data = [];
             }
 
+            localStorage.setItem('filter', JSON.stringify(vm.filter));
+
             vm.pagamento.promise = pagamentoService.get(vm.filter)
                 .then(function success(response) {
                     //console.info('success', response);
                     vm.pagamento.total = response.recordCount;
+
+                    for (var i = 0; i <= response.query.length - 1; i++) {
+                        response.query[i].PAG_DATA_VENCIMENTO = new Date(response.query[i].PAG_DATA_VENCIMENTO);
+                    }
+
                     vm.pagamento.data = vm.pagamento.data.concat(response.query);
                 }, function error(response) {
                     console.error('error', response);
@@ -95,6 +107,24 @@
             }, function() {
                 // cancel
             });
+        }
+
+        function quitar() {
+            $timeout(function() {
+                $mdDialog.show({
+                    locals: { dialogAction: 'quitar' },
+                    preserveScope: true,
+                    controller: 'PropostaDialogCtrl',
+                    controllerAs: 'vm',
+                    templateUrl: 'partial/proposta/proposta-dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: event,
+                    clickOutsideToClose: true
+                }).then(function(data) {
+                    //console.info(data);
+                    getData({ reset: true });
+                });
+            }, 300);
         }
     }
 })();

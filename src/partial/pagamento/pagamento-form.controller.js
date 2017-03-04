@@ -97,7 +97,12 @@
         }
 
         function statusChange() {
-            if (!vm.getData.PAG_DATA_PAGO) {
+            if (vm.pagamento.PAG_STATUS === 0) {
+                vm.pagamento.PAG_DATA_PAGO = null;
+                vm.pagamento.PAG_VALOR_JUROS = '0';
+                vm.pagamento.PAG_VALOR_PAGO = '0';
+                vm.pagamento.PAG_VALOR_PENDENTE = '0';
+            } else if (!vm.getData.PAG_DATA_PAGO) {
                 vm.getData.PAG_DATA_PAGO = new Date();
                 dataPagoChange();
             }

@@ -19,7 +19,8 @@
             controllerAs: 'vm',
             parent: 'home',
             params: {
-                'id': null
+                id: null,
+                filter: {}
             },
         };
     }

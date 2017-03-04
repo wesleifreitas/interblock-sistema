@@ -1,0 +1,119 @@
+<md-dialog ng-cloak flex="70" aria-label="" ng-init="vm.init()" class="proposta-dialog">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Selecione os contratos desejados</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <i class="fa fa-close"></i>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content layout-padding>
+        <form name="formSearch" class="filter">
+            <h5>Utilize o campo abaixo para filtrar a listagem.</h5>
+            <div layout-gt-sm="row">
+                <md-input-container flex="20">
+                    <label>Ano (Inicial)</label>
+                    <input name="pag_data_vencimento_min_ano" ng-model="vm.filter.pag_data_vencimento_min_ano" type="number" required>
+                    <div ng-messages="formSearch.pag_data_vencimento_min_ano.$error" multiple md-auto-hide="false">
+                        <div ng-message="required">Campo obritagório</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container flex="30">
+                    <label>Mês (Final)</label>
+                    <md-select ng-model="vm.filter.pag_data_vencimento_min_mes" required>
+                        <md-option ng-repeat="option in vm.filter.months" ng-value="$index">
+                            {{vm.filter.months[$index]}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-input-container flex="20">
+                    <label>Ano (Final)</label>
+                    <input name="pag_data_vencimento_max_ano" ng-model="vm.filter.pag_data_vencimento_max_ano" type="number" required>
+                    <div ng-messages="formSearch.pag_data_vencimento_max_ano.$error" multiple md-auto-hide="false">
+                        <div ng-message="required">Campo obritagório</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container flex="30">
+                    <label>Mês (Final)</label>
+                    <md-select ng-model="vm.filter.pag_data_vencimento_max_mes" required>
+                        <md-option ng-repeat="option in vm.filter.months" ng-value="$index">
+                            {{vm.filter.months[$index]}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout-gt-sm="row">
+                <md-input-container flex-gt-sm="50">
+                    <label>CPF</label>
+                    <input ng-model="vm.filter.cpf" ui-br-cpf-mask>
+                    <div ng-messages="formSearch.cpf.$error" multiple md-auto-hide="false">
+                        <div ng-message="cpf">CPF inválido</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container flex-gt-sm="50">
+                    <label>Cliente</label>
+                    <input ng-model="vm.filter.cliente">
+                </md-input-container>
+            </div>
+        </form>
+        <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.proposta.selected.length">
+            <div class="md-toolbar-tools">
+                <span>Contratos</span>
+                <span flex></span>
+                <md-button class="md-primary" ng-click="vm.getData({reset: true})" ng-disabled="formSearch.$invalid">
+                    <md-icon>refresh</md-icon>
+                    Atualizar
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content>
+            <md-table-container>
+                <table md-table md-row-select="true" multiple="true" ng-model="vm.proposta.selected" md-progress="vm.proposta.promise">
+                    <thead md-head md-order="vm.proposta.order">
+                        <tr md-row>
+                            <th md-column md-order-by="">Cliente</th>
+                            <th md-column>CPF</th>
+                            <th md-column>Proposta / Contrato</th>
+                            <th md-column>Arquivo</th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="item" md-select-id="PROP_NUMERO" ng-repeat="item in vm.proposta.data | orderBy: vm.proposta.order">
+                            <td md-cell>{{item.CLI_NOME}}</td>
+                            <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>
+                            <td md-cell>{{item.PROP_NUMERO}}</td>
+                            <td md-cell>{{item.CLI_ARQUIVO}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+        </md-content>
+        <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.proposta.limit" md-page="vm.proposta.page" md-total="{{vm.proposta.total}}" md-page-select md-on-paginate="vm.proposta.pagination"></md-table-pagination>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row" layout-align="center center" layout-xs="column">
+        <!-- <md-button nf-if="vm.dialogAction === 'quitar'" class="md-raised md-primary" ng-click="vm.quitar(vm.proposta.selected)" ng-disabled="vm.proposta.selected.length === 0">
+            <i class="fa fa-check" aria-hidden="true"></i> Quitar tudo
+        </md-button> -->
+
+
+
+        <span flex></span>
+
+        <md-checkbox class="md-wardn" nf-if="vm.dialogAction === 'quitar'" ng-model="vm.quitarConfirm" aria-label="" ng-disabled="vm.loading || vm.proposta.selected.length === 0">
+            Entendo as ações deste botão
+            <md-progress-linear md-mode="indeterminate" ng-show="vm.loading"></md-progress-linear>
+        </md-checkbox>
+
+        <md-button nf-if="vm.dialogAction === 'quitar'" ng-disabled="!vm.quitarConfirm || vm.loading" class="md-raised md-warn" ng-click="vm.quitar(vm.proposta.selected)">
+            <i class="fa fa-check" aria-hidden="true"></i> Quitar
+        </md-button>
+
+    </md-dialog-actions>
+</md-dialog>

@@ -67,7 +67,7 @@
 
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>Status desta parcela</label>
-                        <md-select ng-model="vm.pagamento.PAG_STATUS" class="md-no-underline" ng-change="vm.statusChange()">
+                        <md-select ng-model="vm.pagamento.PAG_STATUS" ng-change="vm.statusChange()">
                             <md-option ng-repeat="status in vm.status" ng-value="status.id">
                                 {{status.name}}
                             </md-option>
@@ -76,7 +76,7 @@
 
                     <md-input-container flex="50">
                         <label>Pago em</label>
-                        <md-datepicker name="PAG_DATA_PAGO" ng-model="vm.pagamento.PAG_DATA_PAGO" ng-disabled="vm.pagamento.PAG_STATUS === 0" ng-required="vm.pagamento.PAG_STATUS !== '0'" ng-change="vm.dataPagoChange()"></md-datepicker>
+                        <md-datepicker name="PAG_DATA_PAGO" ng-model="vm.pagamento.PAG_DATA_PAGO" ng-disabled="vm.pagamento.PAG_STATUS === 0" ng-required="vm.pagamento.PAG_STATUS !== 0" ng-change="vm.dataPagoChange()"></md-datepicker>
                         <div ng-messages="form.PAG_DATA_PAGO.$error">
                             <div ng-message="valid">Data inválida (DD/MM/YYYY)</div>
                             <div ng-message="required">Campo obrigatório</div>
@@ -87,7 +87,7 @@
                 <div layout-gt-sm="row">
                     <md-input-container flex="50">
                         <label>Valor final</label>
-                        <input type="text" ng-currency name="PAG_VALOR_JUROS" ng-model="vm.pagamento.PAG_VALOR_JUROS" required disabled>
+                        <input type="text" ng-currency name="PAG_VALOR_JUROS" ng-model="vm.pagamento.PAG_VALOR_JUROS" required ng-disabled="vm.pagamento.PAG_STATUS === 0">
                         <div ng-messages="form.PAG_VALOR_JUROS.$error">
                             <div ng-message="required">Campo obrigatório</div>
                         </div>
@@ -95,7 +95,7 @@
 
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>Valor pago</label>
-                        <input type="text" ng-currency name="PAG_VALOR_PAGO" ng-model="vm.pagamento.PAG_VALOR_PAGO" required ng-change="vm.valorPagoChange()">
+                        <input type="text" ng-currency name="PAG_VALOR_PAGO" ng-model="vm.pagamento.PAG_VALOR_PAGO" required ng-change="vm.valorPagoChange()" ng-disabled="vm.pagamento.PAG_STATUS === 0">
                         <div ng-messages="form.PAG_VALOR_PAGO.$error">
                             <div ng-message="required">Campo obrigatório</div>
                         </div>

@@ -16,6 +16,8 @@
         service.update = update;
         service.remove = remove;
         service.removeById = removeById;
+        service.getQuitacao = getQuitacao;
+        service.quitar = quitar;
 
         return service;
 
@@ -105,6 +107,39 @@
                         'Authorization': '',
                         'Content-Type': 'application/json'
                     }
+                })
+                .then(handleSuccess, handleError);
+
+            return req;
+        }
+
+        function getQuitacao(params) {
+
+            var req = $http({
+                    url: config.REST_URL + '/pagamento/quitacao',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': '',
+                        'Content-Type': 'application/json'
+                    },
+                    params: params
+                })
+                .then(handleSuccess, handleError);
+
+            return req;
+        }
+
+        function quitar(params, data) {
+
+            var req = $http({
+                    url: config.REST_URL + '/pagamento/quitar',
+                    method: 'POST',
+                    headers: {
+                        'Authorization': '',
+                        'Content-Type': 'application/json'
+                    },
+                    params: params,
+                    data: data
                 })
                 .then(handleSuccess, handleError);
 
