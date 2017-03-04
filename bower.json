@@ -43,7 +43,8 @@
     "material-calendar": "^0.2.14",
     "angular-sanitize": "^1.6.1",
     "angular-br-filters": "^0.7.0",
-    "ng-currency": "^1.1.6"
+    "ng-currency": "^1.1.6",
+    "angular-loading-bar": "^0.9.0"
   },
   "resolutions": {
     "bootstrap": "~3",

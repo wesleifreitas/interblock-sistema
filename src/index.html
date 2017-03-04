@@ -14,6 +14,7 @@
 </head>
 
 <body ng-app="myApp" layout="column" ng-cloak>
+    <div id="loading-bar-container"></div>
     <div ui-view layout="column" class="myApp-views"></div>
     <!-- Livereload script for development only (stripped during dist build) -->
     <script src="http://localhost:35729/livereload.js"></script>
@@ -42,6 +43,7 @@
     <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="lib/material-calendar/dist/angular-material-calendar.min.js"></script>
     <script src="lib/ng-currency/dist/ng-currency.js"></script>
+    <script src="lib/angular-loading-bar/build/loading-bar.min.js"></script>
     <!-- Your application bootstrap  -->
     <script src="app.js"></script>
     <!-- controllers -->
@@ -54,6 +56,7 @@
     <script src="partial/pagamento/pagamento.controller.js"></script>
     <script src="partial/pagamento/pagamento-form.controller.js"></script>
     <script src="partial/proposta/proposta-dialog.controller.js"></script>
+    <script src="partial/boleto/boleto-dialog.controller.js"></script>
     <!-- routes -->
     <script src="partial/login/login.route.js"></script>
     <script src="partial/home/home.route.js"></script>
@@ -73,6 +76,7 @@
     <script src="service/user.service.js"></script>
     <script src="service/example.service.js"></script>
     <script src="service/pagamento.service.js"></script>
+    <script src="service/boleto.service.js"></script>
     <!-- constants -->
     <script src="constant/example.constant.js"></script>
     <script src="constant/pagamento.constant.js"></script>

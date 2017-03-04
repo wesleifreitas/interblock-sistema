@@ -97,11 +97,11 @@
                             </md-button>
                         </td>
                         <td md-cell>
-                            <md-button class="md-icon-button">
+                            <md-button class="md-icon-button" ng-click="vm.showPdf(item)">
                                 <md-icon>picture_as_pdf</md-icon>
                             </md-button>
                         </td>
-                        <td md-cell nowrap>{{item.PAG_STATUS | pagamentoStatus}}</td>
+                        <td md-cell nowrap><span class="{{item.PAG_STATUS | pagamentoStatusClass}}">{{item.PAG_STATUS | pagamentoStatus}}</span></td>
                         <td md-cell>{{vm.moment(item.PAG_DATA_VENCIMENTO).format('DD/MM/YYYY')}} {{item.PAG_VALOR | currency}}</td>
                         <td md-cell>{{item.CLI_NOME}}</td>
                         <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>

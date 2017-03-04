@@ -16,6 +16,7 @@
             'pxConfig',
             'px-data-grid',
             'md.data.table',
+            'angular-loading-bar',
             'materialCalendar',
             'ng-currency'
         ])
@@ -32,9 +33,15 @@
         //'REST_URL': 'http://localhost:8080/interblock-sistema',
     });
 
-    config.$inject = ['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', '$mdDateLocaleProvider'];
+    config.$inject = ['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', '$mdDateLocaleProvider',
+        'cfpLoadingBarProvider'
+    ];
 
-    function config($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdDateLocaleProvider) {
+    function config($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdDateLocaleProvider,
+        cfpLoadingBarProvider) {
+
+        cfpLoadingBarProvider.includeSpinner = false;
+
         $urlRouterProvider.otherwise(function($injector) {
             var $state = $injector.get('$state');
             $state.go('login');

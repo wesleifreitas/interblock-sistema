@@ -30,6 +30,7 @@
             total: 0
         };
         vm.quitar = quitar;
+        vm.showPdf = showPdf;
 
         // $on
         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope
@@ -125,6 +126,21 @@
                     getData({ reset: true });
                 });
             }, 300);
+        }
+
+        function showPdf(item) {
+            $mdDialog.show({
+                locals: { pag_id: item.PAG_ID },
+                preserveScope: true,
+                controller: 'BoletoDialogCtrl',
+                controllerAs: 'vm',
+                templateUrl: 'partial/boleto/boleto-dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: true
+            }).then(function(data) {
+                //console.info(data);
+            });
         }
     }
 })();
