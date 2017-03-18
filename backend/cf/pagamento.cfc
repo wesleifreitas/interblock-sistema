@@ -290,6 +290,10 @@
 					'#dateMin#' BETWEEN pag_data_vencimento_min AND pag_data_vencimento_max
 					OR 
 					'#dateMax#' BETWEEN pag_data_vencimento_min AND pag_data_vencimento_max
+					OR
+					pag_data_vencimento_min BETWEEN '#dateMin#' AND '#dateMax#'
+					OR
+					pag_data_vencimento_max BETWEEN '#dateMin#' AND '#dateMax#'
 				)
             </cfquery>
 			
@@ -311,6 +315,10 @@
 					'#dateMin#' BETWEEN pag_data_vencimento_min AND pag_data_vencimento_max
 					OR 
 					'#dateMax#' BETWEEN pag_data_vencimento_min AND pag_data_vencimento_max
+					OR
+					pag_data_vencimento_min BETWEEN '#dateMin#' AND '#dateMax#'
+					OR
+					pag_data_vencimento_max BETWEEN '#dateMin#' AND '#dateMax#'
 				)
                 ORDER BY
                     cli_nome ASC
