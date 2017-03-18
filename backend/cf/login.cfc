@@ -18,27 +18,16 @@
 		<cfset response["body"] = body>
         <cfset response["params"] = url>
 
-        <cfset myQuery = QueryNew("user_id, user_name, user_password", "VarChar, VarChar, VarChar")> 
-        <cfset newRow = QueryAddRow(MyQuery, 2)> 
-
-        <cfset temp = QuerySetCell(myQuery, "user_id", "1", 1)> 
-        <cfset temp = QuerySetCell(myQuery, "user_name", "admin", 1)> 
-        <cfset temp = QuerySetCell(myQuery, "user_password", hash("admin", "SHA-512"), 1)>
-
-        <cfset temp = QuerySetCell(myQuery, "user_id", "21", 2)> 
-        <cfset temp = QuerySetCell(myQuery, "user_name", "user", 2)> 
-        <cfset temp = QuerySetCell(myQuery, "user_password", hash("123", "SHA-512"), 2)>
-
-        <cfquery dbtype="query" name="qLogin">  
+        <cfquery datasource="#application.datasource#" name="qLogin">  
             SELECT 
-                user_id
-                ,user_name
-                ,user_password 
+                usu_id
+                ,usu_nome
+                ,usu_senha 
             FROM 
-                myQuery 
+                dbo.usuario 
             WHERE 
-                user_name = <cfqueryparam value="#body.username#" cfsqltype="cf_sql_varchar">
-            AND user_password = <cfqueryparam value="#hash(body.password, 'SHA-512')#" cfsqltype="cf_sql_varchar">
+                usu_login = <cfqueryparam value="#body.username#" cfsqltype="cf_sql_varchar">
+            AND usu_senha = <cfqueryparam value="#hash(body.password, 'SHA-512')#" cfsqltype="cf_sql_varchar">
         </cfquery> 
 
         <cfif qLogin.recordCount GT 0>
@@ -47,8 +36,8 @@
             <cfif body.setSession>
                 <cflock timeout="20" throwontimeout="No" type="EXCLUSIVE" scope="session">
                     <cfset session.authenticated = true>					
-                    <cfset session.userId = qLogin.user_id>
-                    <cfset session.userName = qLogin.user_name>                                
+                    <cfset session.userId = qLogin.usu_id>
+                    <cfset session.userName = qLogin.usu_nome>                                
                 </cflock>
                 <cfset response["session"] = session>
             </cfif>
@@ -58,8 +47,7 @@
         </cfif>
 
         <cfset response["query"] = queryToArray(qLogin)>
-		
-     
+
 		<cfreturn SerializeJSON(response)>
 	</cffunction>
     
