@@ -3,97 +3,103 @@
 	
 	<cffunction name="navBar" access="remote" returntype="String" httpmethod="GET"> 
         
+        <cfset response = structNew()>
         <cfset response["params"] = url>
 
-        <cfquery datasource="#application.datasource#" name="qUsuario">
-            SELECT
-                usu_nome
-                ,per_id
-                ,per_developer
-                ,grupo_nome
-            FROM
-                dbo.vw_usuario
-            WHERE
-                usu_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#URL.user#">
-        </cfquery>
-        
-        <cfquery datasource="#application.datasource#" name="qMenu">
-
-            SELECT
-                menu.men_ativo
-                ,menu.men_sistema
-                ,menu.men_id
-                ,menu.men_nome
-                ,menu.men_idPai
-                ,menu.men_ordem
-                ,(
-                    SELECT 
-                        COUNT(1) 
-                    FROM 
-                        dbo.menu AS submenu
-                    <cfif URL.user GT -1 AND qUsuario.per_developer NEQ 1>
-                        INNER JOIN dbo.acesso AS acesso
-                        ON submenu.men_id = acesso.men_id
-                    </cfif> 
-                    WHERE 
-                        <!--- pro_id      IN (#inPro_id#)
-                    AND ---> 
-                    menu.men_id = submenu.men_idPai 
-                    AND men_ativo   = 1
-                    AND men_sistema = 1
-                    <cfif URL.user GT -1 AND qUsuario.per_developer NEQ 1>
-                        AND acesso.per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qUsuario.per_id#">
-                    </cfif>
-                ) AS count_submenu
-                ,(
-                    SELECT 
-                        COUNT(1) 
-                    FROM 
-                        dbo.menu AS submenu 
-                    <cfif URL.user GT -1 AND qUsuario.per_developer NEQ 1>
-                        INNER JOIN dbo.acesso AS acesso
-                        ON submenu.men_id = acesso.men_id
-                    </cfif>
-                    WHERE 
-                        <!--- pro_id              IN (#inPro_id#)
-                    AND --->
-                    submenu.men_idPai   = menu.men_idPai
-                    AND men_ativo           = 1 
-                    AND men_sistema         = 1
-                    <cfif URL.user GT -1 AND qUsuario.per_developer NEQ 1>
-                        AND acesso.per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qUsuario.per_id#">
-                    </cfif>
-                ) AS count_menu
-            FROM
-                dbo.menu AS menu
-
-            <cfif URL.user GT -1 AND qUsuario.per_developer NEQ 1>
-                INNER JOIN dbo.acesso AS acesso
-                ON menu.men_id = acesso.men_id
-            </cfif>
-
-            WHERE
-                <!--- pro_id      IN (#inPro_id#)
-            AND --->
-             men_ativo   = <cfqueryparam cfsqltype="cf_sql_bit" value="1"/>
-            AND men_sistema = <cfqueryparam cfsqltype="cf_sql_bit" value="1"/>
-            <cfif URL.user GT -1 AND qUsuario.per_developer NEQ 1>
-                AND acesso.per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qUsuario.per_id#">
-            </cfif>
-            ORDER BY
-                menu.men_idPai
-                ,menu.men_ordem             
-        </cfquery>
-        
-
-        <cfsavecontent variable = "pxMenu">
+        <cfset inPro_id = "0">
+        <cftry>
+            <cfquery datasource="#application.datasource#" name="qUsuario">
+                SELECT
+                    usu_nome
+                    ,per_id
+                    ,per_developer
+                    ,grupo_nome
+                FROM
+                    dbo.vw_usuario
+                WHERE
+                    usu_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#session.userId#">
+            </cfquery>
             
-            <cfset getRecursiveNavBar(data = qMenu) />
+            <cfquery datasource="#application.datasource#" name="qMenu">
 
-        </cfsavecontent>
+                SELECT
+                    menu.men_ativo
+                    ,menu.men_sistema
+                    ,menu.men_id
+                    ,menu.men_nome
+                    ,menu.men_idPai
+                    ,menu.men_ordem
+                    ,(
+                        SELECT 
+                            COUNT(1) 
+                        FROM 
+                            dbo.menu AS submenu
+                        <cfif session.userId GT -1 AND qUsuario.per_developer NEQ 1>
+                            INNER JOIN dbo.acesso AS acesso
+                            ON submenu.men_id = acesso.men_id
+                        </cfif> 
+                        WHERE 
+                            pro_id      IN (#inPro_id#)
+                        AND menu.men_id = submenu.men_idPai 
+                        AND men_ativo   = 1
+                        AND men_sistema = 1
+                        <cfif session.userId GT -1 AND qUsuario.per_developer NEQ 1>
+                            AND acesso.per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qUsuario.per_id#">
+                        </cfif>
+                    ) AS count_submenu
+                    ,(
+                        SELECT 
+                            COUNT(1) 
+                        FROM 
+                            dbo.menu AS submenu 
+                        <cfif session.userId GT -1 AND qUsuario.per_developer NEQ 1>
+                            INNER JOIN dbo.acesso AS acesso
+                            ON submenu.men_id = acesso.men_id
+                        </cfif>
+                        WHERE 
+                            pro_id              IN (#inPro_id#)
+                        AND submenu.men_idPai   = menu.men_idPai
+                        AND men_ativo           = 1 
+                        AND men_sistema         = 1
+                        <cfif session.userId GT -1 AND qUsuario.per_developer NEQ 1>
+                            AND acesso.per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qUsuario.per_id#">
+                        </cfif>
+                    ) AS count_menu
+                FROM
+                    dbo.menu AS menu
 
+                <cfif session.userId GT -1 AND qUsuario.per_developer NEQ 1>
+                    INNER JOIN dbo.acesso AS acesso
+                    ON menu.men_id = acesso.men_id
+                </cfif>
+
+                WHERE
+                    pro_id      IN (#inPro_id#)
+                AND men_ativo   = <cfqueryparam cfsqltype="cf_sql_bit" value="1"/>
+                AND men_sistema = <cfqueryparam cfsqltype="cf_sql_bit" value="1"/>
+                <cfif session.userId GT -1 AND qUsuario.per_developer NEQ 1>
+                    AND acesso.per_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#qUsuario.per_id#">
+                </cfif>
+                ORDER BY
+                    menu.men_idPai
+                    ,menu.men_ordem             
+            </cfquery>
+            
+
+            <cfsavecontent variable = "pxMenu">
+                
+                <cfset getRecursiveNavBar(data = qMenu) />
+
+            </cfsavecontent>
+
+            
+            <cfset response['navBar'] = '<md-menu-bar>#variables.pxMenu#</md-menu-bar>'>
+
+            <cfcatch>
+				<cfset responseError(400, cfcatch.message)>
+			</cfcatch>	
+		</cftry>
         
-        <cfset response['navBar'] = '<md-menu-bar>#variables.pxMenu#</md-menu-bar>'>
         <cfreturn SerializeJSON(response)>
 
     </cffunction>

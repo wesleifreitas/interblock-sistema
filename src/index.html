@@ -10,7 +10,6 @@
     <link href="favicon.ico" rel="shortcut icon">
     <title>Interblock</title>
     <link href="app.less" type="text/css" rel="stylesheet/less">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body ng-app="myApp" layout="column" ng-cloak>
@@ -49,6 +48,14 @@
     <!-- controllers -->
     <script src="partial/login/login.controller.js"></script>
     <script src="partial/home/home.controller.js"></script>
+    <script src="partial/perfil-usuario/perfil-usuario.controller.js"></script>
+    <script src="partial/perfil-usuario/grupo.controller.js"></script>
+    <script src="partial/perfil-usuario/grupo-form.controller.js"></script>
+    <script src="partial/perfil-usuario/perfil.controller.js"></script>
+    <script src="partial/perfil-usuario/perfil-dialog.controller.js"></script>
+    <script src="partial/perfil-usuario/perfil-form.controller.js"></script>
+    <script src="partial/perfil-usuario/usuario.controller.js"></script>
+    <script src="partial/perfil-usuario/usuario-form.controller.js"></script>
     <script src="partial/404/404.controller.js"></script>
     <script src="partial/example/example.controller.js"></script>
     <script src="partial/example/example-form.controller.js"></script>
@@ -60,6 +67,10 @@
     <!-- routes -->
     <script src="partial/login/login.route.js"></script>
     <script src="partial/home/home.route.js"></script>
+    <script src="partial/perfil-usuario/perfil-usuario.route.js"></script>
+    <script src="partial/perfil-usuario/grupo-form.route.js"></script>
+    <script src="partial/perfil-usuario/perfil-form.route.js"></script>
+    <script src="partial/perfil-usuario/usuario-form.route.js"></script>
     <script src="partial/404/404.route.js"></script>
     <script src="partial/example/example.route.js"></script>
     <script src="partial/example/example-form.route.js"></script>
@@ -74,11 +85,18 @@
     <!-- services -->
     <script src="service/login.service.js"></script>
     <script src="service/user.service.js"></script>
+    <script src="service/toast.service.js"></script>
+    <script src="service/perfil.service.js"></script>
+    <script src="service/usuario.service.js"></script>
+    <script src="service/grupo.service.js"></script>
+    <script src="service/cep.service.js"></script>
     <script src="service/example.service.js"></script>
     <script src="service/pagamento.service.js"></script>
     <script src="service/boleto.service.js"></script>
     <!-- constants -->
     <script src="constant/example.constant.js"></script>
+    <script src="constant/perfil.js"></script>
+    <script src="constant/usuario.js"></script>
     <script src="constant/pagamento.constant.js"></script>
     <!-- endbuild -->
 </body>

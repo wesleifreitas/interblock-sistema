@@ -23,8 +23,10 @@
                 usu_id
                 ,usu_nome
                 ,usu_senha 
+                ,per_developer
+                ,grupo_id
             FROM 
-                dbo.usuario 
+                dbo.vw_usuario 
             WHERE 
                 usu_login = <cfqueryparam value="#body.username#" cfsqltype="cf_sql_varchar">
             AND usu_senha = <cfqueryparam value="#hash(body.password, 'SHA-512')#" cfsqltype="cf_sql_varchar">
@@ -37,7 +39,9 @@
                 <cflock timeout="20" throwontimeout="No" type="EXCLUSIVE" scope="session">
                     <cfset session.authenticated = true>					
                     <cfset session.userId = qLogin.usu_id>
-                    <cfset session.userName = qLogin.usu_nome>                                
+                    <cfset session.userName = qLogin.usu_nome>   
+                    <cfset session.perfilDeveloper = 1>    
+                    <cfset session.grupoId = qLogin.grupo_id>                              
                 </cflock>
                 <cfset response["session"] = session>
             </cfif>
