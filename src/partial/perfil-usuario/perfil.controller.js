@@ -35,7 +35,7 @@
         });
 
         function pagination(page, limit) {
-            vm.smsPacote.data = [];
+            vm.perfil.data = [];
             getData();
         }
 
