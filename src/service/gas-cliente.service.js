@@ -3,11 +3,11 @@
 
     angular
         .module('myApp')
-        .factory('exampleService', exampleService);
+        .factory('gasClienteService', gasClienteService);
 
-    exampleService.$inject = ['config', '$http', '$q', 'toastService', '$timeout'];
+    gasClienteService.$inject = ['config', '$http', '$q', 'toastService', '$timeout'];
 
-    function exampleService(config, $http, $q, toastService, $timeout) {
+    function gasClienteService(config, $http, $q, toastService, $timeout) {
         var service = {};
 
         service.get = get;

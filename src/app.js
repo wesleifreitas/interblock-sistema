@@ -111,7 +111,8 @@
                     event.preventDefault();
                 } else if (toState.name === 'home') {
                     // Redirecionar o primeiro state
-                    $state.go('agenda');
+                    //$state.go('agenda');
+                    $state.go('pagamento');
                     event.preventDefault();
                 }
             }

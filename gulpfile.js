@@ -249,7 +249,7 @@ gulp.task('clean', function() {
         .pipe(clean({ force: true }));
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', ['build-backend-cf']);
 
 gulp.task('build', function() {
     gulpSequence('clean',
