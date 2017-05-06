@@ -9,6 +9,7 @@
 
         var vm = this;
         vm.init = init;
+        vm.filter = JSON.parse(localStorage.getItem('filter')) || {};
         vm.getData = getData;
         vm.create = create;
         vm.update = update;
@@ -51,6 +52,7 @@
                 vm.example.data = [];
             }
 
+            localStorage.setItem('filter', JSON.stringify(vm.filter));
             vm.example.promise = exampleService.get(vm.filter)
                 .then(function success(response) {
                     //console.info('success', response);

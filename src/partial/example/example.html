@@ -2,12 +2,12 @@
     <form name="formSearch" class="filter">
         <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
         <div layout-gt-sm="row">
-            <md-input-container flex-gt-sm="10" flex-gt-sm layout-xs="100">
+            <md-input-container flex-gt-sm="" flex-gt-sm layout-xs="100">
                 <label>ID</label>
                 <input ng-model="vm.filter.id">
             </md-input-container>
 
-            <md-input-container flex-gt-sm="25" layout-xs="100">
+            <md-input-container flex-gt-sm="" layout-xs="100">
                 <label>Nome</label>
                 <input ng-model="vm.filter.nome">
             </md-input-container>
@@ -15,7 +15,7 @@
     </form>
     <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.example.selected.length">
         <div class="md-toolbar-tools">
-            <span>Exemplos</span>
+            <span>Exemplo</span>
             <span flex></span>
             <md-button class="md-primary" ng-click="vm.create()">
                 <md-icon>add</md-icon>
@@ -49,14 +49,14 @@
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row md-select="item" md-select-id="_ID" md-auto-select ng-repeat="item in vm.example.data | orderBy: vm.example.order">
+                    <tr md-row md-select="item" md-select-id="_ID" ng-repeat="item in vm.example.data | orderBy: vm.example.order">
                         <td md-cell>
                             <md-button class="md-icon-button" ng-click="vm.update(item._ID)">
                                 <md-icon>mode_edit</md-icon>
                             </md-button>
                         </td>
                         <td md-cell>{{item.NOME}}</td>
-                        <td md-cell>{{item.CPF}}</td>
+                        <td md-cell>{{item.CPF | brCpf}}</td>
                         <td md-cell>{{item.DATA}}</td>
                     </tr>
                 </tbody>

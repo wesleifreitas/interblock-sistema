@@ -31,7 +31,7 @@
 
                 perfilService.jsTreeGrupo(vm.getData.PER_ID, vm.getData.GRUPO_ID)
                     .then(function success(response) {
-                        console.info('jsTreeGrupo', response);
+                        //console.info('jsTreeGrupo', response);
                         if (!angular.isDefined($('#jstreeGrupo').jstree(true).settings)) {
                             $('#jstreeGrupo').jstree(response.jstree);
                         } else {
@@ -48,7 +48,7 @@
 
                 perfilService.jsTreeMenu(params)
                     .then(function success(response) {
-                        //console.info('jsTreeMenu', response);
+                        console.info('jsTreeMenu', response);
                         if (!angular.isDefined($('#jstreeMenu').jstree(true).settings)) {
                             $('#jstreeMenu').jstree(response.jstree);
                         } else {
@@ -80,7 +80,7 @@
 
                 perfilService.jsTreeMenu()
                     .then(function success(response) {
-                        console.info(response);
+                        //console.info(response);
                         if (!angular.isDefined($('#jstreeMenu').jstree(true).settings)) {
                             $('#jstreeMenu').jstree(response.jstree);
                         } else {

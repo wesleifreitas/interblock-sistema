@@ -12,42 +12,81 @@
 
 		<cftry>
 
-			<cfquery datasource="#application.datasource#" name="queryCount">
-                SELECT
-                    COUNT(*) AS COUNT
-                FROM
-                   	dbo.perfil_grupo AS perfil_grupo
-                               
-                INNER JOIN grupo AS grupo
-                ON grupo.grupo_id = perfil_grupo.grupo_id
+			<cfif session.perfilDeveloper EQ 1>
+				<cfquery datasource="#application.datasource#" name="queryCount">
+					SELECT
+						COUNT(*) AS COUNT
+					FROM
+						dbo.grupo
+					WHERE
+						1 = 1
+					<cfif IsDefined("url.grupo_nome") AND url.grupo_nome NEQ "">
+						AND	grupo_nome LIKE <cfqueryparam value = "%#url.grupo_nome#%" CFSQLType = "CF_SQL_VARCHAR">
+					</cfif>
+				</cfquery>
 
-                WHERE
-					grupo_id IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#session.grupolist#" list="true">)
-				AND per_id = <cfqueryparam value = "#session.perfilId#" CFSQLType = "CF_SQL_NUMERIC">
-            </cfquery>
+				<cfquery datasource="#application.datasource#" name="query">
+					SELECT
+						grupo_id
+						,grupo_nome
+					FROM
+						dbo.grupo
+					WHERE
+						1 = 1
+					<cfif IsDefined("url.grupo_nome") AND url.grupo_nome NEQ "">
+						AND	grupo_nome LIKE <cfqueryparam value = "%#url.grupo_nome#%" CFSQLType = "CF_SQL_VARCHAR">
+					</cfif>
+					ORDER BY
+						grupo_nome ASC	
+					
+					<!--- Paginação --->
+					OFFSET #URL.page * URL.limit - URL.limit# ROWS
+					FETCH NEXT #URL.limit# ROWS ONLY;
+				</cfquery>
+			<cfelse>
+				<cfquery datasource="#application.datasource#" name="queryCount">
+					SELECT
+						COUNT(*) AS COUNT
+					FROM
+						dbo.perfil_grupo AS perfil_grupo
+								
+					INNER JOIN grupo AS grupo
+					ON grupo.grupo_id = perfil_grupo.grupo_id
 
-            <cfquery datasource="#application.datasource#" name="query">
-                SELECT
-                    per_id
-                    ,grupo_id
-                    ,grupo_nome
-                FROM
-                   	dbo.perfil_grupo AS perfil_grupo
-                            
-                INNER JOIN grupo AS grupo
-                ON grupo.grupo_id = perfil_grupo.grupo_id
+					WHERE
+						perfil_grupo.grupo_id IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#session.grupolist#" list="true">)
+					AND per_id = <cfqueryparam value = "#session.perfilId#" CFSQLType = "CF_SQL_NUMERIC">
+					<cfif IsDefined("url.grupo_nome") AND url.grupo_nome NEQ "">
+						AND	grupo_nome LIKE <cfqueryparam value = "%#url.grupo_nome#%" CFSQLType = "CF_SQL_VARCHAR">
+					</cfif>
+				</cfquery>
 
-                WHERE
-					grupo_id IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#session.grupolist#" list="true">)
-                AND per_id = <cfqueryparam value = "#session.perfilId#" CFSQLType = "CF_SQL_NUMERIC">
-				
-				ORDER BY
-					grupo_id ASC	
-                
-                <!--- Paginação --->
-                OFFSET #URL.page * URL.limit - URL.limit# ROWS
-                FETCH NEXT #URL.limit# ROWS ONLY;
-            </cfquery>
+				<cfquery datasource="#application.datasource#" name="query">
+					SELECT
+						perfil_grupo.per_id
+						,perfil_grupo.grupo_id
+						,grupo.grupo_nome
+					FROM
+						dbo.perfil_grupo AS perfil_grupo
+								
+					INNER JOIN grupo AS grupo
+					ON grupo.grupo_id = perfil_grupo.grupo_id
+
+					WHERE
+						perfil_grupo.grupo_id IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#session.grupolist#" list="true">)
+					AND per_id = <cfqueryparam value = "#session.perfilId#" CFSQLType = "CF_SQL_NUMERIC">
+					<cfif IsDefined("url.grupo_nome") AND url.grupo_nome NEQ "">
+						AND	grupo_nome LIKE <cfqueryparam value = "%#url.grupo_nome#%" CFSQLType = "CF_SQL_VARCHAR">
+					</cfif>
+					
+					ORDER BY
+						grupo_nome ASC	
+					
+					<!--- Paginação --->
+					OFFSET #URL.page * URL.limit - URL.limit# ROWS
+					FETCH NEXT #URL.limit# ROWS ONLY;
+				</cfquery>
+			</cfif>
 		
 			<cfset response["page"] = URL.page>	
 			<cfset response["limit"] = URL.limit>	

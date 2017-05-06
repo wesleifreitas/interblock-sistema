@@ -262,13 +262,12 @@
 					WHERE 
 						per_id = <cfqueryparam value = "#arguments.id#" CFSQLType = "CF_SQL_BIGINT">				
 				</cfquery>
-
+				
 				<cfquery datasource="#application.datasource#">
 					DELETE FROM
 						dbo.perfil_grupo							
 					WHERE 
 						per_id = <cfqueryparam value = "#arguments.id#" CFSQLType = "CF_SQL_BIGINT">
-					AND grupo_id = <cfqueryparam value = "#session.grupoId#" CFSQLType = "CF_SQL_BIGINT">;					
 				</cfquery>	
 
 				<cfif IsDefined("body.jstreeDataGrupo")>
@@ -473,8 +472,10 @@
 					) AS grupo_check    
 				FROM
 					dbo.grupo AS grupo
-
-				WHERE grupo_id = <cfqueryparam cfsqltype="cf_sql_bigint" value="#arguments.grupo_id#">
+				
+				<cfif session.perfilDeveloper NEQ 1>
+					WHERE grupo_id IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#session.grupolist#" list="true">)
+				</cfif>
 				
 				ORDER BY
 					grupo_nome

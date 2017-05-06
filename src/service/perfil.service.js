@@ -124,7 +124,7 @@
         function jsTreeMenu(params) {
 
             params = params || {};
-            params.projectId = config.PROJECT_ID;
+            params.projectId = config.PROJECT_ID || 0;
 
             var req = $http({
                     url: config.REST_URL + '/perfil/treeMenu',

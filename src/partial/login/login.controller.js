@@ -44,7 +44,7 @@
                             console.warn(response.data.message);
                         }
                     }, function error(response) {
-                        //console.error('login', response);
+                        console.error('login', response);
                         vm.dataLoading = false;
                         vm.username = '';
                         vm.password = '';
