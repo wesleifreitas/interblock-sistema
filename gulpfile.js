@@ -15,7 +15,8 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     cssmin = require('gulp-cssmin'),
-    livereload = require('gulp-livereload');
+    livereload = require('gulp-livereload'),
+    moment = require('moment');
 
 // https://www.npmjs.com/package/gulp-webserver
 gulp.task('serve', ['watch'], function() {
@@ -62,19 +63,28 @@ gulp.task('watch', function() {
     gulp.watch('src/service/**/*.js', { cwd: './' }, ['jshint']);
     gulp.watch('src/constant/**/*.js', { cwd: './' }, ['jshint']);
     gulp.watch('src/filter/**/*.js', { cwd: './' }, ['jshint']);
-    gulp.watch('backend/cf/**/*.*', { cwd: './' }, ['backend-cf-init']);
+    gulp.watch('backend/cf/**/*.*', { cwd: './' }, ['rest-cf-init']);
 });
 
-gulp.task('backend-cf-init', function() {
-    var url = 'http://localhost:8500/interblock-sistema/backend/cf/restInit.cfm'
+var requestCount = 0;
+gulp.task('rest-cf-init', function() {
+    var url = 'http://localhost:8500/interblock-sistema/backend/cf/rest-init.cfm'
     request(url, function(error, response, body) {
-        var date = new Date();
         if (!error && response.statusCode == 200) {
-            console.log('[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ']', body);
-        } else {
-            console.log('[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ']', 'error');
+            console.log('[' + moment().format('HH:mm:ss') + ']', body);
+            requestCount = 0;
+        } else if (response.statusCode === 500 && requestCount < 3) {
+            requestCount++;
+            console.log('[' + moment().format('HH:mm:ss') + ']', 'Fail(' + requestCount + ')  \'rest-cf-init\' try again...');
+            setTimeout(function() {
+                gulp.start('rest-cf-init');
+            }, 3000);
+
+        } else if (response.statusCode === 500) {
+            console.log('[' + moment().format('HH:mm:ss') + ']', 'Fail(' + requestCount + ')  \'rest-cf-init\' try to access by browser please: ' + url);
+            requestCount = 0;
         }
-    })
+    });
 });
 
 gulp.task('jshint', function() {
@@ -249,7 +259,7 @@ gulp.task('clean', function() {
         .pipe(clean({ force: true }));
 });
 
-gulp.task('default', ['build-backend-cf']);
+gulp.task('default', ['build']);
 
 gulp.task('build', function() {
     gulpSequence('clean',
@@ -263,7 +273,8 @@ gulp.task('build', function() {
         //'js-concat',
         //'js-clean',
         'pdf-viewer',
-        'index-replace')();
+        'index-replace',
+        'backend-cf')();
 });
 
 gulp.task('build-backend-cf', function() {

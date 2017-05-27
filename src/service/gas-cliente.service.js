@@ -22,7 +22,7 @@
         function get(params) {
 
             var req = $http({
-                    url: config.REST_URL + '/example/',
+                    url: config.REST_URL + '/gas-cliente/',
                     method: 'GET',
                     headers: {
                         'Authorization': '',
@@ -38,7 +38,7 @@
         function getById(id) {
 
             var req = $http({
-                    url: config.REST_URL + '/example/' + id,
+                    url: config.REST_URL + '/gas-cliente/' + id,
                     method: 'GET',
                     headers: {
                         'Authorization': '',
@@ -53,7 +53,7 @@
         function create(data) {
 
             var req = $http({
-                    url: config.REST_URL + '/example/',
+                    url: config.REST_URL + '/gas-cliente/',
                     method: 'POST',
                     headers: {
                         'Authorization': '',
@@ -69,7 +69,7 @@
         function update(id, data) {
 
             var req = $http({
-                    url: config.REST_URL + '/example/' + id,
+                    url: config.REST_URL + '/gas-cliente/' + id,
                     method: 'PUT',
                     headers: {
                         'Authorization': '',
@@ -84,7 +84,7 @@
 
         function remove(data) {
             var req = $http({
-                    url: config.REST_URL + '/example/',
+                    url: config.REST_URL + '/gas-cliente/',
                     method: 'DELETE',
                     headers: {
                         'Authorization': '',
@@ -99,7 +99,7 @@
 
         function removeById(id) {
             var req = $http({
-                    url: config.REST_URL + '/example/' + id,
+                    url: config.REST_URL + '/gas-cliente/' + id,
                     method: 'DELETE',
                     headers: {
                         'Authorization': '',

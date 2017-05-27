@@ -18,6 +18,8 @@
 @import "partial/pagamento/pagamento.less";
 @import "partial/pagamento/pagamento-form.less";
 @import "partial/proposta/proposta-dialog.less";
+@import "partial/gas-cliente/gas-cliente.less";
+@import "partial/gas-cliente/gas-cliente-form.less";
 body, html {	
 	margin: 0;
 	padding: 0;
@@ -103,4 +105,20 @@ md-toast.md-error-toast-theme .md-toast-content {
 md-actions{
 	background-color: #FAFAFA;
 	min-height: 50px;
+}
+
+table[md-table] md-checkbox[disabled] {
+	background-color: #EEEEEE;
+}
+
+.center {
+	text-align: center !important;
+}
+
+.right {
+	text-align: right !important;
+}
+
+.left {
+	text-align: left !important;
 }

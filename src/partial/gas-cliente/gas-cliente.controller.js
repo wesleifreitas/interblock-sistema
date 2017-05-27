@@ -56,6 +56,17 @@
             vm.gasCliente.promise = gasClienteService.get(vm.filter)
                 .then(function success(response) {
                     //console.info('success', response);
+
+                    for (var i = 0; i <= response.query.length - 1; i++) {
+                        // ajustar dates
+                        if (response.query[i].GAS_ULTIMA_TROCA !== '') {
+                            response.query[i].GAS_ULTIMA_TROCA = new Date(response.query[i].GAS_ULTIMA_TROCA);
+                        }
+                        if (response.query[i].GAS_PROXIMA_TROCA !== '') {
+                            response.query[i].GAS_PROXIMA_TROCA = new Date(response.query[i].GAS_PROXIMA_TROCA);
+                        }
+                    }
+
                     vm.gasCliente.total = response.recordCount;
                     vm.gasCliente.data = vm.gasCliente.data.concat(response.query);
                 }, function error(response) {
