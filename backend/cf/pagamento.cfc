@@ -2,19 +2,7 @@
 	<cfinclude template="security.cfm">
 	<cfinclude template="util.cfm">
 
-	<cffunction name="postPagamento" access="remote" returnType="String" httpMethod="POST" restPath="/post">
-		<cfargument name="body" type="String">
-
-		<cfset body = DeserializeJSON(arguments.body)>
-		
-		<cfset response = structNew()>
-		<cfset response["arguments"] = body>
-		<cfset response["message"] = 'Ação realizada com sucesso!'>
-		
-		<cfreturn SerializeJSON(response)>
-	</cffunction>
-
-	<cffunction name="pagamento" access="remote" returntype="String" httpmethod="GET"> 
+	<cffunction name="get" access="remote" returntype="String" httpmethod="GET"> 
 
 		<cfset checkAuthentication()>
         
@@ -149,7 +137,7 @@
 
     </cffunction>
 
-	<cffunction name="pagamentoCreate" access="remote" returnType="String" httpMethod="POST">		
+	<cffunction name="create" access="remote" returnType="String" httpMethod="POST">		
 		<cfargument name="body" type="String">
 
 		<cfset checkAuthentication()>
@@ -172,7 +160,7 @@
 		<cfreturn SerializeJSON(response)>
 	</cffunction>
 
-	<cffunction name="pagamentoUpdate" access="remote" returnType="String" httpMethod="PUT" restPath="/{id}">
+	<cffunction name="update" access="remote" returnType="String" httpMethod="PUT" restPath="/{id}">
 		<cfargument name="id" restargsource="Path" type="numeric"/>
 		<cfargument name="body" type="String">
 
@@ -213,7 +201,7 @@
 		<cfreturn SerializeJSON(response)>
 	</cffunction>
 
-	<cffunction name="pagamentoRemove" access="remote" returnType="String" httpMethod="DELETE">		
+	<cffunction name="remove" access="remote" returnType="String" httpMethod="DELETE">		
 		<cfargument name="body" type="String">
 
 		<cfset checkAuthentication()>
@@ -235,7 +223,7 @@
 		<cfreturn SerializeJSON(response)>
 	</cffunction>
 
-	<cffunction name="pagamentoRemoveById" access="remote" returnType="String" httpMethod="DELETE" restPath="/{id}">
+	<cffunction name="removeById" access="remote" returnType="String" httpMethod="DELETE" restPath="/{id}">
 		<cfargument name="id" restargsource="Path" type="numeric"/>
 
 		<cfset checkAuthentication()>
@@ -256,7 +244,7 @@
 		<cfreturn SerializeJSON(response)>
 	</cffunction>
 
-	<cffunction name="pagamentoQuitacao" access="remote" returntype="String" httpmethod="GET" restPath="/quitacao"> 
+	<cffunction name="quitacao" access="remote" returntype="String" httpmethod="GET" restPath="/quitacao"> 
 
 		<cfset checkAuthentication()>
         
@@ -342,7 +330,7 @@
 		<cfreturn SerializeJSON(response)>
     </cffunction>
 
-	<cffunction name="pagamentoQuitar" access="remote" returnType="String" httpMethod="POST" restpath="/quitar">		
+	<cffunction name="quitar" access="remote" returnType="String" httpMethod="POST" restpath="/quitar">		
 		<cfargument name="body" type="String">
 
 		<cfset checkAuthentication()>
