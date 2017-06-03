@@ -23,6 +23,7 @@
         .config(config)
         .run(run);
 
+    /* jshint ignore:start */
     angular.module(PROJECT_NAME).constant('config', {
         // RESTful - ColdFusion
         // Registrar REST: http://localhost:8500/interblock-sistema/backend/cf/restInit.cfm
@@ -32,6 +33,7 @@
         // Registrar REST: backend\node> node server.js
         //'REST_URL': 'http://localhost:8080/interblock-sistema',
     });
+    /* jshint ignore:end */
 
     config.$inject = ['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', '$mdDateLocaleProvider',
         'cfpLoadingBarProvider'
