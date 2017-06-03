@@ -11,6 +11,7 @@
         var service = {};
 
         service.Login = Login;
+        service.Logout = Logout;
         service.SetCredentials = SetCredentials;
         service.ClearCredentials = ClearCredentials;
 
@@ -114,6 +115,13 @@
                     'Content-Type': 'application/json'
                 },
                 data: { username: username, password: password }
+            });
+        }
+
+        function Logout() {
+            return $http({
+                url: config.REST_URL + '/logout',
+                method: 'POST'
             });
         }
 

@@ -3,9 +3,9 @@
 
     angular.module('myApp').controller('HomeCtrl', HomeCtrl);
 
-    HomeCtrl.$inject = ['$rootScope', '$state', '$mdUtil', '$mdSidenav', 'grupoService'];
+    HomeCtrl.$inject = ['$rootScope', '$state', '$mdUtil', '$mdSidenav', 'grupoService', 'loginService'];
     /* @ngInject */
-    function HomeCtrl($rootScope, $state, $mdUtil, $mdSidenav, grupoService) {
+    function HomeCtrl($rootScope, $state, $mdUtil, $mdSidenav, grupoService, loginService) {
         var vm = this;
         vm.logout = logout;
         vm.toggleRight = buildToggler('right');
@@ -32,7 +32,7 @@
                         };
                         vm.searchText = response.query[0].GRUPO_NOME;
                     } else {
-                        console.warn('home init', 'usuário sem grupo!');
+                        console.warn('home init: usuário sem grupo!');
                     }
                 }, function error(response) {
                     console.error('error', response);
@@ -40,6 +40,14 @@
         }
 
         function logout() {
+            loginService.Logout()
+                .then(function success(response) {
+                    loginService.ClearCredentials();
+                    $state.go('login');
+                }, function error(response) {
+                    console.error(response);
+                });
+
             $state.go('login');
         }
 
