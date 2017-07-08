@@ -4,6 +4,7 @@
 @import "lib/font-awesome/less/font-awesome.less";
 @import (inline) "lib/angular-material-data-table/dist/md-data-table.min.css";
 @import "assets/jstree/themes/proton/style.less";
+@import (inline) "lib/angular-material-sidemenu/dest/angular-material-sidemenu.css";
 @fa-font-path: "lib/font-awesome/fonts";
 @icon-font-path: "lib/bootstrap/fonts/";
 @import "partial/login/login.less";
@@ -20,7 +21,7 @@
 @import "partial/proposta/proposta-dialog.less";
 @import "partial/gas-cliente/gas-cliente.less";
 @import "partial/gas-cliente/gas-cliente-form.less";
-body, html {	
+body, html {
 	margin: 0;
 	padding: 0;
 	height: 100%;
@@ -49,6 +50,24 @@ px-nav-bar md-menu-bar.md-default-theme md-menu.md-open > button, md-menu-bar md
 
 md-menu-content.md-menu-bar-menu.md-dense .md-button span {
 	font-size: 17px;
+}
+
+table.clone thead tr:last-child th {
+	border-bottom: 1px rgba(0, 0, 0, 0.12) solid;
+}
+
+table.clone + md-table-container table tbody tr:first-child td {
+	border-top: block;
+}
+
+md-table-container.fix-head {
+	width: 100%;
+	min-height: 300px;
+	height: 100%;
+	.overflow {
+		overflow: auto;
+		height: 100%;
+	}
 }
 
 .ng-invalid {
@@ -85,26 +104,32 @@ md-menu-content.md-menu-bar-menu.md-dense .md-button span {
 }
 
 #loading-bar .bar {
-  background: white;
+	background: white;
 }
+
 #loading-bar-spinner .spinner-icon {
-  border-top-color:  white;
-  border-left-color: white;
+	border-top-color: white;
+	border-left-color: white;
 }
+
 #loading-bar .peg {
-  -moz-box-shadow: white 1px 0 6px 1px;
-  -ms-box-shadow: white 1px 0 6px 1px;
-  -webkit-box-shadow: white 1px 0 6px 1px;
-  box-shadow: white 1px 0 6px 1px;
+	-moz-box-shadow: white 1px 0 6px 1px;
+	-ms-box-shadow: white 1px 0 6px 1px;
+	-webkit-box-shadow: white 1px 0 6px 1px;
+	box-shadow: white 1px 0 6px 1px;
 }
 
-md-toast.md-error-toast-theme .md-toast-content {
-    background-color: maroon;
+md-content {
+	background-color: white;
 }
 
-md-actions{
-	background-color: #FAFAFA;
+md-actions {
+	background-color: white;
 	min-height: 50px;
+}
+
+.md-sidemenu-content {
+    display: block;
 }
 
 table[md-table] md-checkbox[disabled] {

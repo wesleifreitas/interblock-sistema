@@ -1,116 +1,124 @@
-<div layout="column" ng-cloak class="pagamento" ng-init="vm.init()">
-    <form name="formSearch" class="filter">
-        <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
+<div layout="column" ng-cloak flex="100" class="pagamento" ng-init="vm.init()">
+    <div layout="column" layout-align="start stretch" class="content">
 
-        <div layout-gt-sm="row">
-            <md-input-container flex-gt-sm="15">
-                <label>Ano (Vencimento)</label>
-                <input ng-model="vm.filter.ano" type="number">
-            </md-input-container>
+        <form name="formSearch" class="filter">
+            <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
 
-            <md-input-container flex-gt-sm="20">
-                <label>Mês (Vencimento)</label>
-                <md-select ng-model="vm.filter.mes">
-                    <md-option ng-value="-1">
-                        <em>Todos</em>
-                    </md-option>
-                    <md-option ng-repeat="option in vm.filter.months" ng-value="$index">
-                        {{vm.filter.months[$index]}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
+            <div layout-gt-sm="row">
+                <md-input-container flex-gt-sm="15">
+                    <label>Ano (Vencimento)</label>
+                    <input ng-model="vm.filter.ano" type="number">
+                </md-input-container>
 
-            <md-input-container>
-                <label>CPF</label>
-                <input ng-model="vm.filter.cpf" ui-br-cpf-mask>
-                <div ng-messages="form.cpf.$error" multiple md-auto-hide="false">
-                    <div ng-message="cpf">CPF inválido</div>
-                </div>
-            </md-input-container>
+                <md-input-container flex-gt-sm="20">
+                    <label>Mês (Vencimento)</label>
+                    <md-select ng-model="vm.filter.mes">
+                        <md-option ng-value="-1">
+                            <em>Todos</em>
+                        </md-option>
+                        <md-option ng-repeat="option in vm.filter.months" ng-value="$index">
+                            {{vm.filter.months[$index]}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
 
-            <md-input-container flex-gt-sm>
-                <label>Nome do cliente</label>
-                <input ng-model="vm.filter.cliente">
-            </md-input-container>
+                <md-input-container>
+                    <label>CPF</label>
+                    <input ng-model="vm.filter.cpf" ui-br-cpf-mask>
+                    <div ng-messages="form.cpf.$error" multiple md-auto-hide="false">
+                        <div ng-message="cpf">CPF inválido</div>
+                    </div>
+                </md-input-container>
 
-            <md-input-container class="md-block" flex-gt-sm="">
-                <label>Status desta parcela</label>
-                <md-select ng-model="vm.filter.PAG_STATUS">
-                    <md-option ng-value="todos">
-                        <em>Todos</em>
-                    </md-option>
-                    <md-option ng-repeat="status in vm.status" ng-value="status.id">
-                        {{status.name}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-        </div>
-    </form>
-    <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.pagamento.selected.length">
-        <div class="md-toolbar-tools">
-            <span>Pagamentos</span>
-            <span flex></span>
-            <!-- <md-button class="md-primary" ng-click="vm.create()">
+                <md-input-container flex-gt-sm>
+                    <label>Nome do cliente</label>
+                    <input ng-model="vm.filter.cliente">
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm="">
+                    <label>Status desta parcela</label>
+                    <md-select ng-model="vm.filter.PAG_STATUS">
+                        <md-option ng-value="todos">
+                            <em>Todos</em>
+                        </md-option>
+                        <md-option ng-repeat="status in vm.status" ng-value="status.id">
+                            {{status.name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </form>
+
+        <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.pagamento.selected.length">
+            <div class="md-toolbar-tools">
+                <span>Pagamentos</span>
+                <span flex></span>
+                <!-- <md-button class="md-primary" ng-click="vm.create()">
                 <md-icon>add</md-icon>
                 Adicionar
             </md-button> -->
-            <md-button class="md-primary" ng-click="vm.quitar()">
-                <md-icon>assignment_turned_in</md-icon>
-                Quitar pagamentos
-            </md-button>
-            <md-button class="md-primary" ng-click="vm.getData({reset: true})">
-                <md-icon>refresh</md-icon>
-                Atualizar
-            </md-button>
-        </div>
-    </md-toolbar>
+                <md-button class="md-primary" ng-click="vm.quitar()">
+                    <md-icon>assignment_turned_in</md-icon>
+                    Quitar pagamentos
+                </md-button>
+                <md-button class="md-primary" ng-click="vm.getData({reset: true})">
+                    <md-icon>refresh</md-icon>
+                    Atualizar
+                </md-button>
+            </div>
+        </md-toolbar>
 
-    <md-toolbar class="md-accent md-hue-1" ng-show="vm.pagamento.selected.length">
-        <div class="md-toolbar-tools">
-            <span>{{vm.pagamento.selected.length}} {{vm.pagamento.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-click="vm.remove()">
-                <md-icon>delete</md-icon>
-            </md-button>
-        </div>
-    </md-toolbar>
-    <md-content class="content" flex>
-        <md-table-container>
-            <table md-table md-row-select="false" multiple="false" ng-model="vm.pagamento.selected" md-progress="vm.pagamento.promise">
-                <thead md-head md-order="vm.pagamento.order">
-                    <tr md-row>
-                        <th md-column><span></span></th>
-                        <th md-column><span>Boleto</span></th>
-                        <th md-column><span>Status</span></th>
-                        <th md-column><span>Vencimento/Valor</span></th>
-                        <th md-column md-order-by="">Cliente</th>
-                        <th md-column>CPF</th>
-                        <th md-column>Proposta / Contrato</th>
-                        <th md-column>Arquivo</th>
-                    </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row md-select="item" md-select-id="PAG_ID" ng-repeat="item in vm.pagamento.data | orderBy: vm.pagamento.order">
-                        <td md-cell>
-                            <md-button class="md-icon-button" ng-click="vm.update(item.PAG_ID)">
-                                <md-icon>mode_edit</md-icon>
-                            </md-button>
-                        </td>
-                        <td md-cell>
-                            <md-button class="md-icon-button" ng-click="vm.showPdf(item)">
-                                <md-icon>picture_as_pdf</md-icon>
-                            </md-button>
-                        </td>
-                        <td md-cell nowrap><span class="{{item.PAG_STATUS | pagamentoStatusClass}}">{{item.PAG_STATUS | pagamentoStatus}}</span></td>
-                        <td md-cell>{{vm.moment(item.PAG_DATA_VENCIMENTO).format('DD/MM/YYYY')}} {{item.PAG_VALOR | currency}}</td>
-                        <td md-cell>{{item.CLI_NOME}}</td>
-                        <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>
-                        <td md-cell>{{item.PROP_NUMERO}}</td>
-                        <td md-cell>{{item.CLI_ARQUIVO}}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <md-toolbar class="md-accent md-hue-1" ng-show="vm.pagamento.selected.length">
+            <div class="md-toolbar-tools">
+                <span>{{vm.pagamento.selected.length}} {{vm.pagamento.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.remove()">
+                    <md-icon>delete</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-table-container layout="column" class="fix-head">
+            <div class="overflow">
+                <table md-table md-row-select="false" multiple="false" ng-model="vm.pagamento.selected" md-progress="vm.pagamento.promise">
+                    <thead fix-head md-head md-order="vm.pagamento.order">
+                        <tr md-row>
+                            <th md-column><span></span></th>
+                            <th md-column><span>Boleto</span></th>
+                            <th md-column><span>Status</span></th>
+                            <th md-column><span>Vencimento/Valor</span></th>
+                            <th md-column md-order-by="">Cliente</th>
+                            <th md-column>CPF</th>
+                            <th md-column>Proposta / Contrato</th>
+                            <th md-column>Arquivo</th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="item" md-select-id="PAG_ID" ng-repeat="item in vm.pagamento.data | orderBy: vm.pagamento.order">
+                            <td md-cell>
+                                <md-button class="md-icon-button" ng-click="vm.update(item.PAG_ID)">
+                                    <md-icon>mode_edit</md-icon>
+                                </md-button>
+                            </td>
+                            <td md-cell>
+                                <md-button class="md-icon-button" ng-click="vm.showPdf(item)">
+                                    <md-icon>picture_as_pdf</md-icon>
+                                </md-button>
+                            </td>
+                            <td md-cell nowrap><span class="{{item.PAG_STATUS | pagamentoStatusClass}}">{{item.PAG_STATUS | pagamentoStatus}}</span></td>
+                            <td md-cell>{{vm.moment(item.PAG_DATA_VENCIMENTO).format('DD/MM/YYYY')}} {{item.PAG_VALOR | currency}}</td>
+                            <td md-cell>{{item.CLI_NOME}}</td>
+                            <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>
+                            <td md-cell>{{item.PROP_NUMERO}}</td>
+                            <td md-cell>{{item.CLI_ARQUIVO}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </md-table-container>
-    </md-content>
-    <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.pagamento.limit" md-page="vm.pagamento.page" md-total="{{vm.pagamento.total}}" md-page-select md-on-paginate="vm.pagamento.pagination"></md-table-pagination>
+
+        <div>
+            <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.pagamento.limit" md-page="vm.pagamento.page" md-total="{{vm.pagamento.total}}" md-page-select md-on-paginate="vm.pagamento.pagination"></md-table-pagination>
+        </div>
+    </div>
 </div>

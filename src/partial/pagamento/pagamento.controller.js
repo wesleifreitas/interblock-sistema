@@ -13,8 +13,6 @@
         var vm = this;
         vm.init = init;
         vm.moment = moment;
-        vm.filter = JSON.parse(localStorage.getItem('filter')) || {};
-        vm.filter.months = moment.months();
         vm.status = PAGAMENTO.STATUS;
         vm.getData = getData;
         //vm.create = create;
@@ -40,8 +38,18 @@
         });
 
         function init() {
-            vm.filter.ano = vm.filter.ano || moment().year();
-            vm.filter.mes = vm.filter.mes || moment().month();
+            var filterLast = JSON.parse(localStorage.getItem('filter')) || {};
+
+            if (filterLast[$state.current.url.split('/')[1]]) {
+                vm.filter = filterLast;
+            } else {
+                vm.filter = {};
+                vm.filter[$state.current.url.split('/')[1]] = true;
+                vm.filter.months = moment.months();
+                vm.filter.ano = vm.filter.ano || moment().year();
+                vm.filter.mes = vm.filter.mes || moment().month();
+            }
+
             getData({ reset: true });
         }
 

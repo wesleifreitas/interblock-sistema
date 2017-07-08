@@ -7,14 +7,18 @@
     /* @ngInject */
     function HomeCtrl($rootScope, $state, $mdUtil, $mdSidenav, grupoService, loginService) {
         var vm = this;
+        vm.navBarClick = navBarClick;
+        vm.sideMenuClick = sideMenuClick;
         vm.logout = logout;
         vm.toggleRight = buildToggler('right');
+        vm.toggleLeft = buildToggler('left');
         vm.sideNav = {
             username: $rootScope.globals.currentUser.username.split(' ')[0]
         };
         vm.querySearch = querySearch;
         vm.selectedItemChange = selectedItemChange;
         vm.grupoSearchBlur = grupoSearchBlur;
+        vm.sideMenuClick = sideMenuClick;
 
         init();
 
@@ -39,15 +43,25 @@
                 });
         }
 
+        function navBarClick(event) {
+            $state.go(event.state);
+        }
+
+        function sideMenuClick(event) {
+            console.info('sideMenuClick', event);
+            $mdSidenav('left').close();
+        }
+
         function logout() {
-            loginService.Logout()
+            /*loginService.Logout()
                 .then(function success(response) {
                     loginService.ClearCredentials();
                     $state.go('login');
                 }, function error(response) {
                     console.error(response);
-                });
+                });*/
 
+            loginService.ClearCredentials();
             $state.go('login');
         }
 

@@ -1,89 +1,99 @@
-<div layout="column" ng-cloak class="gas-cliente" ng-init="vm.init()">
-    <form name="formSearch" class="filter">
-        <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
-        <div layout-gt-sm="row">
-            <md-input-container flex-gt-sm="" flex-gt-sm layout-xs="100">
-                <label>CPF</label>
-                <input name="CLI_CPFCNPJ" ng-model="vm.filter.CLI_CPFCNPJ" ui-br-cpf-mask>
-                <div ng-messages="formSearch.CLI_CPFCNPJ.$error" multiple md-auto-hide="false">
-                    <div ng-message="cpf">CPF inválido.</div>
-                </div>
-            </md-input-container>
+<div layout="column" ng-cloak flex="100" class="gas-cliente" ng-init="vm.init()">
+    <div layout="column" layout-align="start stretch" class="content">
 
-            <md-input-container flex-gt-sm="" layout-xs="100">
-                <label>Nome</label>
-                <input ng-model="vm.filter.CLI_NOME">
-            </md-input-container>
-        </div>
-    </form>
-    <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.gasCliente.selected.length">
-        <div class="md-toolbar-tools">
-            <span>Cliente</span>
-            <span flex></span>
-            <md-button class="md-primary" ng-click="vm.create()">
-                <md-icon>add</md-icon>
-                Adicionar
-            </md-button>
-            <md-button class="md-primary" ng-click="vm.getData({reset: true})">
-                <md-icon>refresh</md-icon>
-                Atualizar
-            </md-button>
-        </div>
-    </md-toolbar>
 
-    <md-toolbar class="md-accent md-hue-1" ng-show="vm.gasCliente.selected.length">
-        <div class="md-toolbar-tools">
-            <span>{{vm.gasCliente.selected.length}} {{vm.gasCliente.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-click="vm.remove()">
-                <md-icon>delete</md-icon>
-            </md-button>
-        </div>
-    </md-toolbar>
-    <md-content class="content" flex>
-        <md-table-container>
-            <table md-table md-row-select="false" multiple="false" ng-model="vm.gasCliente.selected" md-progress="vm.gasCliente.promise">
-                <thead md-head md-order="vm.gasCliente.order">
-                    <tr md-row>
-                        <th md-column><span></span></th>
-                        <th md-column><span>Código</span></th>
-                        <th md-column md-order-by=""><span>Nome</span></th>
-                        <th md-column md-order-by=""><span>CPF</span></th>
-                        <th md-column>Última troca</th>
-                        <th md-column class="center">
-                            <md-tooltip md-direction="top">Estimativa</md-tooltip>
-                            Próxima troca*
-                        </th>
-                        <th md-column>
-                            <md-tooltip md-direction="top">Estimativa</md-tooltip>
-                            Média (Gás/mês)
-                        </th>
-                        <th md-column>
-                            <md-tooltip md-direction="top">Estimativa</md-tooltip>
-                            Situação (Gás)*
-                        </th>
-                    </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row md-select="item" md-select-id="_ID" ng-repeat="item in vm.gasCliente.data | orderBy: vm.gasCliente.order">
-                        <td md-cell>
-                            <md-button class="md-icon-button" ng-click="vm.update(item._ID)">
-                                <md-icon>search</md-icon>
-                            </md-button>
-                        </td>
-                        <td md-cell>{{item.CLI_ID}}</td>
-                        <td md-cell>{{item.CLI_NOME}}</td>
-                        <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>
-                        <td md-cell>{{item.GAS_ULTIMA_TROCA | date:'dd/MM/yyyy'}}</td>
-                        <td md-cell>{{item.GAS_PROXIMA_TROCA | date:'dd/MM/yyyy'}}</td>
-                        <td md-cell>{{item.GAS_MEDIA}}</td>
-                        <td md-cell class="center">
-                            <md-icon md-font-icon="{{item.GAS_STATUS | gasStatusClass}}" class="fa"></md-icon>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <form name="formSearch" class="filter">
+            <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
+            <div layout-gt-sm="row">
+                <md-input-container flex-gt-sm="" flex-gt-sm layout-xs="100">
+                    <label>CPF</label>
+                    <input name="CLI_CPFCNPJ" ng-model="vm.filter.CLI_CPFCNPJ" ui-br-cpf-mask>
+                    <div ng-messages="formSearch.CLI_CPFCNPJ.$error" multiple md-auto-hide="false">
+                        <div ng-message="cpf">CPF inválido.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container flex-gt-sm="" layout-xs="100">
+                    <label>Nome</label>
+                    <input ng-model="vm.filter.CLI_NOME">
+                </md-input-container>
+            </div>
+        </form>
+
+        <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.gasCliente.selected.length">
+            <div class="md-toolbar-tools">
+                <span>Cliente</span>
+                <span flex></span>
+                <md-button class="md-primary" ng-click="vm.create()">
+                    <md-icon>add</md-icon>
+                    Adicionar
+                </md-button>
+                <md-button class="md-primary" ng-click="vm.getData({reset: true})">
+                    <md-icon>refresh</md-icon>
+                    Atualizar
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-toolbar class="md-accent md-hue-1" ng-show="vm.gasCliente.selected.length">
+            <div class="md-toolbar-tools">
+                <span>{{vm.gasCliente.selected.length}} {{vm.gasCliente.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.remove()">
+                    <md-icon>delete</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+
+        <md-table-container layout="column" class="fix-head">
+            <div class="overflow">
+                <table md-table md-row-select="false" multiple="false" ng-model="vm.gasCliente.selected" md-progress="vm.gasCliente.promise">
+                    <thead fix-head md-head md-order="vm.gasCliente.order">
+                        <tr md-row>
+                            <th md-column><span></span></th>
+                            <th md-column><span>Código</span></th>
+                            <th md-column md-order-by=""><span>Nome</span></th>
+                            <th md-column md-order-by=""><span>CPF</span></th>
+                            <th md-column>Última troca</th>
+                            <th md-column class="center">
+                                <md-tooltip md-direction="top">Estimativa</md-tooltip>
+                                Próxima troca*
+                            </th>
+                            <th md-column>
+                                <md-tooltip md-direction="top">Estimativa</md-tooltip>
+                                Média (Gás/mês)
+                            </th>
+                            <th md-column>
+                                <md-tooltip md-direction="top">Estimativa</md-tooltip>
+                                Situação (Gás)*
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="item" md-select-id="_ID" ng-repeat="item in vm.gasCliente.data | orderBy: vm.gasCliente.order">
+                            <td md-cell>
+                                <md-button class="md-icon-button" ng-click="vm.update(item._ID)">
+                                    <md-icon>search</md-icon>
+                                </md-button>
+                            </td>
+                            <td md-cell>{{item.CLI_ID}}</td>
+                            <td md-cell>{{item.CLI_NOME}}</td>
+                            <td md-cell nowrap>{{item.CLI_CPFCNPJ | brCpf}}</td>
+                            <td md-cell>{{item.GAS_ULTIMA_TROCA | date:'dd/MM/yyyy'}}</td>
+                            <td md-cell>{{item.GAS_PROXIMA_TROCA | date:'dd/MM/yyyy'}}</td>
+                            <td md-cell>{{item.GAS_MEDIA}}</td>
+                            <td md-cell class="center">
+                                <md-icon md-font-icon="{{item.GAS_STATUS | gasStatusClass}}" class="fa"></md-icon>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </md-table-container>
-    </md-content>
-    <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.gasCliente.limit" md-page="vm.gasCliente.page" md-total="{{vm.gasCliente.total}}" md-page-select md-on-paginate="vm.gasCliente.pagination"></md-table-pagination>
+
+        <div>
+            <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.gasCliente.limit" md-page="vm.gasCliente.page" md-total="{{vm.gasCliente.total}}" md-page-select md-on-paginate="vm.gasCliente.pagination"></md-table-pagination>
+        </div>
+    </div>
 </div>

@@ -1,11 +1,11 @@
 (function() {
     'use strict';
 
-    angular.module('myApp').directive('navBar', navBar);
+    angular.module('myApp').directive('sideMenu', sideMenu);
 
-    navBar.$inject = ['$compile'];
+    sideMenu.$inject = ['$compile'];
 
-    function navBar($compile) {
+    function sideMenu($compile) {
         var directive = {
             restrict: 'E',
             transclude: true,
@@ -19,11 +19,11 @@
         return directive;
 
         function link(scope, element, attrs, ngModel) {
-            var watchNavBarHtml = scope.$watch('navBarHtml', function(newValue, oldValue) {
+            var watchsideMenuHtml = scope.$watch('sideMenuHtml', function(newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    element.html(scope.navBarHtml);
+                    element.html(scope.sideMenuHtml);
                     $compile(element.contents())(scope);
-                    watchNavBarHtml();
+                    watchsideMenuHtml();
                 }
             });
         }
@@ -33,8 +33,9 @@
 
     function controller(config, $scope, $http, $rootScope, $sce) {
 
-        $scope.getNavBar = function() {
+        $scope.getsideMenu = function() {
             var params = {};
+            params.sideMenu = true;
             params.user = $rootScope.globals.currentUser.userid;
 
             $http({
@@ -42,37 +43,19 @@
                 url: config.REST_URL + '/navBar',
                 params: params
             }).then(function success(response) {
-                $scope.navBarHtml = response.data.navBar;
+                console.info(response);
+                console.info(response.data.sideMenu);
+                $scope.sideMenuHtml = response.data.sideMenu;
             }, function error(response) {
                 console.error(response);
             });
         };
 
-        $scope.showView = function(view) {
-
-            var params = {
-                menu: view
-            };
-
-            $http({
-                method: 'GET',
-                url: config.REST_URL + '/navBar/view',
-                params: params
-            }).then(function success(response) {
-                //console.info(response);
-                if (response.status === 200 && response.data.query) {
-                    response.data.query[0].state = response.data.query[0].COM_VIEW;
-
-                    $scope.itemClick({
-                        event: {
-                            view: view,
-                            response: response.data.query[0],
-                            state: response.data.query[0].COM_VIEW
-                        }
-                    });
+        $scope.showView = function(state) {
+            $scope.itemClick({
+                event: {
+                    state: state
                 }
-            }, function error(response) {
-                console.error(response);
             });
         };
 
@@ -86,6 +69,6 @@
         };
 
         // Inicializar menu
-        $scope.getNavBar();
+        $scope.getsideMenu();
     }
 })();

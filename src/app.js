@@ -9,38 +9,59 @@
             'ngCookies',
             'ngMaterial',
             'ngMessages',
-            'ngSanitize',
             'ui.utils.masks',
-            'idf.br-filters',
             'ui.mask',
-            'pxConfig',
-            'px-data-grid',
+            'idf.br-filters',
+            'ng-currency',
             'md.data.table',
+            'fixed.table.header',
             'angular-loading-bar',
-            'materialCalendar',
-            'ng-currency'
+            'ngMaterialSidemenu'
         ])
         .config(config)
         .run(run);
 
-    /* jshint ignore:start */
-    angular.module(PROJECT_NAME).constant('config', {
-        // RESTful - ColdFusion
-        // Registrar REST: http://localhost:8500/interblock-sistema/backend/cf/restInit.cfm
-        'REST_URL': window.location.origin + '/rest/interblock-sistema',
+    angular
+        .module(PROJECT_NAME)
+        .factory('httpRequestInterceptor', function() {
+            return {
+                request: function(config) {
+                    if (String(config.url).indexOf('interblock-sistema') > -1) {
+                        config.headers['Authorization'] = '';
+                        config.headers['Accept'] = 'application/json;odata=verbose';
+                    } else {
+                        delete config.headers['Authorization'];
+                    }
+                    return config;
+                }
+            };
+        });
 
-        // RESTful - Node.js        
-        // Registrar REST: backend\node> node server.js
-        //'REST_URL': 'http://localhost:8080/interblock-sistema',
+    var localUrl = 'http://localhost:8500';
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== 'http://127.0.0.1') {
+        localUrl = window.location.origin;
+    }
+
+    // RESTful - Node.js
+    // Registrar REST:
+    // $ cd backend/node
+    // $ node server.js
+
+    // RESTful - ColdFusion
+    // Registrar REST: http://localhost:8500/interblock-sistema/backend/cf/rest-init.cfm
+    angular.module(PROJECT_NAME).constant('config', {
+        PROJECT_ID: 0,
+        'REST_URL': localUrl + '/rest/interblock-sistema',
     });
-    /* jshint ignore:end */
 
     config.$inject = ['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', '$mdDateLocaleProvider',
-        'cfpLoadingBarProvider'
+        'cfpLoadingBarProvider', '$httpProvider'
     ];
 
     function config($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdDateLocaleProvider,
-        cfpLoadingBarProvider) {
+        cfpLoadingBarProvider, $httpProvider) {
+
+        $httpProvider.interceptors.push('httpRequestInterceptor');
 
         cfpLoadingBarProvider.includeSpinner = false;
 
@@ -88,8 +109,7 @@
         };
 
         $mdDateLocaleProvider.formatDate = function(date) {
-            var m = moment(date);
-            return m.isValid() ? m.format('L') : '';
+            return date ? moment(date).format('L') : '';
         };
     }
 
@@ -104,16 +124,23 @@
         }
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
+
+            var filterLast = JSON.parse(localStorage.getItem('filter')) || {};
+
+            if (!filterLast[toState.url.split('/')[1]]) {
+                localStorage.removeItem('filter');
+            }
+
             if (toState.name === 'login' || toState.name === 'register') {
                 return;
             } else {
                 var loggedIn = $rootScope.globals.currentUser;
                 if (!loggedIn) {
                     $state.go('login');
+                    localStorage.removeItem('filter');
                     event.preventDefault();
                 } else if (toState.name === 'home') {
-                    // Redirecionar o primeiro state
-                    //$state.go('agenda');
+                    // redirecionar o primeiro state
                     $state.go('pagamento');
                     event.preventDefault();
                 }
