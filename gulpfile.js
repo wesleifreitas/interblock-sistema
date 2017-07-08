@@ -120,7 +120,7 @@ var gulpSrc = function(opts) {
 
 
 var jsBuild = es.pipeline(
-    //uglify(),
+    uglify(),
     plugins.concat('concat.js'),
     gulp.dest('./src/build/js')
 );
@@ -251,7 +251,7 @@ gulp.task('backend-cf', function() {
         .src(['./backend/cf/**/*.cfm',
             './backend/cf/**/*.cfc'
         ])
-        .pipe(gulp.dest('./src/build/backend'));
+        .pipe(gulp.dest('./src/build/backend/cf'));
 });
 
 gulp.task('clean', function() {
