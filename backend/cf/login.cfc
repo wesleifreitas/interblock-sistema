@@ -118,7 +118,7 @@
             <cfset response["authenticated"] = false>
         </cfif>
 
-        <cfreturn SerializeJSON(response)>
+        <cfreturn SerializeJSON(session)>
     </cffunction>
 
     <cffunction name = "logout" access ="remote" returntype ="String" httpMethod="POST" restPath="/logout">
