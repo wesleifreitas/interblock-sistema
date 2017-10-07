@@ -308,7 +308,7 @@
 		<cfset response["params"] = url>
 		
 		<cftry>
-            <cfset destination = getDirectoryFromPath(getCurrentTemplatePath()) & "/../_files/temp/boleto">
+            <cfset destination = getDirectoryFromPath(getCurrentTemplatePath()) & "/../_server/temp/ordem-servico">
             <cfif not directoryExists(destination)>
                 <cfdirectory action="create" directory="#destination#" />		
             </cfif>
@@ -316,14 +316,13 @@
             <cfset guid = CreateUUID()>
 			<cfset filename = destination & "/ordem_servico_" & guid & ".pdf">
 
-				
+			<cfset template = application.ROOT & "ordem-servico-template.cfm">
             <cfdocument format = "PDF" 
 		 	 			filename = "#filename#" 
 		 	 			overwrite = "yes" 
 						> 
-                        
-                TO.DO     
-				<!--- <cfinclude template=""> --->
+                
+				<cfinclude template="ordem-servico-template.cfm">
 						 										 	
 			</cfdocument>
 
