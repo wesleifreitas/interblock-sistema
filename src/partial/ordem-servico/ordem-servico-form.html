@@ -27,6 +27,14 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Valor</label>
+                        <input type="text" ng-currency name="OS_VALOR" ng-model="vm.ordemServico.OS_VALOR" required ng-disabled="vm.pagamento.PAG_STATUS === 0">
+                        <div ng-messages="form.OS_VALOR.$error">
+                            <div ng-message="required">Campo obrigatório</div>
+                        </div>
+                    </md-input-container>
                 </div>
 
                 <md-input-container class="md-block" flex-gt-sm="">

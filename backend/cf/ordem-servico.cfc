@@ -32,6 +32,8 @@
                     os_id
                     ,os_status
                     ,os_numero
+					,os_valor
+					,os_valor
 					,os_data
                     ,cli_nome
                     ,cli_arquivo
@@ -88,6 +90,7 @@
 					os_id
 					,os_numero
                     ,os_status
+					,os_valor
 					,os_data
 					,cli_id
 					,vei_id
@@ -138,6 +141,7 @@
 					dbo.ordem_servico
 				(                   
 					os_status
+					,os_valor
 					,os_data
 					,cli_id
 					,vei_id
@@ -156,6 +160,7 @@
 				) 
 				VALUES (
 					<cfqueryparam value = "#body.os_status#" CFSQLType = "CF_SQL_TINYINT">
+					<cfqueryparam value = "#body.os_valor#" CFSQLType = "CF_SQL_FLOAT">
 					,GETDATE()
 					,<cfqueryparam value = "#body.cliente.cli_id#" CFSQLType = "CF_SQL_INTEGER">					
 					,<cfqueryparam value = "#body.veiculo.vei_id#" CFSQLType = "CF_SQL_INTEGER">					
@@ -207,6 +212,7 @@
 					dbo.ordem_servico  
 				SET 
 					os_status = <cfqueryparam value = "#body.os_status#" CFSQLType = "CF_SQL_TINYINT">
+					,os_valor = <cfqueryparam value = "#body.os_valor#" CFSQLType = "CF_SQL_FLOAT">
 					,cli_id = <cfqueryparam value = "#body.cliente.cli_id#" CFSQLType = "CF_SQL_INTEGER">					
 					,vei_id = <cfqueryparam value = "#body.veiculo.vei_id#" CFSQLType = "CF_SQL_INTEGER">					
 					,os_cep = <cfqueryparam value = "#body.os_cep#" CFSQLType = "CF_SQL_VARCHAR">					

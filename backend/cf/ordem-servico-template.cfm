@@ -95,7 +95,7 @@
         font-size: .9em;
     }
     div.assinatura-data{
-        margin-top: 30px;
+        margin-top: 10px;
 		width: 100%;
 		text-align: center;
 	}
@@ -110,6 +110,14 @@
         padding-left: 10px;
         font-size: .9em;
     }
+	.nota td.line-gap {
+		height:20px;
+		vertical-align: bottom;
+	}
+	.nota td.assinatura-gap {
+		text-align: center;
+		vertical-align: top;
+	}
     .rotate {
         text-align: center;
         white-space: nowrap;
@@ -136,6 +144,7 @@
 
 <cfoutput>	
 	<cfset setLocale("Portuguese (Brazilian)")>	
+	<cfinclude template="number-util.cfm">
 	
 	<cftry>
 		<cfset BORDER = 0>
@@ -146,6 +155,7 @@
 				os_id
                 ,os_numero
                 ,os_status
+				,os_valor
                 ,os_data
                 ,cli_id
                 ,vei_id
@@ -158,6 +168,8 @@
                 ,os_uf
                 ,os_tel1
                 ,os_tel2
+                ,os_tel3
+                ,os_tel4
                 ,os_responsavel
                 ,os_id
 				
@@ -170,6 +182,7 @@
 				,cli_complemento
 				,cli_bairro
 				,cli_cidade
+				,cli_uf
 				,cli_cep
 				,cli_tel1
 				,cli_tel2
@@ -241,30 +254,30 @@
 				<td class="titulo">Endereço:</td>
 				<td class="valor" nowrap>
 					<span class="value">
-						#query.cli_endereco#, #query.cli_numero#
+						#query.os_endereco#, #query.os_numero#
 					</span>
 				</td>
 				
 				<td class="titulo">Complemento:</td>
-				<td class="valor"><span class="value">#query.cli_complemento#</span></td>					
+				<td class="valor"><span class="value">#query.os_complemento#</span></td>					
 			</tr>
 
 			<tr>	
 				<td class="titulo">Bairro:</td>
-				<td class="valor"><span class="value">#query.cli_bairro#</span></td>
+				<td class="valor"><span class="value">#query.os_bairro#</span></td>
 				
 				<td class="titulo">Cidade:</td>
-				<td class="valor"><span class="value">#query.cli_cidade#</span> - <span><span class="value">SP</span></span></td>
+				<td class="valor"><span class="value">#query.os_cidade#</span> - <span><span class="value">#query.os_uf#</span></span></td>
 			</tr>
 
 			<tr>	
 				<td class="titulo">CEP:</td>
-				<td class="valor"><span class="value">#mid(query.cli_cep,1,5)#-#mid(query.cli_cep,6,3)#</span></td>
+				<td class="valor"><span class="value">#mid(query.os_cep,1,5)#-#mid(query.os_cep,6,3)#</span></td>
 				
 				<td class="titulo">Tel. Residêncial:</td>
 				<td class="valor">
-					<cfif len(query.cli_tel1) GTE 10>
-						<span class="value">#mid(query.cli_tel1,1,2)#-#mid(query.cli_tel1,3,4)#-#mid(query.cli_tel1,7,4)#</span>
+					<cfif len(query.os_tel1) GTE 10>
+						<span class="value">#mid(query.os_tel1,1,2)#-#mid(query.os_tel1,3,4)#-#mid(query.os_tel1,7,4)#</span>
 					</cfif>
 				</td>					
 			</tr>
@@ -272,17 +285,17 @@
 			<tr>					
 				<td class="titulo">Tel. Comercial:</td>
 				<td class="valor">
-					<cfif len(query.cli_tel2) GTE 10>
-						<span class="value">#mid(query.cli_tel2,1,2)#-#mid(query.cli_tel2,3,4)#-#mid(query.cli_tel2,7,4)#</span>
+					<cfif len(query.os_tel2) GTE 10>
+						<span class="value">#mid(query.os_tel2,1,2)#-#mid(query.os_tel2,3,4)#-#mid(query.os_tel2,7,4)#</span>
 					</cfif>
 				</td>
 				<td class="titulo">Celular:</td>
 				<td class="valor">
-					<cfif len(query.cli_tel3) GTE 10>
+					<cfif len(query.os_tel3) GTE 10>
 						<span class="value">
-							#mid(query.cli_tel3,1,2)#-#mid(query.cli_tel3,3,5)#-#mid(query.cli_tel3,8,4)#
-							<cfif len(query.cli_tel4) GTE 10>
-								#mid(query.cli_tel4,1,2)#-#mid(query.cli_tel4,3,5)#-#mid(query.cli_tel4,8,4)#
+							#mid(query.os_tel3,1,2)#-#mid(query.os_tel3,3,5)#-#mid(query.os_tel3,8,4)#
+							<cfif len(query.os_tel4) GTE 10>
+								#mid(query.os_tel4,1,2)#-#mid(query.os_tel4,3,5)#-#mid(query.os_tel4,8,4)#
 							</cfif>
 						</span>
 					</cfif>
@@ -312,7 +325,7 @@
 						</span>
 					</td>
 				<cfelse>
-					<td class="titulo">Inscri��o estadual:</td>
+					<td class="titulo">Inscrição estadual:</td>
 					<td class="valor">
 						<span class="value">
 							#query.cli_rgInscricaoEstadual#	
@@ -381,7 +394,7 @@
             </table>
 		</div>
 
-        <table class="block nota" cellpadding="0" cellspacing="0" align="center">
+        <table class="block nota" cellpadding="0" cellspacing="0" align="center" border="1">
             <tr>
                 <td class="rotate" rowspan=11>
                     <!--- <div>NOTA PROMISSÓRIA</div> --->
@@ -389,36 +402,49 @@
                 </td>   
             </tr>
             <tr>
-                <td>N° ________ VALOR R$ ________ VENCIMENTO ____/____/________</td>
+                <td colspan="2" class="line-gap">N° ________ VALOR <b>R$ #LSCurrencyFormat(query.os_valor)#</b> VENCIMENTO ____/____/________</td>
             </tr>
             <tr>
-                <td>AOS ________ DIAS DO MÊS E ANO DE ____/________ PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
+                <td colspan="2" class="line-gap">AOS ________ DIAS DO MÊS E ANO DE ____/________ PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
             </tr>
             <tr>
-                <td>[...]</td>
+                <td colspan="2">DE NOTA PROMISSÓRIA À <b>INTERBLOCK COMERCIAL LTDA ME — CNPJ: 02.632.466/0001-35</b></td>
             </tr>
             <tr>
-                <td>[...]</td>
+                <td colspan="2">OU A SUA ORDEM DE QUANTIA <b>#ucase(moneyBrExt(query.os_valor))# XXX</b> EM MOEDA CORRENTE DESTE PAÍS
+				PAGÁVEL NA PRAÇA DE <b>SANTO ANDRÉ — SP</b></td>
             </tr>
             <tr>
-                <td>[...]</td>
+                <td colspan="2"><b>DADOS DO EMITENTE</b></td>
             </tr>
             <tr>
-                <td>[...]</td>
+                <td colspan="1"><b>NOME:</b> #query.cli_nome#</td>
+                <td rowspan="4" class="assinatura-gap">
+					<br /><span class="line-gap"><u>Santo André </u> ____/____/________<span>
+					<br />
+					<br />
+					<br />
+					_______________________________
+					<br />#query.cli_nome#
+				</td>
             </tr>
             <tr>
-                <td>[...]</td>
+                <td colspan="1"><b>ENDEREÇO:</b> #query.cli_endereco#, #query.cli_numero#</td>	
             </tr>
             <tr>
-                <td>[...]</td>
+                <td colspan="1"><b>BAIRRO:</b> #query.cli_bairro#
+				<b>CIDADE:</b> #query.cli_cidade# — #query.cli_uf#</td>
             </tr>
             <tr>
-                <td>[...]</td>
+                <td>
+					<b>CEP:</b> #query.cli_cep#
+					<cfif query.cli_pessoa EQ "F">
+						<b>CPF:</b> #mid(query.cli_cpfCnpj,1,3)#.#mid(query.cli_cpfCnpj,4,3)#.#mid(query.cli_cpfCnpj,7,3)#-#mid(query.cli_cpfCnpj,10,2)#	
+					<cfelse>
+						<b>CNPJ:</b> #mid(query.cli_cpfCnpj,1,2)#.#mid(query.cli_cpfCnpj,3,3)#.#mid(query.cli_cpfCnpj,6,3)#/#mid(query.cli_cpfCnpj,9,4)#-#mid(query.cli_cpfCnpj,13,2)#
+					</cfif>
+				</td>
             </tr>
-            <tr>
-                <td>[...]</td>
-            </tr>
-
         </table>
 
 
@@ -433,104 +459,19 @@
 	</cftry>
 	
 	<cfscript>
-
-		function getTipoPagamento( value ) {
-			switch(value)
-			{
-				case 0:
-				{ 
-					return "Cheque";
-					break;
-				}
-
-				case 1:
-				{ 
-					return "Dinheiro";
-					break;
-				}
-				
-				case 2:
-				{ 
-					return "Boleto";
-					break;
-				}
-									
-				default:
-				{
-								
-					return "";
-					break;
-				}
-			}
-		}
-
-		function getCheckX ( value ){			
-			if(value EQ 1)
-				return "[X]";
-			else
-				return "[<font color='##FFFFFF'>--</font>]";
-		}
-		
 		function getStatus( value ){
 			switch(value)
 			{
 				case 0:
 				{ 
-					return "PROPOSTA DE ADES�O";
-					break;
-				}
-
-				case 1:
-				{ 
-					return "CONTRATO";
-					break;
-				}
-				
-				case 2:
-				{ 
-					return "DOCUMENTO CANCELADO";
-					break;
-				}
-									
-				default:
-				{
-								
-					return "DOCUMENTO";
-					break;
-				}
-			}
-		}
-
-		function getDeclaracao( os_status ){
-			switch(os_status)
-			{
-				case 0:
-				{ 
-					return 
-					"
-					<p>O contratante declara que leu e recebeu todas as informa��es contidas nesta proposta de ades�o.</p>
-					<p>O contratante declara que leu e est� ciente dos regulamentos dos contratos em que � participanete.</p>
-					<p>O contratante declara que recebeu orienta��o e est� ciente do funcionamento e segredos do sistema.</p>
-					";
-					break;
-				}
-
-				case 1:
-				{ 
 					return "";
 					break;
 				}
 				
-				case 2:
-				{ 
-					return "";
-					break;
-				}
-									
 				default:
 				{
 								
-					return "DOCUMENTO";
+					return "";
 					break;
 				}
 			}
