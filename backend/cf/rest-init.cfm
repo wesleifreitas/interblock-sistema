@@ -1,4 +1,9 @@
 <cftry>
+	<!---
+	<cfset path = getDirectoryFromPath(getCurrentTemplatePath())>
+	<cfset restDeleteApplication(path)>
+	<cfabort>
+	--->
 	<cfset path = getDirectoryFromPath(getCurrentTemplatePath())>
 	<cfset restInitApplication(path, "interblock-sistema")>
 	<cfoutput>Success! 'rest-cf-init'</cfoutput>	

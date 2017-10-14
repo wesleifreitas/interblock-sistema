@@ -219,8 +219,9 @@ gulp.task('pdf-viewer', function () {
 
 gulp.task('index-replace', function () {
     gulp.src(['./src/build/index.html'])
-        .pipe(replace('app.less', 'app.css'))
+        .pipe(replace('app.less', 'app.css?v=' + new Date().getTime()))
         .pipe(replace('stylesheet/less', 'stylesheet'))
+        .pipe(replace('concat.js', 'concat.js?v=' + new Date().getTime()))
         .pipe(gulp.dest('./src/build'));
 })
 

@@ -3,10 +3,10 @@
 
     angular.module('myApp').controller('OrdemServicoFormCtrl', OrdemServicoFormCtrl);
 
-    OrdemServicoFormCtrl.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', 'ordemServicoService', 'getData',
+    OrdemServicoFormCtrl.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', '$filter', 'ordemServicoService', 'getData',
         'ORDEM_SERVICO'];
 
-    function OrdemServicoFormCtrl($scope, $state, $stateParams, $mdDialog, ordemServicoService, getData,
+    function OrdemServicoFormCtrl($scope, $state, $stateParams, $mdDialog, $filter, ordemServicoService, getData,
         ORDEM_SERVICO) {
 
         var vm = this;
@@ -65,15 +65,18 @@
                     CLI_NOME: data.CLI_NOME
                 };
 
-                vm.ordemServico.OS_CEP = data.CLI_CEP;
+                vm.ordemServico.OS_CEP = $filter('padLeft')(data.CLI_CEP, '00000000');
                 vm.ordemServico.OS_ENDERECO = data.CLI_ENDERECO;
                 vm.ordemServico.OS_NUMERO_ENDERECO = data.CLI_NUMERO;
                 vm.ordemServico.OS_COMPLEMENTO = data.CLI_COMPLEMENTO;
                 vm.ordemServico.OS_BAIRRO = data.CLI_BAIRRO;
                 vm.ordemServico.OS_CIDADE = data.CLI_CIDADE;
                 vm.ordemServico.OS_UF = data.CLI_UF;
-                vm.ordemServico.OS_TEL1 = String(data.CLI_TEL1);
-                vm.ordemServico.OS_TEL2 = String(data.CLI_TEL2);
+                if (String(data.CLI_TEL1).length > 9) {
+                    vm.ordemServico.OS_TEL1 = String(data.CLI_TEL1);
+                } if (String(data.CLI_TEL2).length > 9) {
+                    vm.ordemServico.OS_TEL2 = String(data.CLI_TEL2);
+                }
             });
         }
 
