@@ -88,8 +88,8 @@
                 controllerAs: 'vm',
                 templateUrl: 'partial/ordem-servico/ordem-servico-dialog.html',
                 parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose: true
+                //targetEvent: event,
+                clickOutsideToClose: false
             }).then(function (data) {
                 //console.info(data);
             });

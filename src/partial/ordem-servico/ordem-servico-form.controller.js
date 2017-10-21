@@ -74,8 +74,13 @@
                 vm.ordemServico.OS_UF = data.CLI_UF;
                 if (String(data.CLI_TEL1).length > 9) {
                     vm.ordemServico.OS_TEL1 = String(data.CLI_TEL1);
-                } if (String(data.CLI_TEL2).length > 9) {
+                } else {
+                    vm.ordemServico.OS_TEL1 = '';
+                }
+                if (String(data.CLI_TEL2).length > 9) {
                     vm.ordemServico.OS_TEL2 = String(data.CLI_TEL2);
+                } else {
+                    vm.ordemServico.OS_TEL2 = '';
                 }
             });
         }

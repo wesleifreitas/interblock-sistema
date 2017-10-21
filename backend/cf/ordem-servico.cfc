@@ -2,6 +2,9 @@
 	<cfinclude template="security.cfm">
 	<cfinclude template="util.cfm">
 
+	<cfprocessingDirective pageencoding="utf-8">
+	<cfset setEncoding("form","utf-8")> 
+
 	<cffunction name="ordemServicoGet" access="remote" returntype="String" httpmethod="GET"> 
         
 		<cfset checkAuthentication(state = ['ordem-servico'])>
@@ -160,7 +163,7 @@
 				) 
 				VALUES (
 					<cfqueryparam value = "#body.os_status#" CFSQLType = "CF_SQL_TINYINT">
-					<cfqueryparam value = "#body.os_valor#" CFSQLType = "CF_SQL_FLOAT">
+					,<cfqueryparam value = "#body.os_valor#" CFSQLType = "CF_SQL_FLOAT">
 					,GETDATE()
 					,<cfqueryparam value = "#body.cliente.cli_id#" CFSQLType = "CF_SQL_INTEGER">					
 					,<cfqueryparam value = "#body.veiculo.vei_id#" CFSQLType = "CF_SQL_INTEGER">					

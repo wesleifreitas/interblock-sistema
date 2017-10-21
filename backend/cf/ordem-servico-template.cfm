@@ -402,7 +402,7 @@
                 </td>   
             </tr>
             <tr>
-                <td colspan="2" class="line-gap">N° ________ VALOR <b>R$ #LSCurrencyFormat(query.os_valor)#</b> VENCIMENTO ____/____/________</td>
+                <td colspan="2" class="line-gap">N° ________ VALOR <b>#LSCurrencyFormat(query.os_valor)#</b> VENCIMENTO ____/____/________</td>
             </tr>
             <tr>
                 <td colspan="2" class="line-gap">AOS ________ DIAS DO MÊS E ANO DE ____/________ PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
