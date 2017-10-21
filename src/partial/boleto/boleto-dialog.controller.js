@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular.module('myApp').controller('BoletoDialogCtrl', BoletoDialogCtrl);
@@ -22,8 +22,6 @@
         function getData() {
             boletoService.boleto(pag_id)
                 .then(function success(response) {
-                    console.info('getBlobByProtocolo', response);
-
                     var blob = toBinary(response.base64, 'application/pdf;base64');
                     var blobUrl = URL.createObjectURL(blob);
 

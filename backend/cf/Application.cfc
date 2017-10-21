@@ -10,6 +10,7 @@
     <cfset THIS.SessionTimeout = CreateTimeSpan( 0, 8, 0, 0 ) />
     <cfset THIS.SetClientCookies = true />
     <cfset THIS.RootDir = getDirectoryFromPath(getCurrentTemplatePath()) />
+	<cfset THIS.mappings[ "/cf" ] = THIS.RootDir>
 
     <cfparam name="session.loggedIn" default="false" />
 
@@ -26,6 +27,7 @@
         output="false"
         hint="I run when the application boots up. If I return false, the application initialization will hault.">
 
+        <cfset application.ROOT = THIS.RootDir />
         <cfset application.datasource = "px_interblock_sql_local">
 
         <cfreturn true />
@@ -52,7 +54,14 @@
 
         <cfargument type="String" name="targetPage" required="true"/>
 
+         <!--- Check for initialization. --->
+        <cfif StructKeyExists( URL, "reset" )>
 
+            <!--- Reset application and session. --->
+            <cfset THIS.OnApplicationStart() />
+            <cfset THIS.OnSessionStart() />
+
+        </cfif>
         
         <!--- Return out. --->
         <cfreturn true />

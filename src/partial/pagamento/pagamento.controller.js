@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular.module('myApp').controller('PagamentoCtrl', PagamentoCtrl);
@@ -32,7 +32,7 @@
 
         // $on
         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope
-        $scope.$on('broadcastTest', function() {
+        $scope.$on('broadcastTest', function () {
             console.info('broadcastTest!');
             //getData();
         });
@@ -103,7 +103,7 @@
                 .ok('SIM')
                 .cancel('NÃO');
 
-            $mdDialog.show(confirm).then(function() {
+            $mdDialog.show(confirm).then(function () {
                 pagamentoService.remove(vm.pagamento.selected)
                     .then(function success(response) {
                         if (response.success) {
@@ -113,13 +113,13 @@
                     }, function error(response) {
                         console.error('error', response);
                     });
-            }, function() {
+            }, function () {
                 // cancel
             });
         }
 
         function quitar() {
-            $timeout(function() {
+            $timeout(function () {
                 $mdDialog.show({
                     locals: { dialogAction: 'quitar' },
                     preserveScope: true,
@@ -127,9 +127,9 @@
                     controllerAs: 'vm',
                     templateUrl: 'partial/proposta/proposta-dialog.html',
                     parent: angular.element(document.body),
-                    targetEvent: event,
+                    //targetEvent: event,
                     clickOutsideToClose: true
-                }).then(function(data) {
+                }).then(function (data) {
                     //console.info(data);
                     getData({ reset: true });
                 });
@@ -144,9 +144,9 @@
                 controllerAs: 'vm',
                 templateUrl: 'partial/boleto/boleto-dialog.html',
                 parent: angular.element(document.body),
-                targetEvent: event,
+                //targetEvent: event,
                 clickOutsideToClose: true
-            }).then(function(data) {
+            }).then(function (data) {
                 //console.info(data);
             });
         }

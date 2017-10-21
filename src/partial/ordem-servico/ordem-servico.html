@@ -1,0 +1,94 @@
+<div layout="column" ng-cloak flex="100" class="ordem-servico" ng-init="vm.init()">
+    <div layout="column" layout-align="start stretch" class="content">
+
+        <form name="formSearch" class="filter">
+            <h5>Utilize os campos abaixo para filtrar a listagem.</h5>
+            <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm="">
+                    <label>Status</label>
+                    <md-select ng-model="vm.filter.OS_STATUS">
+                        <md-option ng-value="todos">
+                            <em>Todos</em>
+                        </md-option>
+                        <md-option ng-repeat="status in vm.status" ng-value="status.id">
+                            {{status.name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <label>Nome do cliente</label>
+                    <input ng-model="vm.filter.CLI_NOME">
+                </md-input-container>
+            </div>
+        </form>
+
+        <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.ordemServico.selected.length">
+            <div class="md-toolbar-tools">
+                <span>Ordem de Serviço</span>
+                <span flex></span>
+                <md-button class="md-primary" ng-click="vm.create()">
+                    <md-icon>add</md-icon>
+                    Adicionar
+                </md-button>
+                <md-button class="md-primary" ng-click="vm.getData({reset: true})">
+                    <md-icon>refresh</md-icon>
+                    Atualizar
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-toolbar class="md-accent md-hue-1" ng-show="vm.ordemServico.selected.length">
+            <div class="md-toolbar-tools">
+                <span>{{vm.ordemServico.selected.length}} {{vm.ordemServico.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.remove($event)">
+                    <md-icon>delete</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-table-container layout="column" class="fix-head">
+            <div class="overflow">
+                <table md-table md-row-select="true" multiple="true" ng-model="vm.ordemServico.selected" md-progress="vm.ordemServico.promise">
+                    <thead fix-head md-head md-order="vm.ordemServico.order">
+                        <tr md-row>
+                            <th md-column><span></span></th>
+                            <th md-column md-order-by=""><span>Status</span></th>
+                            <th md-column md-order-by="" class="center"><span>Número da OS</span></th>
+                            <th md-column md-order-by=""><span>Nome Cliente</span></th>
+                            <th md-column md-order-by=""><span>Arquivo do Cliente</span></th>
+                            <th md-column md-order-by=""><span>Veículo</span></th>
+                            <th md-column>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="item" md-select-id="OS_ID" ng-repeat="item in vm.ordemServico.data | orderBy: vm.ordemServico.order">
+                            <td md-cell>
+                                <md-button class="md-icon-button" ng-click="vm.update(item.OS_ID)">
+                                    <md-icon>mode_edit</md-icon>
+                                </md-button>
+                            </td>
+                            <td md-cell>{{item.OS_STATUS | osStatus}}</td>
+                            <td md-cell class="center">
+                                <md-button class="md-button" ng-click="vm.showPdf(item)">
+                                    <md-icon>picture_as_pdf</md-icon>
+                                    {{item.OS_NUMERO}}
+                                </md-button>
+                            </td>
+                            <td md-cell>{{item.CLI_NOME}}</td>
+                            <td md-cell>{{item.CLI_ARQUIVO}}</td>
+                            <td md-cell>{{item.VEI_INFO}}</td>
+                            <td md-cell>{{item.OS_DATA | date : 'dd/MM/yyyy'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </md-table-container>
+
+        <div>
+            <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.ordemServico.limit"
+                md-page="vm.ordemServico.page" md-total="{{vm.ordemServico.total}}" md-page-select md-on-paginate="vm.ordemServico.pagination"></md-table-pagination>
+        </div>
+    </div>
+</div>

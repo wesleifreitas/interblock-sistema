@@ -1,0 +1,163 @@
+<div layout="column" ng-cloak class="ordem-servico-form" ng-init="vm.init()">
+    <md-toolbar class="md-hue-2">
+        <div class="md-toolbar-tools">
+            <h2>
+                <span>Formulário - Ordem de Serviço</span>
+            </h2>
+        </div>
+    </md-toolbar>
+    <md-content layout="column" layout-padding class="content">
+        <div>
+            <form name="form">
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Número da OS</label>
+                        <input name="os_numero" ng-model="vm.ordemServico.OS_NUMERO" required disabled>
+                        <div ng-messages="form.os_numero.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Status</label>
+                        <md-select ng-model="vm.ordemServico.OS_STATUS" ng-change="vm.statusChange()">
+                            <md-option ng-repeat="status in vm.status" ng-value="status.id">
+                                {{status.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Valor</label>
+                        <input type="text" ng-currency name="OS_VALOR" ng-model="vm.ordemServico.OS_VALOR" required ng-disabled="vm.pagamento.PAG_STATUS === 0">
+                        <div ng-messages="form.OS_VALOR.$error">
+                            <div ng-message="required">Campo obrigatório</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <md-input-container class="md-block" flex-gt-sm="">
+                    <label>Técnico</label>
+                    <input name="os_responsavel" ng-model="vm.ordemServico.OS_RESPONSAVEL">
+                </md-input-container>
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Cliente</label>
+                        <input name="cliente" ng-model="vm.ordemServico.cliente.CLI_NOME" ng-readonly="true" required placeholder="Clique aqui para selecionar um cliente"
+                            class="pointer" ng-click="vm.clienteDialog($event)">
+                        <div ng-messages="form.cliente.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row" ng-show="vm.ordemServico.cliente.CLI_ID">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Veículo</label>
+                        <input name="veiculo" ng-model="vm.ordemServico.veiculo.VEI_INFO" ng-readonly="true" required placeholder="Clique aqui para selecionar um veiculo"
+                            class="pointer" ng-click="vm.veiculoDialog($event)">
+                        <div ng-messages="form.veiculo.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="30">
+                        <label>CEP</label>
+                        <input name="os_cep" ng-model="vm.ordemServico.OS_CEP" required ui-br-cep-mask cep-search cep-search-event="">
+                        <div ng-messages="vm.form.os_cep.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Endereço</label>
+                        <input name="os_endereco" ng-model="vm.ordemServico.OS_ENDERECO" maxlength="40" required>
+                        <div ng-messages="vm.form.os_endereco.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container flex-gt-sm="15">
+                        <label>Nº</label>
+                        <input type="number" name="os_numero_endereco" ng-model="vm.ordemServico.OS_NUMERO_ENDERECO" required>
+                        <div ng-messages="vm.form.os_numero_endereco.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container flex-gt-sm="">
+                        <label>Complemento</label>
+                        <input type="text" name="os_complemento" ng-model="vm.ordemServico.OS_COMPLEMENTO" maxlength="20">
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Bairro</label>
+                        <input name="os_bairro" ng-model="vm.ordemServico.OS_BAIRRO" maxlength="30" required>
+                        <div ng-messages="vm.form.os_bairro.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Cidade</label>
+                        <input name="os_cidade" ng-model="vm.ordemServico.OS_CIDADE" maxlength="40" required>
+                        <div ng-messages="vm.form.os_cidade.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="15">
+                        <label>Estado</label>
+                        <input name="os_uf" ng-model="vm.ordemServico.OS_UF" required>
+                        <div ng-messages="vm.form.os_uf.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Telefone</label>
+                        <input name="os_tel1" ng-model="vm.ordemServico.OS_TEL1" ui-br-phone-number>
+                        <div ng-messages="vm.form.os_tel1.$error">
+                            <div ng-message="brPhoneNumber">Telefone inválido.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Celular</label>
+                        <input name="os_tel2" ng-model="vm.ordemServico.OS_TEL2" ui-br-phone-number>
+                        <div ng-messages="vm.form.os_tel2.$error">
+                            <div ng-message="brPhoneNumber">Telefone inválido.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+    </md-content>
+
+    <md-actions layout="row" layout-xs="column">
+
+        <md-button class="md-warn" ng-click="vm.removeById()" ng-if="vm.action === 'update'">
+            <i class="fa fa-times" aria-hidden="true"></i> Remover
+        </md-button>
+
+        <span flex></span>
+
+        <md-button ng-click="vm.cancel()">
+            <i class="" aria-hidden="true"></i> Cancelar
+        </md-button>
+
+        <md-button class="md-raised md-primary" ng-click="vm.save()" ng-disabled="form.$invalid">
+            <i class="fa fa-check" aria-hidden="true"></i> Salvar
+        </md-button>
+    </md-actions>
+</div>

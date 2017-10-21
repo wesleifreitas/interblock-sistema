@@ -19,12 +19,12 @@ var gulp = require('gulp'),
     moment = require('moment');
 
 // https://www.npmjs.com/package/gulp-webserver
-gulp.task('serve', ['watch'], function() {
+gulp.task('serve', ['watch'], function () {
     gulp.src('')
         .pipe(webserver({
             livereload: {
                 enable: false,
-                filter: function(fileName) {
+                filter: function (fileName) {
                     // exclude all source maps from livereload
                     if (fileName.match(/LICENSE|\.json$|\.md|lib|backend|node_modules|build|pdf-viewer/)) {
                         return false;
@@ -39,12 +39,12 @@ gulp.task('serve', ['watch'], function() {
         }));
 });
 
-gulp.task('livereload', function() {
+gulp.task('livereload', function () {
     gulp.src('src')
         .pipe(livereload());
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     livereload.listen();
     gulp.watch([
         'src/*.html',
@@ -67,16 +67,16 @@ gulp.task('watch', function() {
 });
 
 var requestCount = 0;
-gulp.task('rest-cf-init', function() {
+gulp.task('rest-cf-init', function () {
     var url = 'http://localhost:8500/interblock-sistema/backend/cf/rest-init.cfm'
-    request(url, function(error, response, body) {
+    request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log('[' + moment().format('HH:mm:ss') + ']', body);
             requestCount = 0;
         } else if (response.statusCode === 500 && requestCount < 3) {
             requestCount++;
             console.log('[' + moment().format('HH:mm:ss') + ']', 'Fail(' + requestCount + ')  \'rest-cf-init\' try again...');
-            setTimeout(function() {
+            setTimeout(function () {
                 gulp.start('rest-cf-init');
             }, 3000);
 
@@ -87,7 +87,7 @@ gulp.task('rest-cf-init', function() {
     });
 });
 
-gulp.task('jshint', function() {
+gulp.task('jshint', function () {
     return gulp
         .src(['./src/*.js',
             './src/directive/**/*.js',
@@ -102,11 +102,11 @@ gulp.task('jshint', function() {
 
 
 // pipe a glob stream into this and receive a gulp file stream 
-var gulpSrc = function(opts) {
+var gulpSrc = function (opts) {
     var paths = es.through();
     var files = es.through();
 
-    paths.pipe(es.writeArray(function(err, srcs) {
+    paths.pipe(es.writeArray(function (err, srcs) {
 
         for (var i = 0; i <= srcs.length - 1; i++) {
             srcs[i] = 'src/' + srcs[i];
@@ -131,12 +131,12 @@ var cssBuild = es.pipeline(
 );
 
 
-gulp.task('htmlbuild', function() {
+gulp.task('htmlbuild', function () {
 
     gulp.src(['./src/index.html'])
         .pipe(htmlbuild({
             // build js with preprocessor 
-            js: htmlbuild.preprocess.js(function(block) {
+            js: htmlbuild.preprocess.js(function (block) {
 
                 block.pipe(gulpSrc())
                     .pipe(jsBuild);
@@ -146,7 +146,7 @@ gulp.task('htmlbuild', function() {
             }),
 
             // build css with preprocessor 
-            css: htmlbuild.preprocess.css(function(block) {
+            css: htmlbuild.preprocess.css(function (block) {
 
                 block.pipe(gulpSrc())
                     .pipe(cssBuild);
@@ -156,17 +156,17 @@ gulp.task('htmlbuild', function() {
             }),
 
             // remove blocks with this target 
-            remove: function(block) {
+            remove: function (block) {
                 block.end();
             },
 
             // add a template with this target 
-            template: function(block) {
+            template: function (block) {
                 es.readArray([
                     '<!--',
                     '  processed by htmlbuild (' + block.args[0] + ')',
                     '-->'
-                ].map(function(str) {
+                ].map(function (str) {
                     return block.indent + str;
                 })).pipe(block);
             }
@@ -174,7 +174,7 @@ gulp.task('htmlbuild', function() {
         .pipe(gulp.dest('./src/build'));
 });
 
-gulp.task('less', function() {
+gulp.task('less', function () {
     return gulp.src('./src/app.less')
         .pipe(less({
             paths: [path.join(__dirname, 'less', 'includes')]
@@ -183,17 +183,17 @@ gulp.task('less', function() {
         .pipe(gulp.dest('./src/build'));
 });
 
-gulp.task('material-css', function() {
+gulp.task('material-css', function () {
     return gulp.src('./src/lib/angular-material/angular-material.min.css')
         .pipe(gulp.dest('./src/build/lib/angular-material/'));
 });
 
-gulp.task('partial-html', function() {
+gulp.task('partial-html', function () {
     return gulp.src('./src/partial/**/*.html')
         .pipe(gulp.dest('./src/build/partial/'));
 });
 
-gulp.task('assets', function() {
+gulp.task('assets', function () {
     return gulp
         .src(['./src/assets/**/*.jpg',
             './src/assets/**/*.png',
@@ -202,7 +202,7 @@ gulp.task('assets', function() {
         .pipe(gulp.dest('./src/build/assets/'));
 });
 
-gulp.task('lib-fonts', function() {
+gulp.task('lib-fonts', function () {
     return gulp
         .src(['./src/lib/**/*.ttf',
             './src/lib/**/*.woff',
@@ -211,34 +211,35 @@ gulp.task('lib-fonts', function() {
         .pipe(gulp.dest('./src/build/lib/'));
 });
 
-gulp.task('pdf-viewer', function() {
+gulp.task('pdf-viewer', function () {
     return gulp
         .src('./src/pdf-viewer/**')
         .pipe(gulp.dest('./src/build/pdf-viewer'));
 });
 
-gulp.task('index-replace', function() {
+gulp.task('index-replace', function () {
     gulp.src(['./src/build/index.html'])
-        .pipe(replace('app.less', 'app.css'))
+        .pipe(replace('app.less', 'app.css?v=' + new Date().getTime()))
         .pipe(replace('stylesheet/less', 'stylesheet'))
+        .pipe(replace('concat.js', 'concat.js?v=' + new Date().getTime()))
         .pipe(gulp.dest('./src/build'));
 })
 
-gulp.task('js-compress', function() {
+gulp.task('js-compress', function () {
     return gulp
         .src(['!./src/build/js/*.min.js', './src/build/js/*.js'])
         .pipe(uglify())
         .pipe(gulp.dest('./src/build/js/'));
 });
 
-gulp.task('js-concat', function() {
+gulp.task('js-concat', function () {
     return gulp
         .src(['./src/build/js/*.js'])
         .pipe(concat('concat.js'))
         .pipe(gulp.dest('./src/build/js/'));
 });
 
-gulp.task('js-clean', function() {
+gulp.task('js-clean', function () {
     return gulp
         .src(['!./src/build/js/concat.js',
             './src/build/js/*.js'
@@ -246,7 +247,7 @@ gulp.task('js-clean', function() {
         .pipe(clean({ force: true }));
 });
 
-gulp.task('backend-cf', function() {
+gulp.task('backend-cf', function () {
     return gulp
         .src(['./backend/cf/**/*.cfm',
             './backend/cf/**/*.cfc'
@@ -254,14 +255,14 @@ gulp.task('backend-cf', function() {
         .pipe(gulp.dest('./src/build/backend/cf'));
 });
 
-gulp.task('clean', function() {
+gulp.task('clean', function () {
     return gulp.src('./src/build')
         .pipe(clean({ force: true }));
 });
 
 gulp.task('default', ['build']);
 
-gulp.task('build', function() {
+gulp.task('build', function () {
     gulpSequence('clean',
         'htmlbuild',
         'less',
@@ -277,8 +278,7 @@ gulp.task('build', function() {
         'backend-cf')();
 });
 
-gulp.task('build-backend-cf', function() {
+gulp.task('build-backend-cf', function () {
     projectBuild = 'main';
-    gulpSequence('clean',
-        'backend-cf')();
+    gulpSequence('backend-cf')();
 });
