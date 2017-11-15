@@ -42,6 +42,11 @@
                     <input name="os_responsavel" ng-model="vm.ordemServico.OS_RESPONSAVEL">
                 </md-input-container>
 
+                <md-input-container class="md-block">
+                    <label>Objetivo</label>
+                    <textarea ng-model="vm.ordemServico.OS_OBJETIVO" md-maxlength="700" rows="5"></textarea>
+                </md-input-container>
+
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>Cliente</label>
@@ -133,9 +138,27 @@
                     </md-input-container>
 
                     <md-input-container class="md-block" flex-gt-sm="">
-                        <label>Celular</label>
+                        <label>Telefone 2</label>
                         <input name="os_tel2" ng-model="vm.ordemServico.OS_TEL2" ui-br-phone-number>
                         <div ng-messages="vm.form.os_tel2.$error">
+                            <div ng-message="brPhoneNumber">Telefone inválido.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Celular</label>
+                        <input name="os_tel3" ng-model="vm.ordemServico.OS_TEL3" ui-br-phone-number>
+                        <div ng-messages="vm.form.os_tel3.$error">
+                            <div ng-message="brPhoneNumber">Telefone inválido.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Celular 2</label>
+                        <input name="os_tel4" ng-model="vm.ordemServico.OS_TEL4" ui-br-phone-number>
+                        <div ng-messages="vm.form.os_tel4.$error">
                             <div ng-message="brPhoneNumber">Telefone inválido.</div>
                         </div>
                     </md-input-container>

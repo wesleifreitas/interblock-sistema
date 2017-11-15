@@ -106,7 +106,10 @@
 					,os_uf
 					,os_tel1
 					,os_tel2
+					,os_tel3
+					,os_tel4
 					,os_responsavel
+					,os_objetivo
 					,os_id
 					,grupo_id   
 					,cli_nome
@@ -158,6 +161,7 @@
 					,os_tel1
 					,os_tel2
 					,os_responsavel
+					,os_objetivo
 					,usu_id
 					,grupo_id           
 				) 
@@ -177,6 +181,7 @@
 					,<cfqueryparam value = "#body.os_tel1#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#body.os_tel2#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#body.os_responsavel#" CFSQLType = "CF_SQL_VARCHAR">					
+					,<cfqueryparam value = "#body.os_objetivo#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#session.userId#" CFSQLType = "CF_SQL_INTEGER">					
 					,<cfqueryparam value = "#session.grupoId#" CFSQLType = "CF_SQL_INTEGER">					
 				);  
@@ -227,7 +232,10 @@
 					,os_uf = <cfqueryparam value = "#body.os_uf#" CFSQLType = "CF_SQL_VARCHAR">					
 					,os_tel1 = <cfqueryparam value = "#body.os_tel1#" CFSQLType = "CF_SQL_VARCHAR">					
 					,os_tel2 = <cfqueryparam value = "#body.os_tel2#" CFSQLType = "CF_SQL_VARCHAR">					
-					,os_responsavel = <cfqueryparam value = "#body.os_responsavel#" CFSQLType = "CF_SQL_VARCHAR">					
+					,os_tel3 = <cfqueryparam value = "#body.os_tel3#" CFSQLType = "CF_SQL_VARCHAR">					
+					,os_tel4 = <cfqueryparam value = "#body.os_tel4#" CFSQLType = "CF_SQL_VARCHAR">					
+					,os_responsavel = <cfqueryparam value = "#body.os_responsavel#" CFSQLType = "CF_SQL_VARCHAR">				
+					,os_objetivo = <cfqueryparam value = "#body.os_objetivo#" CFSQLType = "CF_SQL_VARCHAR">				
 					,usu_id = <cfqueryparam value = "#session.userId#" CFSQLType = "CF_SQL_INTEGER">					
 					,grupo_id = <cfqueryparam value = "#session.grupoId#" CFSQLType = "CF_SQL_INTEGER">
 				WHERE 
@@ -329,7 +337,10 @@
             <cfdocument format = "PDF" 
 		 	 			filename = "#filename#" 
 		 	 			overwrite = "yes" 
-						> 
+						marginbottom="0"
+						marginleft="0.1"
+						marginright="0.1"
+						margintop="0"> 
                 
 				<cfinclude template="ordem-servico-template.cfm">
 						 										 	

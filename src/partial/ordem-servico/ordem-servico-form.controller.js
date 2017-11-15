@@ -3,11 +3,11 @@
 
     angular.module('myApp').controller('OrdemServicoFormCtrl', OrdemServicoFormCtrl);
 
-    OrdemServicoFormCtrl.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', '$filter', 'ordemServicoService', 'getData',
-        'ORDEM_SERVICO'];
+    OrdemServicoFormCtrl.$inject = ['$scope', '$state', '$stateParams', '$mdDialog', '$filter', 'ordemServicoService',
+        'getData', 'ORDEM_SERVICO'];
 
-    function OrdemServicoFormCtrl($scope, $state, $stateParams, $mdDialog, $filter, ordemServicoService, getData,
-        ORDEM_SERVICO) {
+    function OrdemServicoFormCtrl($scope, $state, $stateParams, $mdDialog, $filter, ordemServicoService,
+        getData, ORDEM_SERVICO) {
 
         var vm = this;
         vm.init = init;
@@ -40,8 +40,11 @@
                 //default
                 vm.ordemServico.OS_NUMERO = 'Automático';
                 vm.ordemServico.os_tel1 = '';
-                vm.ordemServico.os_tel1 = '';
+                vm.ordemServico.os_tel2 = '';
+                vm.ordemServico.os_tel3 = '';
+                vm.ordemServico.os_tel4 = '';
                 vm.ordemServico.OS_STATUS = vm.status[0].id;
+                vm.ordemServico.OS_OBJETIVO = '';
             }
         }
 
@@ -72,6 +75,7 @@
                 vm.ordemServico.OS_BAIRRO = data.CLI_BAIRRO;
                 vm.ordemServico.OS_CIDADE = data.CLI_CIDADE;
                 vm.ordemServico.OS_UF = data.CLI_UF;
+                console.info(data);
                 if (String(data.CLI_TEL1).length > 9) {
                     vm.ordemServico.OS_TEL1 = String(data.CLI_TEL1);
                 } else {
@@ -81,6 +85,16 @@
                     vm.ordemServico.OS_TEL2 = String(data.CLI_TEL2);
                 } else {
                     vm.ordemServico.OS_TEL2 = '';
+                }
+                if (String(data.CLI_TEL3).length > 9) {
+                    vm.ordemServico.OS_TEL3 = String(data.CLI_TEL3);
+                } else {
+                    vm.ordemServico.OS_TEL3 = '';
+                }
+                if (String(data.CLI_TEL4).length > 9) {
+                    vm.ordemServico.OS_TEL4 = String(data.CLI_TEL4);
+                } else {
+                    vm.ordemServico.OS_TEL4 = '';
                 }
             });
         }

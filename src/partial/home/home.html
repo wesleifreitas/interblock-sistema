@@ -6,7 +6,7 @@
         <!-- <img src="assets/img/logo/logo-example-50x50.png"> -->
         <md-button aria-label="Exemplo" ui-sref="example" hide-xs>
             <md-icon class="material-icons" aria-hidden="true">home</md-icon>
-            <span>Home (Exemplo)</span>
+            <span>Início</span>
         </md-button>
         <nav-bar item-click="vm.navBarClick(event)" flex hide-xs hide-sm sidemenu="vm.sidemenu"></nav-bar>
         <span flex></span>
@@ -29,8 +29,10 @@
     <md-content layout="column" layout-align="center stretch" layout-padding>
         <form layout="column" layout-align="center stretch" layout-padding>
 
-            <md-autocomplete md-floating-label="Grupo" md-input-id="grupoSearch" id="grupoSearch" class="md-autocomplete-icon-search" md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text-change="vm.searchTextChange(searchText)" md-search-text="vm.searchText"
-                md-selected-item-change="vm.selectedItemChange(item)" md-items="item in vm.querySearch(searchText)" md-item-text="item.GRUPO_NOME" md-min-length="1" placeholder="Digite um grupo" md-clear-button="false" ng-blur="vm.grupoSearchBlur($event)">
+            <md-autocomplete md-floating-label="Grupo" md-input-id="grupoSearch" id="grupoSearch" class="md-autocomplete-icon-search"
+                md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text-change="vm.searchTextChange(searchText)"
+                md-search-text="vm.searchText" md-selected-item-change="vm.selectedItemChange(item)" md-items="item in vm.querySearch(searchText)"
+                md-item-text="item.GRUPO_NOME" md-min-length="1" placeholder="Digite um grupo" md-clear-button="false" ng-blur="vm.grupoSearchBlur($event)">
                 <md-item-template>
                     <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.GRUPO_NOME}}</span>
                 </md-item-template>

@@ -5,6 +5,11 @@
     }
     h2 {
         font-size: .9em;
+		margin-bottom: 0;
+    }
+	h3 {
+        font-size: .7em;
+		margin-bottom: 0;
     }
     hr {
 	    border: 0;
@@ -24,7 +29,7 @@
     
     table { 
         width: 100%;
-        font-size: 14px;
+        font-size: 12px;
         table-layout: fixed;
         margin-left: auto;
         margin-right: auto;	  
@@ -63,6 +68,10 @@
         text-align: center;
     }
 
+	.info {
+		margin: 0 20px 0 20px;
+	}
+
     table.block {    
         width: 100%;
         text-align: left;
@@ -87,10 +96,10 @@
         text-align: center;
     }
     .checkout hr {
-        margin-top: 30px;
+        margin-top: 20px;
     }
     .declaracao p{
-        margin: 10px;
+        margin: 0 10px 0 10px;
         text-align: justify;
         font-size: .9em;
     }
@@ -98,6 +107,7 @@
         margin-top: 10px;
 		width: 100%;
 		text-align: center;
+		font-size: 13px;
 	}
 	table.assinaturas{
         margin: 30px 0 30px 0;
@@ -108,10 +118,9 @@
 
     .nota td {
         padding-left: 10px;
-        font-size: .9em;
+        font-size: 13px;
     }
 	.nota td.line-gap {
-		height:20px;
 		vertical-align: bottom;
 	}
 	.nota td.assinatura-gap {
@@ -136,8 +145,8 @@
         margin-right: -10em;
     }
     .rotate img {
-        padding: 10px 10px 10px 0;
-        height: 160px;
+        padding: 20px 10px 20px 0;
+        height: 270px;
         width: auto;
     }
 </style>
@@ -171,6 +180,7 @@
                 ,os_tel3
                 ,os_tel4
                 ,os_responsavel
+				,os_objetivo
                 ,os_id
 				
 				,cli_arquivo
@@ -207,194 +217,204 @@
 		<cfset query.cli_cep = NumberFormat(query.cli_cep, '00000000')>
 		<cfset query.os_cep = NumberFormat(query.os_cep, '00000000')>
 
-		<table class="header-item">
-			<tr>
-				<td class="header-item" width="50%">
-					<center>			
-						<h1>INTERBLOCK COMERCIAL LTDA ME
-						<br />Sistema de Proteção para Veículos</h1>
-					</center>
-				</td>
+		<div class="info">
 
-				<td class="header-item center" nowrap>					
-                    <h1>ORDEM DE SERVIÇO:
-                    <br />N° #query.os_numero#</h1>
-                </td>		
-			</tr>
-		</table>
-
-		<table class="header-item">
-			<tr>
-				<td class="header-item" width="50%" nowrap>
-					<b>Téc. Inst.</b><br>
-					<span class="value">#query.os_responsavel#</span>
-				</td>
-				<td class="header-item" nowrap>
-					<b>Atendente</b><br>
-					<span class="value"><span class="value">#query.usu_nome#</span></span>
-				</td>		
-			</tr>
-		</table>
-
-		<h2>Dados do cliente</h2>
-		<table width="100%" class="block">
-			<tr>	
-				<td class="titulo">Nome:</td>
-				<td class="valor"><span class="value">#query.cli_nome#</span></td>
-				
-				<td class="titulo">N° Arquivo:</td>
-				<td class="valor">
-					<span class="value">
-						#query.cli_arquivo#
-					</span>
-				</td>
-			</tr>
-			
-			<tr>	
-				<td class="titulo">Endereço:</td>
-				<td class="valor" nowrap>
-					<span class="value">
-						#query.os_endereco#, #query.os_numero#
-					</span>
-				</td>
-				
-				<td class="titulo">Complemento:</td>
-				<td class="valor"><span class="value">#query.os_complemento#</span></td>					
-			</tr>
-
-			<tr>	
-				<td class="titulo">Bairro:</td>
-				<td class="valor"><span class="value">#query.os_bairro#</span></td>
-				
-				<td class="titulo">Cidade:</td>
-				<td class="valor"><span class="value">#query.os_cidade#</span> - <span><span class="value">#query.os_uf#</span></span></td>
-			</tr>
-
-			<tr>	
-				<td class="titulo">CEP:</td>
-				<td class="valor"><span class="value">#mid(query.os_cep,1,5)#-#mid(query.os_cep,6,3)#</span></td>
-				
-				<td class="titulo">Tel. Residêncial:</td>
-				<td class="valor">
-					<cfif len(query.os_tel1) GTE 10>
-						<span class="value">#mid(query.os_tel1,1,2)#-#mid(query.os_tel1,3,4)#-#mid(query.os_tel1,7,4)#</span>
-					</cfif>
-				</td>					
-			</tr>
-
-			<tr>					
-				<td class="titulo">Tel. Comercial:</td>
-				<td class="valor">
-					<cfif len(query.os_tel2) GTE 10>
-						<span class="value">#mid(query.os_tel2,1,2)#-#mid(query.os_tel2,3,4)#-#mid(query.os_tel2,7,4)#</span>
-					</cfif>
-				</td>
-				<td class="titulo">Celular:</td>
-				<td class="valor">
-					<cfif len(query.os_tel3) GTE 10>
-						<span class="value">
-							#mid(query.os_tel3,1,2)#-#mid(query.os_tel3,3,5)#-#mid(query.os_tel3,8,4)#
-							<cfif len(query.os_tel4) GTE 10>
-								#mid(query.os_tel4,1,2)#-#mid(query.os_tel4,3,5)#-#mid(query.os_tel4,8,4)#
-							</cfif>
-						</span>
-					</cfif>
-				</td>
-			</tr>
-			<tr>
-				<cfif query.cli_pessoa EQ "F">					
-					<td class="titulo">CPF:</td>
-						<td class="valor">
-						<span class="value">						
-							#mid(query.cli_cpfCnpj,1,3)#.#mid(query.cli_cpfCnpj,4,3)#.#mid(query.cli_cpfCnpj,7,3)#-#mid(query.cli_cpfCnpj,10,2)#
-						</span>
+			<table class="header-item">
+				<tr>
+					<td class="header-item" width="50%">
+						<center>			
+							<h1>INTERBLOCK COMERCIAL LTDA ME
+							<br />Sistema de Proteção para Veículos</h1>
+						</center>
 					</td>
-				<cfelse>
-					<td class="titulo">CNPJ:</td>
-						<td class="valor">
-						<span class="value">											
-							#mid(query.cli_cpfCnpj,1,2)#.#mid(query.cli_cpfCnpj,3,3)#.#mid(query.cli_cpfCnpj,6,3)#/#mid(query.cli_cpfCnpj,9,4)#-#mid(query.cli_cpfCnpj,13,2)#
-						</span>
+
+					<td class="header-item center" nowrap>					
+						<h1>ORDEM DE SERVIÇO:
+						<br />N° #query.os_numero#</h1>
+					</td>		
+				</tr>
+			</table>
+
+			<table class="header-item">
+				<tr>
+					<td class="header-item" width="50%" nowrap>
+						<b>Téc. Inst.</b><br>
+						<span class="value">#ucase(query.os_responsavel)#</span>
 					</td>
-				</cfif>
-				<cfif query.cli_pessoa EQ "F">
-					<td class="titulo">RG:</td>
+					<td class="header-item" nowrap>
+						<b>Atendente</b><br>
+						<span class="value"><span class="value">#ucase(query.usu_nome)#</span></span>
+					</td>		
+				</tr>
+			</table>
+
+			<h2>Dados do cliente</h2>
+			<table width="100%" class="block">
+				<tr>	
+					<td class="titulo">Nome:</td>
+					<td class="valor"><span class="value">#ucase(query.cli_nome)#</span></td>
+					
+					<td class="titulo">N° Arquivo:</td>
 					<td class="valor">
 						<span class="value">
-							#mid(query.cli_rgInscricaoEstadual,1,2)#.#mid(query.cli_rgInscricaoEstadual,3,3)#.#mid(query.cli_rgInscricaoEstadual,6,3)#-#mid(query.cli_rgInscricaoEstadual,9,2)#
+							#query.cli_arquivo#
 						</span>
 					</td>
-				<cfelse>
-					<td class="titulo">Inscrição estadual:</td>
+				</tr>
+				
+				<tr>	
+					<td class="titulo">Endereço:</td>
+					<td class="valor" nowrap>
+						<span class="value">
+							#ucase(query.os_endereco)#, #query.os_numero#
+						</span>
+					</td>
+					
+					<td class="titulo">Complemento:</td>
+					<td class="valor"><span class="value">#ucase(query.os_complemento)#</span></td>					
+				</tr>
+
+				<tr>	
+					<td class="titulo">Bairro:</td>
+					<td class="valor"><span class="value">#ucase(query.os_bairro)#</span></td>
+					
+					<td class="titulo">Cidade:</td>
+					<td class="valor"><span class="value">#ucase(query.os_cidade)#</span> - <span><span class="value">#ucase(query.os_uf)#</span></span></td>
+				</tr>
+
+				<tr>	
+					<td class="titulo">CEP:</td>
+					<td class="valor"><span class="value">#mid(query.os_cep,1,5)#-#mid(query.os_cep,6,3)#</span></td>
+					
+					<td class="titulo">E-mail:</td>
 					<td class="valor">
 						<span class="value">
-							#query.cli_rgInscricaoEstadual#	
+							#ucase(query.cli_email)#
 						</span>
+					</td>	
+				</tr>
+
+				<tr>	
+					<td class="titulo">Telefone:</td>
+					<td class="valor">
+						<cfif len(query.os_tel1) GTE 10>
+							<span class="value">#mid(query.os_tel1,1,2)#-#mid(query.os_tel1,3,4)#-#mid(query.os_tel1,7,4)#</span>
+						</cfif>
+						<cfif len(query.os_tel1) GTE 10 AND len(query.os_tel2) GTE 10>
+						/
+						</cfif>
+						<cfif len(query.os_tel2) GTE 10>
+							<span class="value">#mid(query.os_tel2,1,2)#-#mid(query.os_tel2,3,4)#-#mid(query.os_tel2,7,4)#</span>
+						</cfif>
+					</td>					
+							
+					<td class="titulo">Celular:</td>
+					<td class="valor">
+						<cfif len(query.os_tel3) GTE 10>
+							<span class="value">#mid(query.os_tel3,1,2)#-#mid(query.os_tel3,3,4)#-#mid(query.os_tel3,7,4)#</span>
+						</cfif>
+						<cfif len(query.os_tel3) GTE 10 AND len(query.os_tel4) GTE 10>
+						/
+						</cfif>
+						<cfif len(query.os_tel4) GTE 10>
+							<span class="value">#mid(query.os_tel4,1,2)#-#mid(query.os_tel4,3,4)#-#mid(query.os_tel4,7,4)#</span>
+						</cfif>
 					</td>
-				</cfif>
-			</tr>	
+				</tr>
+				<tr>
+					<cfif query.cli_pessoa EQ "F">					
+						<td class="titulo">CPF:</td>
+							<td class="valor">
+							<span class="value">						
+								#mid(query.cli_cpfCnpj,1,3)#.#mid(query.cli_cpfCnpj,4,3)#.#mid(query.cli_cpfCnpj,7,3)#-#mid(query.cli_cpfCnpj,10,2)#
+							</span>
+						</td>
+					<cfelse>
+						<td class="titulo">CNPJ:</td>
+							<td class="valor">
+							<span class="value">											
+								#mid(query.cli_cpfCnpj,1,2)#.#mid(query.cli_cpfCnpj,3,3)#.#mid(query.cli_cpfCnpj,6,3)#/#mid(query.cli_cpfCnpj,9,4)#-#mid(query.cli_cpfCnpj,13,2)#
+							</span>
+						</td>
+					</cfif>
+					<cfif query.cli_pessoa EQ "F">
+						<td class="titulo">RG:</td>
+						<td class="valor">
+							<span class="value">
+								#mid(query.cli_rgInscricaoEstadual,1,2)#.#mid(query.cli_rgInscricaoEstadual,3,3)#.#mid(query.cli_rgInscricaoEstadual,6,3)#-#mid(query.cli_rgInscricaoEstadual,9,2)#
+							</span>
+						</td>
+					<cfelse>
+						<td class="titulo">Inscrição estadual:</td>
+						<td class="valor">
+							<span class="value">
+								#query.cli_rgInscricaoEstadual#	
+							</span>
+						</td>
+					</cfif>
+				</tr>	
+				<tr>
+					<td class="titulo">Objetivo:</td>
+					<td class="valor" colspan="3">
+						<span class="value">
+							#ucase(query.os_objetivo)#
+						</span>
+					</td>	
+				</tr>			
+			</table>
 
-			<tr>					
-				<td class="titulo">E-mail:</td>
-				<td class="valor">
-					<span class="value">
-						#query.cli_email#
-					</span>
-				</td>				
-			</tr>			
-		</table>
+			<h2>Dados do veículo</h2>	
+			<table width="100%" class="block">
+				<tr>					
+					<td class="titulo" nowrap>Marca/Modelo:</td>
+					<td class="valor" nowrap><span class="value">#query.vei_modelo#</span></td>
 
-		<h2>Dados do veículo</h2>	
-		<table width="100%" class="block">
-			<tr>					
-				<td class="titulo" nowrap>Marca/Modelo:</td>
-				<td class="valor" nowrap><span class="value">#query.vei_modelo#</span></td>
+					<td class="titulo" nowrap>Cor:</td>
+					<td class="valor" nowrap><span class="value">#query.vei_cor#</span></td>
 
-				<td class="titulo" nowrap>Cor:</td>
-				<td class="valor" nowrap><span class="value">#query.vei_cor#</span></td>
+					<td class="titulo" nowrap>Ano:</td>
+					<td class="valor" nowrap><span class="value">#query.vei_ano#</span></td>
 
-				<td class="titulo" nowrap>Ano:</td>
-				<td class="valor" nowrap><span class="value">#query.vei_ano#</span></td>
+					<td class="titulo" nowrap>Placa:</td>
+					<td class="valor" nowrap><span class="value">#query.vei_placa#</span></td>
+				</tr>
+			</table>
 
-				<td class="titulo" nowrap>Placa:</td>
-				<td class="valor" nowrap><span class="value">#query.vei_placa#</span></td>
-			</tr>
-		</table>
+			<h3 class="instalador">USO DO INSTALADOR — SERVIÇOS EXECUTADOS — CHECKOUT — DATA  ____/____/________ HORA ____:____</h3>	
+			<div class="checkout">
+				<hr>
+				<hr>
+				<hr>
+			</div>
+			<div class="declaracao">
+				<p>
+					Neste ato, declaro que recebi o funcionário da empresa em questão 
+					e que este prestou os Serviços necessários para que o sistema instalador
+					em meu veículo funcione perfeitamente e que após o serviço executado,
+					testou o sistema e tudo está em perfeito funcionamento.
 
-        <h2 class="instalador">Uso do instalador — Serviços executados — CHECKOUT</h2>	
-        <div class="checkout">
-            <hr>
-            <hr>
-            <hr>
-        </div>
-		<div class="declaracao">
-            <p>
-                Neste ato, declaro que recebi o funcionário da empresa em questão 
-                e que este prestou os Serviços necessários para que o sistema instalador
-                em meu veículo funcione perfeitamente e que após o serviço executado,
-                testou o sistema e tudo está em perfeito funcionamento.
+				</p>
+			</div>
 
-            </p>
-        </div>
+			<div class="assinatura-data">
+				De Acordo: ____/____/________
 
-        <div class="assinatura-data">
-		    De Acordo: ____/____/________
-
-            <table class="assinaturas">
-                <tr>
-                    <td>
-                        ____________________________________________
-                        <br/>Cliente
-                    </td>
-                    <td>
-                        ____________________________________________
-                        <br/>Técnico
-                    </td>
-                </tr>
-            </table>
+				<table class="assinaturas">
+					<tr>
+						<td>
+							____________________________________________
+							<br/>Cliente
+						</td>
+						<td>
+							____________________________________________
+							<br/>Técnico
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 
-        <table class="block nota" cellpadding="0" cellspacing="0" align="center" border="1">
+        <table class="block nota" cellpadding="0" cellspacing="0" align="center" border="0">
             <tr>
                 <td class="rotate" rowspan=11>
                     <!--- <div>NOTA PROMISSÓRIA</div> --->
@@ -402,10 +422,11 @@
                 </td>   
             </tr>
             <tr>
-                <td colspan="2" class="line-gap">N° ________ VALOR <b>#LSCurrencyFormat(query.os_valor)#</b> VENCIMENTO ____/____/________</td>
+                <td colspan="1" class="line-gap">N° <b>01/01</b> VALOR <b>#LSCurrencyFormat(query.os_valor)#</b></td>
+                <td colspan="1" class="line-gap">VENCIMENTO <b>#LSDateFormat(DateAdd("d", 25, query.os_data) ,"DD-mmmm-YYYY")#</b></td>
             </tr>
             <tr>
-                <td colspan="2" class="line-gap">AOS ________ DIAS DO MÊS E ANO DE ____/________ PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
+                <td colspan="2" class="line-gap">AOS <b style="letter-spacing:0px">25</b> DIAS DO MÊS E ANO DE <b>#ucase(LSDateFormat(DateAdd("d", 25, query.os_data) ,"mmmm-YYYY"))#</b> PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
             </tr>
             <tr>
                 <td colspan="2">DE NOTA PROMISSÓRIA À <b>INTERBLOCK COMERCIAL LTDA ME — CNPJ: 02.632.466/0001-35</b></td>
@@ -415,16 +436,19 @@
 				PAGÁVEL NA PRAÇA DE <b>SANTO ANDRÉ — SP</b></td>
             </tr>
             <tr>
-                <td colspan="2"><b>DADOS DO EMITENTE</b></td>
+                <td colspan="2" class="line-gap"><b>DADOS DO EMITENTE</b></td>
             </tr>
             <tr>
                 <td colspan="1"><b>NOME:</b> #query.cli_nome#</td>
                 <td rowspan="4" class="assinatura-gap">
-					<br /><span class="line-gap"><u>Santo André </u> ____/____/________<span>
+					<br />
+					<br />
+					<center><span class="line-gap"><u>SANTO ANDRÉ - SP   #LSDateFormat(query.os_data ,"DD-mmmm-YYYY")#<span></u></center>
+					<center>Local e Data de Emissão</center>
 					<br />
 					<br />
 					<br />
-					_______________________________
+					_____________________________________
 					<br />#query.cli_nome#
 				</td>
             </tr>
@@ -432,8 +456,10 @@
                 <td colspan="1"><b>ENDEREÇO:</b> #query.cli_endereco#, #query.cli_numero#</td>	
             </tr>
             <tr>
-                <td colspan="1"><b>BAIRRO:</b> #query.cli_bairro#
-				<b>CIDADE:</b> #query.cli_cidade# — #query.cli_uf#</td>
+                <td colspan="1"><b>BAIRRO:</b> #query.cli_bairro#</td>
+			</tr>
+			<tr>
+				<td colspan="1"><b>CIDADE:</b> #query.cli_cidade# — #query.cli_uf#</td>
             </tr>
             <tr>
                 <td>
