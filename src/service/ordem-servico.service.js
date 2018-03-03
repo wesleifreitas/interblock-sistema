@@ -53,6 +53,8 @@
 
         function create(data) {
 
+            data.getTimezoneOffset = new Date().getTimezoneOffset() / 60;
+
             var req = $http({
                 url: config.REST_URL + '/ordem-servico/',
                 method: 'POST',

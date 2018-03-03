@@ -53,7 +53,7 @@
 				</cfif>     
 
 				ORDER BY
-					os_data DESC
+					os_id DESC
                 
                 <!--- Paginação --->
                 OFFSET #URL.page * URL.limit - URL.limit# ROWS
@@ -140,6 +140,12 @@
 		
 		<cfset response = structNew()>
 		<cfset response["arguments"] = arguments>
+
+		<cfset now = now()>
+		<cfif cgi.SERVER_NAME NEQ "localhost">
+			<cfset now = dateAdd("h", body.getTimezoneOffset, now)>
+		</cfif>	
+		<cfset osNumero = lsDateFormat(now, "DDMMYYY") & lsTimeFormat(now, "HHmmss")>
 		
 		<cftry>			
 			<!--- create --->
@@ -148,6 +154,7 @@
 					dbo.ordem_servico
 				(                   
 					os_status
+					,os_numero
 					,os_valor
 					,os_data
 					,os_tecnico
@@ -162,13 +169,13 @@
 					,os_uf
 					,os_tel1
 					,os_tel2
-					,os_responsavel
 					,os_objetivo
 					,usu_id
 					,grupo_id           
 				) 
 				VALUES (
 					<cfqueryparam value = "#body.os_status#" CFSQLType = "CF_SQL_TINYINT">
+					,<cfqueryparam value = "#osNumero#" CFSQLType = "CF_SQL_VARCHAR">
 					,<cfqueryparam value = "#body.os_valor#" CFSQLType = "CF_SQL_FLOAT">
 					,GETDATE()
 					,<cfqueryparam value = "#body.tecnico.id#" CFSQLType = "CF_SQL_INTEGER">									
@@ -183,7 +190,6 @@
 					,<cfqueryparam value = "#body.os_uf#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#body.os_tel1#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#body.os_tel2#" CFSQLType = "CF_SQL_VARCHAR">					
-					,<cfqueryparam value = "#body.os_responsavel#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#body.os_objetivo#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#session.userId#" CFSQLType = "CF_SQL_INTEGER">					
 					,<cfqueryparam value = "#session.grupoId#" CFSQLType = "CF_SQL_INTEGER">					
@@ -191,10 +197,10 @@
 			</cfquery>
 
 			<cfset response["success"] = true>
-			<cfset response["message"] = 'Ordem de serviço criado com sucesso!'>
+			<cfset response["message"] = 'Ordem de serviço criada com sucesso!'>
 
 			<cfcatch>
-				<cfset responseError(400, cfcatch.detail)>
+				<cfset responseError(400, cfcatch.message)>
 			</cfcatch>	
 		</cftry>
 		
