@@ -45,9 +45,9 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm="">
                         <label>Técnico</label>
-                        <input name="cliente" ng-model="vm.ordemServico.tecnico.NOME" ng-readonly="true" required placeholder="Clique aqui para selecionar um técnico"
+                        <input name="tecnico" ng-model="vm.ordemServico.tecnico.NOME" ng-readonly="true" required placeholder="Clique aqui para selecionar um técnico"
                             class="pointer" ng-click="vm.usuarioDialog($event)">
-                        <div ng-messages="form.cliente.$error">
+                        <div ng-messages="form.tecnico.$error">
                             <div ng-message="required">Campo obrigatório.</div>
                         </div>
                     </md-input-container>
