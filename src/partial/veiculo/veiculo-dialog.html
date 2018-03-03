@@ -15,7 +15,7 @@
             <div layout-gt-sm="row">
                 <md-input-container flex-gt-sm="100" layout-xs="100">
                     <label>Veículo (Modelo, marca, ou placa)</label>
-                    <input ng-model="vm.filter.VEI_INFO">
+                    <input ng-model="vm.filter.VEI_INFO" ng-enter="vm.getData({reset: true})">
                 </md-input-container>
             </div>
         </form>
@@ -31,7 +31,8 @@
         </md-toolbar>
         <md-toolbar class="md-accent md-hue-1" ng-show="vm.veiculo.selected.length">
             <div class="md-toolbar-tools">
-                <span>{{vm.veiculo.selected.length}} {{vm.veiculo.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
+                <span>{{vm.veiculo.selected.length}} {{vm.veiculo.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}}
+                    </span>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.remove()">
                     <md-icon>delete</md-icon>
@@ -43,7 +44,9 @@
                 <table md-table md-row-select="false" multiple="false" ng-model="vm.veiculo.selected" md-progress="vm.veiculo.promise">
                     <thead md-head md-order="vm.veiculo.order">
                         <tr md-row>
-                            <th md-column md-order-by="VEI_INFO"><span>Veículo</span></th>
+                            <th md-column md-order-by="VEI_INFO">
+                                <span>Veículo</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody md-body>

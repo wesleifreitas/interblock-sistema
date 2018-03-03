@@ -13,6 +13,7 @@
         vm.init = init;
         vm.ordemServico = {};
         vm.status = ORDEM_SERVICO.STATUS;
+        vm.usuarioDialog = usuarioDialog;
         vm.clienteDialog = clienteDialog;
         vm.veiculoDialog = veiculoDialog;
         vm.getData = getData;
@@ -26,6 +27,12 @@
 
                 vm.ordemServico = vm.getData;
 
+                console.info(vm.getData);
+
+                vm.ordemServico.tecnico = {
+                    ID: vm.getData.OS_TECNICO,
+                    NOME: vm.getData.TECNICO_NOME
+                };
                 vm.ordemServico.cliente = {
                     CLI_ID: vm.getData.CLI_ID,
                     CLI_NOME: vm.getData.CLI_NOME
@@ -46,6 +53,25 @@
                 vm.ordemServico.OS_STATUS = vm.status[0].id;
                 vm.ordemServico.OS_OBJETIVO = '';
             }
+        }
+
+        function usuarioDialog(event) {
+            $mdDialog.show({
+                locals: {},
+                preserveScope: true,
+                controller: 'UsuarioDialogCtrl',
+                controllerAs: 'vm',
+                templateUrl: 'partial/usuario/usuario-dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: true
+            }).then(function (data) {
+
+                vm.ordemServico.tecnico = {
+                    ID: data.USU_ID,
+                    NOME: data.USU_NOME
+                };
+            });
         }
 
         function clienteDialog(event) {

@@ -1,0 +1,98 @@
+<md-dialog ng-cloak flex="70" aria-label="" ng-init="vm.init()" class="default-dialog">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Selecione um usuario</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <i class="fa fa-close"></i>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content layout-padding>
+        <form name="formSearch" class="filter">
+            <h5>Utilize o campo abaixo para filtrar a listagem.</h5>
+            <div layout-gt-sm="row">
+                <md-input-container flex-gt-sm="33" layout-xs="100">
+                    <label>Nome</label>
+                    <input ng-model="vm.filter.nome" ng-enter="vm.getData({reset: true})">
+                </md-input-container>
+
+                <md-input-container flex-gt-sm="33" layout-xs="100">
+                    <label>Login</label>
+                    <input ng-model="vm.filter.login" ng-enter="vm.getData({reset: true})">
+                </md-input-container>
+
+                <md-input-container flex-gt-sm="33" layout-xs="100">
+                    <label>CPF</label>
+                    <input name="cpf" ng-model="vm.filter.cpf" ui-br-cpf-mask ng-enter="vm.getData({reset: true})">
+                    <div ng-messages="formUsuarioSearch.cpf.$error" multiple md-auto-hide="false">
+                        <div ng-message="cpf">CPF inválido.</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </form>
+        <md-toolbar class="md-table-toolbar md-default" ng-hide="vm.usuario.selected.length">
+            <div class="md-toolbar-tools">
+                <span>Usuário</span>
+                <span flex></span>
+                <md-button class="md-primary" ng-click="vm.getData({reset: true})">
+                    <md-icon>refresh</md-icon>
+                    Atualizar
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-toolbar class="md-accent md-hue-1" ng-show="vm.usuario.selected.length">
+            <div class="md-toolbar-tools">
+                <span>{{vm.usuario.selected.length}} {{vm.usuario.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}}
+                </span>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="vm.remove()">
+                    <md-icon>delete</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <div>
+            <md-table-container>
+                <table md-table md-row-select="false" multiple="false" ng-model="vm.usuario.selected" md-progress="vm.usuario.promise">
+                    <thead md-head md-order="vm.usuario.order">
+                        <tr md-row>
+
+                            <th md-column md-order-by="PER_NOME">
+                                <span>Nome do usuario</span>
+                            </th>
+                            <th md-column md-order-by="USU_LOGIN">
+                                <span>Login</span>
+                            </th>
+                            <th md-column md-order-by="USU_CPF">
+                                <span>CPF</span>
+                            </th>
+                            <th md-column md-order-by="PER_NOME">
+                                <span>Perfil</span>
+                            </th>
+                            <th md-column md-order-by="USU_ATIVO_LABEL">
+                                <span>Perfil</span>
+                            </th>
+                            <th md-column>
+                                <span>Último acesso</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="item" md-select-id="USU_ID" ng-repeat="item in vm.usuario.data | orderBy: vm.usuario.order" ng-click="vm.itemClick(item)">
+
+                            <td md-cell>{{item.USU_NOME}}</td>
+                            <td md-cell>{{item.USU_LOGIN}}</td>
+                            <td md-cell nowrap>{{item.USU_CPF | brCpf}}</td>
+                            <td md-cell>{{item.PER_NOME}}</td>
+                            <td md-cell>{{item.USU_ATIVO_LABEL}}</td>
+                            <td md-cell>{{item.USU_ULTIMOACESSO | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+            <md-table-pagination md-label="{page: 'Página:', rowsPerPage: 'Qtd. por página:', of: 'de'}" md-limit="vm.usuario.limit"
+                md-page="vm.usuario.page" md-total="{{vm.usuario.total}}" md-page-select md-on-paginate="vm.usuario.pagination"></md-table-pagination>
+        </div>
+    </md-dialog-content>
+</md-dialog>

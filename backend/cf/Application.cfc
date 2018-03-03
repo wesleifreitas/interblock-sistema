@@ -28,7 +28,7 @@
         hint="I run when the application boots up. If I return false, the application initialization will hault.">
 
         <cfset application.ROOT = THIS.RootDir />
-        <cfset application.datasource = "px_interblock_sql_local">
+        <cfset application.datasource = "px_interblock_sql">
 
         <cfreturn true />
     </cffunction>

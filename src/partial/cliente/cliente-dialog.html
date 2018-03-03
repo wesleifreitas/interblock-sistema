@@ -15,7 +15,7 @@
             <div layout-gt-sm="row">
                 <md-input-container flex-gt-sm="100" layout-xs="100">
                     <label>Nome do cliente</label>
-                    <input ng-model="vm.filter.CLI_NOME">
+                    <input ng-model="vm.filter.CLI_NOME" ng-enter="vm.getData({reset: true})">
                 </md-input-container>
             </div>
         </form>
@@ -31,7 +31,8 @@
         </md-toolbar>
         <md-toolbar class="md-accent md-hue-1" ng-show="vm.cliente.selected.length">
             <div class="md-toolbar-tools">
-                <span>{{vm.cliente.selected.length}} {{vm.cliente.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}} </span>
+                <span>{{vm.cliente.selected.length}} {{vm.cliente.selected.length > 1 ? 'linhas selecionadas' : 'linha selecionada'}}
+                    </span>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="vm.remove()">
                     <md-icon>delete</md-icon>
@@ -43,7 +44,9 @@
                 <table md-table md-row-select="false" multiple="false" ng-model="vm.cliente.selected" md-progress="vm.cliente.promise">
                     <thead md-head md-order="vm.cliente.order">
                         <tr md-row>
-                            <th md-column md-order-by="CLI_NOME"><span>Nome do cliente</span></th>
+                            <th md-column md-order-by="CLI_NOME">
+                                <span>Nome do cliente</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody md-body>

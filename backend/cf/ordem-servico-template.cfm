@@ -149,6 +149,10 @@
         height: 270px;
         width: auto;
     }
+	.recibo {
+		border: 1px solid black;
+		border-top: 1px dashed black;
+	}
 </style>
 
 <cfoutput>	
@@ -166,8 +170,8 @@
                 ,os_status
 				,os_valor
                 ,os_data
-                ,cli_id
-                ,vei_id
+                ,vw_ordem_servico.cli_id
+                ,vw_ordem_servico.vei_id
                 ,os_cep
                 ,os_endereco
                 ,os_numero_endereco
@@ -208,11 +212,23 @@
 				,vei_placa
 				
 				,usu_nome
+
+				,prop_numero
+    			,prop_arquivo_digito
+
+				,tecnico_nome
+				,tecnico_cpf
 			FROM
                 vw_ordem_servico
+				
+			LEFT OUTER JOIN proposta
+			ON vw_ordem_servico.cli_id = proposta.cli_id
+			AND vw_ordem_servico.vei_id = proposta.vei_id
+
             WHERE
                 os_id = <cfqueryparam value = "#arguments.id#" CFSQLType = "CF_SQL_NUMERIC">
 		</cfquery>
+		
 
 		<cfset query.cli_cep = NumberFormat(query.cli_cep, '00000000')>
 		<cfset query.os_cep = NumberFormat(query.os_cep, '00000000')>
@@ -239,7 +255,7 @@
 				<tr>
 					<td class="header-item" width="50%" nowrap>
 						<b>Téc. Inst.</b><br>
-						<span class="value">#ucase(query.os_responsavel)#</span>
+						<span class="value"><span class="value">#ucase(query.tecnico_nome)#</span></span>
 					</td>
 					<td class="header-item" nowrap>
 						<b>Atendente</b><br>
@@ -254,19 +270,27 @@
 					<td class="titulo">Nome:</td>
 					<td class="valor"><span class="value">#ucase(query.cli_nome)#</span></td>
 					
-					<td class="titulo">N° Arquivo:</td>
+					
+					<td class="titulo">Contrato:</td>
 					<td class="valor">
 						<span class="value">
-							#query.cli_arquivo#
+							#query.prop_numero#
 						</span>
-					</td>
+						<b>Arquivo: </b>
+						<span class="value">
+							#query.cli_arquivo#
+							<cfif isNumeric(query.prop_arquivo_digito)>
+								- #query.prop_arquivo_digito#
+							</cfif>
+						</span>
+					</td>		
 				</tr>
 				
 				<tr>	
 					<td class="titulo">Endereço:</td>
 					<td class="valor" nowrap>
 						<span class="value">
-							#ucase(query.os_endereco)#, #query.os_numero#
+							#ucase(query.os_endereco)#, #query.os_numero_endereco#
 						</span>
 					</td>
 					
@@ -384,7 +408,6 @@
 			<div class="checkout">
 				<hr>
 				<hr>
-				<hr>
 			</div>
 			<div class="declaracao">
 				<p>
@@ -403,17 +426,19 @@
 					<tr>
 						<td>
 							____________________________________________
-							<br/>Cliente
+							<br/>#uCase(query.cli_nome)#
 						</td>
 						<td>
 							____________________________________________
-							<br/>Técnico
+							<br/>#uCase(query.tecnico_nome)#
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
 
+		<cfset vencimento = DateAdd("d", 30, query.os_data)>
+		<cfset vencimentoDia = LSDateFormat(vencimento, "D")>
         <table class="block nota" cellpadding="0" cellspacing="0" align="center" border="0">
             <tr>
                 <td class="rotate" rowspan=11>
@@ -423,10 +448,14 @@
             </tr>
             <tr>
                 <td colspan="1" class="line-gap">N° <b>01/01</b> VALOR <b>#LSCurrencyFormat(query.os_valor)#</b></td>
-                <td colspan="1" class="line-gap">VENCIMENTO <b>#LSDateFormat(DateAdd("d", 25, query.os_data) ,"DD-mmmm-YYYY")#</b></td>
+                <td colspan="1" class="line-gap">VENCIMENTO <b>#LSDateFormat(vencimento ,"DD-mmmm-YYYY")#</b></td>
             </tr>
             <tr>
-                <td colspan="2" class="line-gap">AOS <b style="letter-spacing:0px">25</b> DIAS DO MÊS E ANO DE <b>#ucase(LSDateFormat(DateAdd("d", 25, query.os_data) ,"mmmm-YYYY"))#</b> PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
+				<cfif vencimentoDia GT 1>
+                	<td colspan="2" class="line-gap">AOS <b style="letter-spacing:0px">#vencimentoDia#</b> DIAS DO MÊS E ANO DE <b>#ucase(LSDateFormat(DateAdd("d", 30, query.os_data) ,"mmmm-YYYY"))#</b> PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
+				<cfelse>
+					<td colspan="2" class="line-gap">No <b style="letter-spacing:0px">PRIMEIRO</b> DIA DO MÊS E ANO DE <b>#ucase(LSDateFormat(DateAdd("d", 30, query.os_data) ,"mmmm-YYYY"))#</b> PAGAREI(EMOS) POR ESTÁ ÚNICA VIA</td>
+				</cfif>
             </tr>
             <tr>
                 <td colspan="2">DE NOTA PROMISSÓRIA À <b>INTERBLOCK COMERCIAL LTDA ME — CNPJ: 02.632.466/0001-35</b></td>
@@ -472,6 +501,24 @@
 				</td>
             </tr>
         </table>
+		<br />
+		<div class="recibo">
+			<table class="">
+				<tr>
+					<td>Recebi de #uCase(query.cli_nome)#, CPF: <b>#mid(query.cli_cpfCnpj,1,3)#.#mid(query.cli_cpfCnpj,4,3)#.#mid(query.cli_cpfCnpj,7,3)#-#mid(query.cli_cpfCnpj,10,2)#</b> </td>
+				<tr>
+				<tr>
+					<td>a quantia de <b>#LSCurrencyFormat(query.os_valor)#</b> referente a quitação da O.S.: <b>#query.os_numero#</b></td>
+				<tr>
+				<tr>
+					<td width="100%" align="right">
+						____________________________________________
+						<br/>#uCase(query.tecnico_nome)# <b>CPF:</b> #mid(query.tecnico_cpf,1,3)#.#mid(query.tecnico_cpf,4,3)#.#mid(query.tecnico_cpf,7,3)#-#mid(query.tecnico_cpf,10,2)#
+					</table>
+					</td>
+				<tr>
+			</table>
+		</div>
 
 
 		<cfdocumentitem type="footer"> 

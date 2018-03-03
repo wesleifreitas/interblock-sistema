@@ -37,14 +37,25 @@
                     </md-input-container>
                 </div>
 
-                <md-input-container class="md-block" flex-gt-sm="">
+                <!-- <md-input-container class="md-block" flex-gt-sm="">
                     <label>Técnico</label>
                     <input name="os_responsavel" ng-model="vm.ordemServico.OS_RESPONSAVEL">
-                </md-input-container>
+                </md-input-container> -->
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                        <label>Técnico</label>
+                        <input name="cliente" ng-model="vm.ordemServico.tecnico.NOME" ng-readonly="true" required placeholder="Clique aqui para selecionar um técnico"
+                            class="pointer" ng-click="vm.usuarioDialog($event)">
+                        <div ng-messages="form.cliente.$error">
+                            <div ng-message="required">Campo obrigatório.</div>
+                        </div>
+                    </md-input-container>
+                </div>
 
                 <md-input-container class="md-block">
                     <label>Objetivo</label>
-                    <textarea ng-model="vm.ordemServico.OS_OBJETIVO" md-maxlength="700" rows="5"></textarea>
+                    <textarea ng-model="vm.ordemServico.OS_OBJETIVO" md-maxlength="150" rows="3" maxlength="150"></textarea>
                 </md-input-container>
 
                 <div layout-gt-sm="row">

@@ -53,8 +53,7 @@
 				</cfif>     
 
 				ORDER BY
-					os_status ASC
-					,os_data ASC
+					os_data DESC
                 
                 <!--- Paginação --->
                 OFFSET #URL.page * URL.limit - URL.limit# ROWS
@@ -95,6 +94,7 @@
                     ,os_status
 					,os_valor
 					,os_data
+					,os_tecnico
 					,cli_id
 					,vei_id
 					,os_cep
@@ -114,6 +114,7 @@
 					,grupo_id   
 					,cli_nome
 					,vei_info 
+					,tecnico_nome
                 FROM
                     vw_ordem_servico
                 WHERE
@@ -149,6 +150,7 @@
 					os_status
 					,os_valor
 					,os_data
+					,os_tecnico
 					,cli_id
 					,vei_id
 					,os_cep
@@ -169,7 +171,8 @@
 					<cfqueryparam value = "#body.os_status#" CFSQLType = "CF_SQL_TINYINT">
 					,<cfqueryparam value = "#body.os_valor#" CFSQLType = "CF_SQL_FLOAT">
 					,GETDATE()
-					,<cfqueryparam value = "#body.cliente.cli_id#" CFSQLType = "CF_SQL_INTEGER">					
+					,<cfqueryparam value = "#body.tecnico.id#" CFSQLType = "CF_SQL_INTEGER">									
+					,<cfqueryparam value = "#body.cliente.cli_id#" CFSQLType = "CF_SQL_INTEGER">				
 					,<cfqueryparam value = "#body.veiculo.vei_id#" CFSQLType = "CF_SQL_INTEGER">					
 					,<cfqueryparam value = "#body.os_cep#" CFSQLType = "CF_SQL_VARCHAR">					
 					,<cfqueryparam value = "#body.os_endereco#" CFSQLType = "CF_SQL_VARCHAR">					
@@ -222,7 +225,8 @@
 					os_status = <cfqueryparam value = "#body.os_status#" CFSQLType = "CF_SQL_TINYINT">
 					,os_valor = <cfqueryparam value = "#body.os_valor#" CFSQLType = "CF_SQL_FLOAT">
 					,cli_id = <cfqueryparam value = "#body.cliente.cli_id#" CFSQLType = "CF_SQL_INTEGER">					
-					,vei_id = <cfqueryparam value = "#body.veiculo.vei_id#" CFSQLType = "CF_SQL_INTEGER">					
+					,vei_id = <cfqueryparam value = "#body.veiculo.vei_id#" CFSQLType = "CF_SQL_INTEGER">
+					,os_tecnico = <cfqueryparam value = "#body.tecnico.id#" CFSQLType = "CF_SQL_INTEGER">				
 					,os_cep = <cfqueryparam value = "#body.os_cep#" CFSQLType = "CF_SQL_VARCHAR">					
 					,os_endereco = <cfqueryparam value = "#body.os_endereco#" CFSQLType = "CF_SQL_VARCHAR">					
 					,os_numero_endereco = <cfqueryparam value = "#body.os_numero_endereco#" CFSQLType = "CF_SQL_VARCHAR">					
@@ -325,6 +329,8 @@
 		<cfset response["params"] = url>
 		
 		<cftry>
+			<!--- <cfsetting requesttimeout="300"> --->
+
             <cfset destination = getDirectoryFromPath(getCurrentTemplatePath()) & "/../_server/temp/ordem-servico">
             <cfif not directoryExists(destination)>
                 <cfdirectory action="create" directory="#destination#" />		
